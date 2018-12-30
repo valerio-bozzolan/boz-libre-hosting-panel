@@ -23,7 +23,24 @@
 defined( 'BOZ_PHP' ) or die;
 ?>
 
-	<p class="lead"><?php printf(
-		__( "Welcome in the %s dashboard." ),
-		SITE_NAME
-	) ?></p>
+	<ul>
+		<?php foreach( $args[ 'entries' ] as $entry ): ?>
+			<li class="collection-item">
+
+				<?php if( $entry->uid === Header::$args[ 'uid' ] ): ?>
+					<?php _esc_html( $entry->name ) ?>
+				<?php else: ?>
+					<?php echo HTML::a(
+						$entry->getSitePage(),
+						$entry->name,
+						$entry->get( 'title' )
+					) ?>
+				<?php endif ?>
+
+				<?php MenuTree::spawn( array_replace( $args, [
+					'uid'   => $entry->uid,
+					'level' => $level + 1,
+				] ) ) ?>
+			</li>
+		<?php endforeach ?>
+	</ul>

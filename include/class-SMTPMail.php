@@ -1,6 +1,6 @@
 <?php
 # Copyright (C) 2018 Valerio Bozzolan
-# Reyboz another self-hosting panel project
+# Boz Libre Hosting Panel
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as

@@ -16,14 +16,18 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 /*
- * This is the template for the website dashboard
+ * This is the template for the website sidebar
  */
 
 // unuseful when load directly
 defined( 'BOZ_PHP' ) or die;
 ?>
 
-	<p class="lead"><?php printf(
-		__( "Welcome in the %s dashboard." ),
-		SITE_NAME
+<?php if( is_logged() ): ?>
+	<p><?php printf(
+		__( "Welcome %s!" ),
+		esc_html( get_user( 'user_name' ) )
 	) ?></p>
+<?php endif ?>
+
+<?php MenuTree::spawn() ?>

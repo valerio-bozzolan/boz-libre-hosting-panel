@@ -1,6 +1,6 @@
 <?php
 # Copyright (C) 2018 Valerio Bozzolan
-# Reyboz another self-hosting panel project
+# Boz Libre Hosting Panel
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as
@@ -23,18 +23,36 @@
 
 // unuseful when load directly
 defined( 'BOZ_PHP' ) or die;
+
+// load Bootstrap stuff
+enqueue_js(  'jquery'    );
+enqueue_js(  'bootstrap' );
+enqueue_css( 'bootstrap' );
 ?>
 <!DOCTYPE html>
 <html>
 <head>
-	<title><?php echo strip_tags( $args[ 'title' ] ) ?> - <?php echo SITE_NAME ?></title><?php load_module( 'header' ) ?>
+	<title><?php echo strip_tags( $args[ 'title' ] ) ?> - <?php echo strip_tags( SITE_NAME ) ?></title>
+	<link rel="icon" href="<?php echo ROOT ?>/content/logo/logo-64.png" type="image/png" /><?php load_module( 'header' ) ?>
 
 </head>
 <body>
 	<div class="container">
-		<h1><?php echo $args[ 'h1' ] ?></h1>
+		<h1><?php echo SITE_NAME ?></h1>
+		<h2><?php echo $args[ 'title' ] ?></h2>
 	</div>
 
 	<?php if( $args[ 'container' ] ): ?>
+		<!-- page container -->
 		<div class="container">
 	<?php endif ?>
+
+	<!-- page row -->
+	<div class="row">
+
+		<!-- sidebar content -->
+		<?php if( $args[ 'sidebar' ] ): ?>
+			<div class="col-sm-8">
+		<?php else: ?>
+			<div class="col-sm-12">
+		<?php endif ?>

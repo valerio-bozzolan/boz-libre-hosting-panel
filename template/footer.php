@@ -1,6 +1,6 @@
 <?php
 # Copyright (C) 2018 Valerio Bozzolan
-# Reyboz another self-hosting panel project
+# Boz Libre Hosting Panel
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as
@@ -25,26 +25,46 @@ defined( 'BOZ_PHP' ) or die;
 load_module( 'footer' );
 ?>
 
+		</div>
+		<!-- /sidebar content -->
+
+		<!-- sidebar -->
+		<?php if( $args[ 'sidebar' ] ): ?>
+			<div class="col-sm-4">
+				<?php template( 'sidebar' ) ?>
+			</div>
+		<?php endif ?>
+		<!-- /sidebar -->
+
+	<!-- page row -->
+	</div>
+
 	<?php if( $args[ 'container' ] ): ?>
 		</div>
+		<!-- /page container -->
 	<?php endif ?>
 
 	<hr />
+	<!-- footer -->
 	<div class="container">
 		<div class="row">
+
+			<?php if( CONTACT_EMAIL ): ?>
 			<div class="col-sm-2">
 				<?php _e( "Help:" ) ?><br />
 				<?php email_blur( CONTACT_EMAIL ) ?>
 			</div>
+			<?php endif ?>
 
 			<?php if( REPO_URL ): ?>
 			<div class="col-sm-2">
 				<?php _e( "Contribute:" ) ?><br />
-				<a href="<?php echo REPO_URL ?>"><?php _e( "project repository" ) ?></a>
+				<a href="<?php echo REPO_URL ?>" target="_blank"><?php _e( "project repository" ) ?></a>
 			</div>
 			<?php endif ?>
 
 		</div>
 	</div>
+	<!-- /footer -->
 </body>
 </html>

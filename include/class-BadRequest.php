@@ -15,15 +15,16 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-/*
- * This is the template for the website dashboard
- */
+class BadRequest {
 
-// unuseful when load directly
-defined( 'BOZ_PHP' ) or die;
-?>
+	public static function spawn() {
+		http_response_code( 400 );
+		Header::spawn( [
+			'title' => __( "Bad request" )
+		] );
+		template( 'bad-request' );
+		Footer::spawn();
+		exit;
+	}
 
-	<p class="lead"><?php printf(
-		__( "Welcome in the %s dashboard." ),
-		SITE_NAME
-	) ?></p>
+}

@@ -1,6 +1,6 @@
 <?php
 # Copyright (C) 2018 Valerio Bozzolan
-# Reyboz another self-hosting panel project
+# Boz Libre Hosting Panel
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as
@@ -32,30 +32,57 @@ class Header {
 	/**
 	 * Spawn the header to standard output
 	 *
-	 * @param $args array arguments where:
+	 * @param $args mixed Can be the page UID, or arguments where:
+	 * 	uid:   menu UID like 'home'
 	 * 	title: document title
-	 * 	h1:    site title (as default, it's the document title)
 	 */
 	public static function spawn( $args = [] ) {
 
 		// store arguments for future reads
 		self::$args = & $args;
 
-		// set default arguments
-		$args = array_replace( [
-			'h1'        => $args[ 'title' ],
-			'container' => true,
-		], $args );
+		// shortcut
+		if( is_string( $args ) ) {
+			$args = [ 'uid' => $args ];
+		}
 
-		// load Bootstrap stuff
-		enqueue_js(  'jquery'    );
-		enqueue_js(  'bootstrap' );
-		enqueue_css( 'bootstrap' );
+		// eventually retrieve actual page UID
+		if( ! isset( $args[ 'uid' ] ) ) {
+			$args[ 'uid' ] = self::actualPageUID();
+		}
+
+		// retrieve page informations
+		$page = isset(       $args[ 'uid' ] )
+		   ? get_menu_entry( $args[ 'uid' ] )
+		   : null;
+
+		// populate the page informations
+		if( $page ) {
+			$args = array_replace( [
+				'title' => $page->name,
+			], $args );
+		}
+
+		// populate default arguments
+		$args = array_replace( [
+			'container' => true,
+			'sidebar'   => true,
+		], $args );
 
 		// charset is usually UTF-8
 		header( 'Content-Type: text/html; charset=' . CHARSET );
 
 		// spawn header template
 		template( 'header', $args );
+	}
+
+	/**
+	 * Get the default page UID
+	 *
+	 * @return string
+	 */
+	public static function actualPageUID() {
+		$page = basename( $_SERVER[ 'PHP_SELF' ] );
+		return str_replace( '.php', '', $page );
 	}
 }

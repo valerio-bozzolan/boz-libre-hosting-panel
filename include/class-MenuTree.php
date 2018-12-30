@@ -15,15 +15,38 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-/*
- * This is the template for the website dashboard
+/**
+ * Handle a menu
  */
+class MenuTree {
 
-// unuseful when load directly
-defined( 'BOZ_PHP' ) or die;
-?>
+	/**
+	 * Spawn the menu
+	 *
+	 * @param $args array Menu arguments where:
+	 * 	uid:
+	 */
+	public static function spawn( $args = [] ) {
 
-	<p class="lead"><?php printf(
-		__( "Welcome in the %s dashboard." ),
-		SITE_NAME
-	) ?></p>
+		// default arguments
+		$args = array_replace( [
+			'uid'       => null,
+			'level'     => 0,
+			'max-level' => 99,
+		], $args );
+
+		// end if level reached
+		if( $args[ 'level' ] > $args['max-level'] ) {
+			return;
+		}
+
+		$args[ 'entries' ] = get_children_menu_entries( $args[ 'uid' ] );
+		if( ! $args[ 'entries' ] ) {
+			return;
+		}
+
+		// spawn the related template
+		template( 'menu', $args );
+	}
+
+}

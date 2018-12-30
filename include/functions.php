@@ -56,3 +56,54 @@ function send_email( $subject, $message, $to = false ) {
 		->message( $subject, $message )
 		->disconnect();
 }
+
+/**
+ * Require a certain permission
+ *
+ * @param $permission string An internal permission like 'edit-all-user'
+ * @param $redirect boolean Enable or disable the redirect
+ */
+function require_permission( $permission, $redirect = true ) {
+	if( ! has_permission( $permission ) ) {
+		if( is_logged() ) {
+			Header::spawn( [
+				'title' => __( "Permission denied" ),
+			] );
+			Footer::spawn();
+			exit;
+		} else {
+			$login = get_menu_entry( 'login' );
+			$url = $login->getSitePage( URL );
+			if( $redirect && isset( $_SERVER[ 'REQUEST_URI' ] ) ) {
+				$url = http_build_get_query( $url, [
+					'redirect' => $_SERVER[ 'REQUEST_URI' ],
+				] );
+			}
+			http_redirect( $url, 307 );
+		}
+	}
+}
+
+/**
+ * Check the POST action
+ *
+ * @param $action string e.g. 'save-domain'
+ * @return bool
+ */
+function is_action( $action ) {
+	return isset( $_POST[ 'action' ] ) && $_POST[ 'action' ] === $action;
+}
+
+/**
+ * Get URL parts
+ *
+ * @param $n
+ */
+function url_parts( $n ) {
+	$parts = explode( _, $_SERVER[ 'PATH_INFO' ] );
+	array_shift( $parts );
+	if( count( $parts ) !== $n ) {
+		BadRequest::spawn();
+	}
+	return $parts;
+}

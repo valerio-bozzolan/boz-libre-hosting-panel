@@ -16,14 +16,10 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 /*
- * This is the template for the website dashboard
+ * This is the page not found
  */
 
-// unuseful when load directly
-defined( 'BOZ_PHP' ) or die;
-?>
+// load framework
+require 'load.php';
 
-	<p class="lead"><?php printf(
-		__( "Welcome in the %s dashboard." ),
-		SITE_NAME
-	) ?></p>
+PageNotFound::spawn();

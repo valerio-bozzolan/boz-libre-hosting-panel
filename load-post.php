@@ -1,6 +1,6 @@
 <?php
 # Copyright (C) 2018 Valerio Bozzolan
-# Reyboz hosting panel - another self-hosting panel project
+# Boz Libre Hosting Panel
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as
@@ -55,10 +55,30 @@ define( 'GETTEXT_DIRECTORY', 'l10n' );
 define( 'GETTEXT_DEFAULT_ENCODE', CHARSET ); // UTF-8
 
 // common strings
-define_default( 'SITE_NAME', "Reyboz Libre Hosting Panel" );
-
-// generic contact e-mail
+define_default( 'SITE_NAME', "Boz Libre Hosting Panel" );
 define_default( 'CONTACT_EMAIL', 'support@' . DOMAIN );
-
-// repository project URL
 define_default( 'REPO_URL', 'https://github.com/valerio-bozzolan/boz-libre-hosting-panel' );
+
+// register web pages
+call_user_func( function () {
+	$logged = is_logged();
+	$show_to_user =   $logged ? null : 'hidden';
+	$show_to_anon = ! $logged ? null : 'hidden';
+	add_menu_entries( [
+			new MenuEntry( 'index',          '',                    __( "Dashboard" ),      $show_to_user ),
+			new MenuEntry( 'login',          'login.php',           __( "Login" ),          $show_to_anon ),
+			new MenuEntry( 'logout',         'logout.php',          __( "Logout" ),         $show_to_user ),
+			new MenuEntry( 'password-reset', 'password-reset.php',  __( "Password reset" ), $show_to_anon ),
+	] );
+} );
+
+// permissions
+register_permissions( 'user', [
+	'read',
+	'backend',
+] );
+inherit_permissions( 'admin', 'user', [
+	'edit-user-all',
+	'edit-email-all',
+	'edit-domain-all',
+] );

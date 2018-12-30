@@ -16,59 +16,62 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 /*
- * This is the homepage of your hosting panel
+ * This is the domain edit page
  */
 
 // load framework
 require 'load.php';
 
-// require read permissions
-require_permission( 'read' );
+// wanted domain
+list( $domain_name ) = url_parts( 1 );
+
+// retrieve domain
+$domain = ( new DomainAPI )
+	->whereStr( 'domain_name', $domain_name )
+	->whereDomainIsEditable()
+	->queryRow();
+
+// 404?
+$domain or PageNotFound::spawn();
+
+// domain mailboxes
+$mailboxes = ( new MailboxFullAPI() )
+	->select( [
+		'domain_name',
+		'mailbox_username',
+		'mailbox_receive',
+	] )
+	->whereMailboxDomainID( $domain->get( 'domain_ID' ) )
+	->queryGenerator();
 
 // spawn header
-Header::spawn();
-
-// user domains
-$domains = ( new DomainAPI() )
-	->select( [
-		'domain.domain_ID',
-		'domain_name',
-		'domain_active',
-	] )
-	->whereDomainIsEditable()
-	->orderBy( 'domain_name' )
-	->queryGenerator();
+Header::spawn( [
+	'title' => sprintf(
+		__( "Domain: %s" ),
+		"<em>" . esc_html( $domain_name ) . "</em>"
+	),
+] );
 ?>
 
-	<p class="lead"><?php printf(
-		__( "Welcome in your %s dashboard!" ),
-		SITE_NAME
-	) ?></p>
-
-	<?php if( $domains->valid() ): ?>
+	<?php if( $mailboxes->valid() ): ?>
 		<h3><?php printf(
 			__( "Your %s" ),
-			__( "domains" )
+			__( "mailboxes" )
 		) ?></h3>
 		<ul>
-		<?php foreach( $domains as $domain ): ?>
-			<li>
-				<code>
-				<?php if( $domain->domain_active ): ?>
-					<?php echo HTML::a(
-						$domain->getDomainPermalink(),
-						$domain->domain_name
+			<?php foreach( $mailboxes as $mailbox ): ?>
+				<li>
+					<code>
+						<?php echo HTML::a(
+						$mailbox->getMailboxPermalink(),
+						$mailbox->getMailboxAddress()
 					) ?>
-				<?php else: ?>
-					<del><?php _esc_html( $domain->domain_name ) ?></del>
-				<?php endif ?>
-				</code>
-			</li>
-		<?php endforeach ?>
+					</code>
+				</li>
+			<?php endforeach ?>
 		</ul>
 	<?php endif ?>
 
 <?php
-
-// spawn footer
+// spawn the footer
 Footer::spawn();

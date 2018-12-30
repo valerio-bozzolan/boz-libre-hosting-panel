@@ -16,14 +16,13 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 /*
- * This is the template for the website dashboard
+ * This is the template for a bad request
  */
 
 // unuseful when load directly
 defined( 'BOZ_PHP' ) or die;
 ?>
 
-	<p class="lead"><?php printf(
-		__( "Welcome in the %s dashboard." ),
-		SITE_NAME
-	) ?></p>
+<p class="alert alert-danger"><?php _e( "Your request cannot be processed." ) ?></p>
+
+<p><?php _e( "If you think that it's not your fault, contact us. Thanks!" ) ?></p>

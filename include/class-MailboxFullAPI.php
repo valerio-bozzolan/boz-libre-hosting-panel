@@ -15,15 +15,14 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-/*
- * This is the template for the website dashboard
+/**
+ * Mailbox API (retrieve a full mailbox address)
  */
+class MailboxFullAPI extends MailboxAPI {
 
-// unuseful when load directly
-defined( 'BOZ_PHP' ) or die;
-?>
+	public function __construct() {
+		parent::__construct();
+		$this->joinMailboxDomain();
+	}
 
-	<p class="lead"><?php printf(
-		__( "Welcome in the %s dashboard." ),
-		SITE_NAME
-	) ?></p>
+}

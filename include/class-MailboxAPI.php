@@ -15,15 +15,38 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-/*
- * This is the template for the website dashboard
+/**
+ * Mailbox API
  */
+class MailboxAPI extends DomainAPI {
 
-// unuseful when load directly
-defined( 'BOZ_PHP' ) or die;
-?>
+	public function __construct() {
+		Query::__construct();
+		$this->from( Mailbox::T );
+		$this->defaultClass( 'Mailbox' );
+	}
 
-	<p class="lead"><?php printf(
-		__( "Welcome in the %s dashboard." ),
-		SITE_NAME
-	) ?></p>
+	/**
+	 * Limit to a certain domain
+	 *
+	 * @param $domain_ID int
+	 */
+	public function whereMailboxDomainID( $domain_ID ) {
+		return $this->whereInt( 'mailbox.domain_ID', $domain_ID );
+	}
+
+	/**
+	 * Join mailboxes and domain (once)
+	 *
+	 * @return self
+	 */
+	public function joinMailboxDomain() {
+		if( empty( $this->joinedMailboxDomain ) ) {
+			$this->joinedMailboxDomain = true;
+			$this->from( 'domain' );
+			$this->equals( 'domain.domain_ID', 'mailbox.domain_ID' );
+		}
+		return $this;
+	}
+
+}

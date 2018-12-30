@@ -16,14 +16,32 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 /*
- * This is the template for the website dashboard
+ * This is the logout page
  */
 
-// unuseful when load directly
-defined( 'BOZ_PHP' ) or die;
+// load framework
+require 'load.php';
+
+// spawn header
+Header::spawn( [
+	'title' => __( "Please confirm logout" ),
+] );
+
+// check login
+if( is_action( 'logout' ) ) {
+	logout();
+}
+
+// require to be logged, but do not redirect again here otherwise
+require_permission( 'read', false );
 ?>
 
-	<p class="lead"><?php printf(
-		__( "Welcome in the %s dashboard." ),
-		SITE_NAME
-	) ?></p>
+	<p class="alert alert-warning"><?php _e( "Please manually confirm your action." ) ?></p>
+
+	<form method="post">
+		<button type="submit" name="action" value="logout" class="btn btn-default"><?php _e( "Logout" ) ?></button>
+	</form>
+
+<?php
+// spawn footer
+Footer::spawn();

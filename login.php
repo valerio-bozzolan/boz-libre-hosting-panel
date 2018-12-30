@@ -1,6 +1,6 @@
 <?php
 # Copyright (C) 2018 Valerio Bozzolan
-# Reyboz another self-hosting panel project
+# Boz Libre Hosting Panel
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as
@@ -16,28 +16,23 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 /*
- * This is the template for the login form
+ * This is the login page
  */
 
-// unuseful when load directly
-defined( 'BOZ_PHP' ) || die;
+// load framework
+require 'load.php';
 
-/**
- * Print the password reset URL
- */
-$password_reset_url = function () {
-	echo http_build_get_query(
-		ROOT . '/password-reset.php', [
-			'user_uid' => @ $_REQUEST[ 'user_uid' ],
-		]
-	);
-};
+// spawn header
+Header::spawn();
+
+// go to the wanted page (or homepage)
+if( login() ) {
+	http_redirect( after_login_url(), 307 );
+}
 ?>
 
-	<?php if( ! is_logged() ): ?>
-		<?php if( isset( $_POST[ 'user_uid' ] ) ): ?>
-			<p class="alert alert-warning"><?php _e( "Authentication failed!" ) ?></p>
-		<?php endif ?>
+	<?php if( isset( $_POST[ 'user_uid' ] ) ): ?>
+		<p class="alert alert-warning"><?php _e( "Authentication failed!" ) ?></p>
 	<?php endif ?>
 
 	<p><?php printf(
@@ -56,8 +51,29 @@ $password_reset_url = function () {
 		</div>
 
 		<?php if( ! empty( $_POST[ 'user_uid' ] ) ): ?>
-			<p><a href="<?php $password_reset_url() ?>"><?php _e( "Lost password?" ) ?></a></p>
+			<p><a href="<?php
+				// the password reset URL
+				echo http_build_get_query(
+					get_menu_entry( 'password-reset' )->getSitePage( ROOT ), [
+					'user_uid' => @ $_REQUEST[ 'user_uid' ],
+				] );
+			?>"><?php _e( "Lost password?" ) ?></a></p>
 		<?php endif ?>
 
 		<button type="submit" class="btn btn-default"><?php _e( "Login" ) ?></button>
 	</form>
+
+<?php
+// spawn footer
+Footer::spawn();
+
+/**
+ * Return the back URL to be redirected after the login action
+ */
+function after_login_URL() {
+	if( isset( $_GET[ 'redirect' ] ) && 0 === strpos( $_GET[ 'redirect' ], '/' ) ) {
+		return site_page( $_GET[ 'redirect' ], URL );
+	}
+	return get_menu_entry( 'index' )
+		->getSitePage( URL );
+}

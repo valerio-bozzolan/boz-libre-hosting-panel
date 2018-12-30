@@ -15,15 +15,27 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-/*
- * This is the template for the website dashboard
+/**
+ * A domain handled by the user
  */
+class Domain extends Queried {
 
-// unuseful when load directly
-defined( 'BOZ_PHP' ) or die;
-?>
+	const T = 'domain';
+	const UID = 'domain_name';
 
-	<p class="lead"><?php printf(
-		__( "Welcome in the %s dashboard." ),
-		SITE_NAME
-	) ?></p>
+	public function __construct() {
+		$this->integers( 'domain_ID' );
+		$this->booleans( 'domain_active' );
+		$this->dates( 'domain_born', 'domain_expiration' );
+	}
+
+	/**
+	 * Get the domain edit URl
+	 *
+	 * @return string
+	 */
+	public function getDomainPermalink( $absolute = false ) {
+		return ROOT . '/domain.php/' . $this->get( 'domain_name' );
+	}
+
+}
