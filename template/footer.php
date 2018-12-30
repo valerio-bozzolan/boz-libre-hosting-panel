@@ -31,10 +31,20 @@ load_module( 'footer' );
 
 	<hr />
 	<div class="container">
-		<p>
-			<?php _e( "Help:" ) ?><br />
-			<?php email_blur( CONTACT_EMAIL ) ?>
-		</p>
+		<div class="row">
+			<div class="col-sm-2">
+				<?php _e( "Help:" ) ?><br />
+				<?php email_blur( CONTACT_EMAIL ) ?>
+			</div>
+
+			<?php if( REPO_URL ): ?>
+			<div class="col-sm-2">
+				<?php _e( "Contribute:" ) ?><br />
+				<a href="<?php echo REPO_URL ?>"><?php _e( "project repository" ) ?></a>
+			</div>
+			<?php endif ?>
+
+		</div>
 	</div>
 </body>
 </html>

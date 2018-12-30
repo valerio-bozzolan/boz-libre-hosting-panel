@@ -38,7 +38,7 @@ define_default( 'JQUERY_URL', '/javascript/jquery/jquery.min.js' );
 
 // Bootstrap CSS/JavaScript files without trailing slash
 // provided by the libjs-bootstrap package as default
-define_default( 'BOOTSTRAP_DIR_URL', '/javascript/twitter-bootstrap' );
+define_default( 'BOOTSTRAP_DIR_URL', '/javascript/bootstrap' );
 
 // path to the Net SMTP class
 // provided by the php-net-smtp package as default
@@ -59,3 +59,6 @@ define_default( 'SITE_NAME', "Reyboz Libre Hosting Panel" );
 
 // generic contact e-mail
 define_default( 'CONTACT_EMAIL', 'support@' . DOMAIN );
+
+// repository project URL
+define_default( 'REPO_URL', 'https://github.com/valerio-bozzolan/boz-libre-hosting-panel' );
