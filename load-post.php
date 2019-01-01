@@ -64,6 +64,7 @@ define_default( 'REPO_URL', 'https://github.com/valerio-bozzolan/boz-libre-hosti
 add_menu_entries( [
 		new MenuEntry( 'index',          '/',                   __( "Dashboard" ) ),
 		new MenuEntry( 'login',          'login.php',           __( "Login" ) ),
+		new MenuEntry( 'profile',        'profile.php',         __( "Profile" ) ),
 		new MenuEntry( 'logout',         'logout.php',          __( "Logout" ) ),
 		new MenuEntry( 'password-reset', 'password-reset.php',  __( "Password reset" ) ),
 ] );

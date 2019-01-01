@@ -21,9 +21,25 @@
  * @param $name string page name (to be sanitized)
  * @param $args mixed arguments to be passed to the page scope
  */
-function template( $name, $args = [] ) {
-	extract( $args );
-	require TEMPLATE_PATH . __ . "$name.php";
+function template( $template_name, $template_args = [] ) {
+	extract( $template_args, EXTR_SKIP );
+	return require TEMPLATE_PATH . __ . "$template_name.php";
+}
+
+/**
+ * Get the returned text from a template
+ *
+ * @param $name string page name (to be sanitized)
+ * @param $args mixed arguments to be passed to the page scope
+ * @see template()
+ * @return string
+ */
+function template_content( $name, $args = [] ) {
+	ob_start();
+	template( $name, $args );
+	$text = ob_get_contents();
+	ob_end_clean();
+	return $text;
 }
 
 /**
@@ -115,7 +131,7 @@ function url_parts( $n ) {
  * @param $uid string E.g. 'index'
  * @param $args mixed Arguments
  */
-function the_menu_link( $uid ) {
+function the_menu_link( $uid, $args = [] ) {
 	$page = get_menu_entry( $uid );
 	the_link( $page->getSitePage(), $page->name, $args );
 }
@@ -135,4 +151,13 @@ function the_link( $url, $title, $args = [] ) {
 		'url'   => $url,
 		'args'  => $args,
 	] );
+}
+
+/**
+ * Generate a password
+ *
+ * @param $bytes int
+ */
+function generate_password( $bytes = 8 ) {
+	return rtrim( base64_encode( bin2hex( openssl_random_pseudo_bytes( $bytes ) ) ), '=' );
 }

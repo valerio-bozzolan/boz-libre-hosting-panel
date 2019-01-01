@@ -16,18 +16,39 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 /*
- * This is the template for a link
+ * This is the template for the e-mail that contains the user password
  *
  * Called from
- * 	include/functions.php - the_link() function
- *
- * Available variables:
- * 	$title string e.g. "Home"
- * 	$url string e.g. "/"
- * 	$args mixed
+ * 	template/sidebar.php
  */
 
 // unuseful when load directly
 defined( 'BOZ_PHP' ) or die;
+?>
 
-?><a class="btn btn-default" href="<?php _esc_attr( $url ) ?>"><?php _esc_html( $title ) ?></a>
+<?php printf(
+	__( "Hello %s %s!" ),
+	$name,
+	$surname
+) ?>
+
+
+<?php printf(
+	__( "Here you are your credentials for your account into the %s:" ),
+	SITE_NAME
+) ?>
+
+
+<?php echo $uid ?>
+
+<?php echo $password ?>
+
+
+<?php _e( "I remember you that the login page is there:" ) ?>
+
+
+<?php echo http_build_get_query(
+	get_menu_entry( 'login' )->getSitePage( true ), [
+		'user_uid' => $uid
+	]
+) ?>

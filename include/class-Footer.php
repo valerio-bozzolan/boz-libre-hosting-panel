@@ -26,6 +26,8 @@ class Footer {
 	 * @param $args array arguments
 	 */
 	public static function spawn() {
-		template( 'footer', Header::$args );
+		template( 'footer', [
+			'args' => & Header::$args,
+		] );
 	}
 }

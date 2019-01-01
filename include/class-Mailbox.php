@@ -58,7 +58,7 @@ class Mailbox extends Domain {
 	 */
 	public function updateMailboxPassword( $password = null ) {
 		if( ! $password ) {
-			$password = Mailbox::generatePassword();
+			$password = generate_password();
 		}
 		$enc_password = Mailbox::encryptPassword( $password );
 		query_update( 'mailbox', [
@@ -93,14 +93,5 @@ class Mailbox extends Domain {
 	public static function encryptPassword( $password ) {
 		$salt = bin2hex( openssl_random_pseudo_bytes( 3 ) );
 		return '{SHA512-CRYPT}' . crypt( $password, "$6$$salt" );
-	}
-
-	/**
-	 * Generate a password
-	 *
-	 * TODO: do not hardcode to a certain way
-	 */
-	public static function generatePassword() {
-		return rtrim( base64_encode( bin2hex( openssl_random_pseudo_bytes( 8 ) ) ), '=' );
 	}
 }

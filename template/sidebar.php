@@ -33,7 +33,7 @@ defined( 'BOZ_PHP' ) or die;
 	) ?></p>
 
 	<?php if( is_logged() ): ?>
-		<?php the_menu_link( 'logout' ) ?>
+		<p><?php the_menu_link( 'profile' ) ?></p>
 	<?php endif ?>
 <?php endif ?>
 

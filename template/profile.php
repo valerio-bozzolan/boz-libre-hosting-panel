@@ -16,18 +16,28 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 /*
- * This is the template for a link
+ * This is the template for an user profile
  *
- * Called from
- * 	include/functions.php - the_link() function
+ * Called from:
+ * 	profile.php
  *
  * Available variables:
- * 	$title string e.g. "Home"
- * 	$url string e.g. "/"
- * 	$args mixed
+ * 	$email string
  */
 
 // unuseful when load directly
 defined( 'BOZ_PHP' ) or die;
+?>
 
-?><a class="btn btn-default" href="<?php _esc_attr( $url ) ?>"><?php _esc_html( $title ) ?></a>
+<h3><?php _e( "Change password" ) ?></h3>
+<form method="post">
+	<p><?php printf(
+		__( "You can generate a new strong password that will be sent to your e-mail address (%s). Note that this action will also logout you immediately." ),
+		esc_html( $email )
+	) ?></p>
+	<p><button type="submit" class="btn btn-default" name="action" value="send-user-password"><?php _e( "Generate new password" ) ?></button></p>
+</form>
+
+<h3><?php _e( "Logout" ) ?></h3>
+<p><?php _e( "Have you done what you had to do? Then you can (and should) logout now." ) ?></p>
+<p><?php the_menu_link( 'logout' ) ?></p>

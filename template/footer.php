@@ -20,6 +20,9 @@
  *
  * Called from:
  * 	include/class-Footer.php
+ *
+ * Available variables:
+ * 	$args array
  */
 
 // unuseful when load directly
