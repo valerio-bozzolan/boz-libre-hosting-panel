@@ -35,6 +35,7 @@ class DomainAPI extends Query {
 		if( empty( $this->joinedDomainUser ) ) {
 			$this->from( 'domain_user' );
 			$this->equals( 'domain_user.domain_ID', 'domain.domain_ID' );
+
 			$this->joinedDomainUser = true;
 		}
 		return $this;
@@ -59,7 +60,7 @@ class DomainAPI extends Query {
 	 * @return self
 	 */
 	public function whereDomainUser( $user_ID = false ) {
-		if( ! $user_ID ) {
+		if( $user_ID === false ) {
 			$user_ID = get_user( 'user_ID' );
 		}
 		$this->joinDomainUser();
