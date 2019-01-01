@@ -20,25 +20,12 @@
  */
 class DomainAPI extends Query {
 
+	const UID = 'name';
+
 	public function __construct() {
 		parent::__construct();
 		$this->from( Domain::T );
 		$this->defaultClass( 'Domain' );
-	}
-
-	/**
-	 * Join domain and users (once)
-	 *
-	 * @return self
-	 */
-	public function joinDomainUser() {
-		if( empty( $this->joinedDomainUser ) ) {
-			$this->from( 'domain_user' );
-			$this->equals( 'domain_user.domain_ID', 'domain.domain_ID' );
-
-			$this->joinedDomainUser = true;
-		}
-		return $this;
 	}
 
 	/**
@@ -67,4 +54,48 @@ class DomainAPI extends Query {
 		return $this->whereInt( 'domain_user.user_ID', $user_ID );
 	}
 
+	/**
+	 * Limit to a certian domain name
+	 *
+	 * @param $domain_name string
+	 * @return self
+	 */
+	public function whereDomainName( $domain_name ) {
+		return $this->whereStr( 'domain_name', $domain_name );
+	}
+
+	/**
+	 * Constructor from a domain ID
+	 *
+	 * @param $domain_ID int
+	 * @return self
+	 */
+	public function whereDomainID( $domain_ID ) {
+		return $this->whereInt( 'domain.domain_ID', $domain_ID );
+	}
+
+	/**
+	 * Constructor from a Domain object
+	 *
+	 * @param $domain object
+	 * @return self
+	 */
+	public function whereDomain( $domain ) {
+		return $this->whereDomainID( $domain->getDomainID() );
+	}
+
+	/**
+	 * Join domain and users (once)
+	 *
+	 * @return self
+	 */
+	public function joinDomainUser() {
+		if( empty( $this->joinedDomainUser ) ) {
+			$this->from( 'domain_user' );
+			$this->equals( 'domain_user.domain_ID', 'domain.domain_ID' );
+
+			$this->joinedDomainUser = true;
+		}
+		return $this;
+	}
 }

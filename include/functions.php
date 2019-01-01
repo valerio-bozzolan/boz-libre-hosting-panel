@@ -22,6 +22,7 @@
  * @param $args mixed arguments to be passed to the page scope
  */
 function template( $name, $args = [] ) {
+	extract( $args );
 	require TEMPLATE_PATH . __ . "$name.php";
 }
 

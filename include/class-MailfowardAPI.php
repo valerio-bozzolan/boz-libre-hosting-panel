@@ -16,29 +16,38 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Mailbox API
+ * E-mail fowarding API
  */
-class MailboxAPI extends DomainAPI {
+class MailfowardAPI extends DomainAPI {
 
 	public function __construct() {
 		Query::__construct();
-		$this->from( Mailbox::T );
-		$this->defaultClass( 'Mailbox' );
+		$this->from( Mailfoward::T );
+		$this->defaultClass( 'Mailfoward' );
 	}
 
 	/**
-	 * Join mailboxes and domain (once)
+	 * Join mailfowardes and domain (once)
 	 *
 	 * @return self
 	 */
-	public function joinMailboxDomain() {
-		if( empty( $this->joinedMailboxDomain ) ) {
+	public function joinMailfowardDomain() {
+		if( empty( $this->joinedMailfowardDomain ) ) {
+			$this->joinedMailfowardDomain = true;
 			$this->from( 'domain' );
-			$this->equals( 'domain.domain_ID', 'mailbox.domain_ID' );
-
-			$this->joinedMailboxDomain = true;
+			$this->equals( 'domain.domain_ID', 'mailfoward.domain_ID' );
 		}
 		return $this;
+	}
+
+	/**
+	 * Filter to a certain mail fowarding source
+	 *
+	 * @param mailfoward_source string
+	 * @return self
+	 */
+	public function whereMailfowardSource( $mailfoward_source ) {
+		return $this->whereStr( 'mailfoward_source', $mailfoward_source );
 	}
 
 }

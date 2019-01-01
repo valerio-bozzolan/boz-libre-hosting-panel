@@ -18,7 +18,8 @@
 /*
  * This is the template for the website header
  *
- * Please look at the /include/Header.php class to understand the arguments
+ * Called from:
+ * 	include/class-Header.php
  */
 
 // unuseful when load directly
@@ -32,17 +33,17 @@ enqueue_css( 'bootstrap' );
 <!DOCTYPE html>
 <html>
 <head>
-	<title><?php echo strip_tags( $args[ 'title' ] ) ?> - <?php echo strip_tags( SITE_NAME ) ?></title>
+	<title><?php echo strip_tags( $title ) ?> - <?php echo strip_tags( SITE_NAME ) ?></title>
 	<link rel="icon" href="<?php echo ROOT ?>/content/logo/logo-64.png" type="image/png" /><?php load_module( 'header' ) ?>
 
 </head>
 <body>
 	<div class="container">
 		<h1><?php echo SITE_NAME ?></h1>
-		<h2><?php echo $args[ 'title' ] ?></h2>
+		<h2><?php echo $title ?></h2>
 	</div>
 
-	<?php if( $args[ 'container' ] ): ?>
+	<?php if( $container ): ?>
 		<!-- page container -->
 		<div class="container">
 	<?php endif ?>
@@ -51,7 +52,7 @@ enqueue_css( 'bootstrap' );
 	<div class="row">
 
 		<!-- sidebar content -->
-		<?php if( $args[ 'sidebar' ] ): ?>
+		<?php if( $sidebar ): ?>
 			<div class="col-sm-8">
 		<?php else: ?>
 			<div class="col-sm-12">

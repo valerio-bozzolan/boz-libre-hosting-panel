@@ -16,16 +16,19 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 /*
- * This is the template for a bad request
+ * This is the template for the website domain dashboard page
  *
  * Called from:
- * 	include/class-PageNotFound.php
+ * 	domain.php
  */
 
 // unuseful when load directly
 defined( 'BOZ_PHP' ) or die;
-?>
 
-<p class="alert alert-warning"><?php _e( "Oh no! A page not found error!" ) ?></p>
+// spawn the mailboxes list
+template( 'mailboxes', [ 'mailboxes' => $mailboxes ] );
 
-<p><?php _e( "The page you was looking for is wrong or was deleted or you have not enough permissions to see it, etc. you know." ) ?></p>
+// spawn the mail fowardings list
+template( 'mailfowards', [ 'mailfowards' => $mailfowards ] );
+
+

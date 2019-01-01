@@ -82,7 +82,7 @@ class Header {
 	 * @return string
 	 */
 	public static function actualPageUID() {
-		$page = basename( $_SERVER[ 'PHP_SELF' ] );
+		$page = basename( $_SERVER[ 'SCRIPT_NAME' ] );
 		return str_replace( '.php', '', $page );
 	}
 }

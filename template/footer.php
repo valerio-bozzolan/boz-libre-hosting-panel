@@ -17,6 +17,9 @@
 
 /*
  * This is the template for the website footer
+ *
+ * Called from:
+ * 	include/class-Footer.php
  */
 
 // unuseful when load directly
@@ -29,7 +32,7 @@ load_module( 'footer' );
 		<!-- /sidebar content -->
 
 		<!-- sidebar -->
-		<?php if( $args[ 'sidebar' ] ): ?>
+		<?php if( $sidebar ): ?>
 			<div class="col-sm-4">
 				<?php template( 'sidebar' ) ?>
 			</div>
@@ -39,7 +42,7 @@ load_module( 'footer' );
 	<!-- page row -->
 	</div>
 
-	<?php if( $args[ 'container' ] ): ?>
+	<?php if( $container ): ?>
 		</div>
 		<!-- /page container -->
 	<?php endif ?>
@@ -49,19 +52,23 @@ load_module( 'footer' );
 	<div class="container">
 		<div class="row">
 
+			<!-- help -->
 			<?php if( CONTACT_EMAIL ): ?>
 			<div class="col-sm-2">
 				<?php _e( "Help:" ) ?><br />
 				<?php email_blur( CONTACT_EMAIL ) ?>
 			</div>
 			<?php endif ?>
+			<!-- end help -->
 
+			<!-- fork -->
 			<?php if( REPO_URL ): ?>
 			<div class="col-sm-2">
 				<?php _e( "Contribute:" ) ?><br />
 				<a href="<?php echo REPO_URL ?>" target="_blank"><?php _e( "project repository" ) ?></a>
 			</div>
 			<?php endif ?>
+			<!-- end for -->
 
 		</div>
 	</div>

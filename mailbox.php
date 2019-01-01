@@ -26,7 +26,7 @@ require 'load.php';
 list( $domain_name, $mailbox_username ) = url_parts( 2 );
 
 // retrieve domain
-$mailbox = ( new MailboxFullAPI )
+$mailbox = ( new mailboxFullAPI )
 	->select( [
 		'domain.domain_ID',
 		'domain.domain_name',

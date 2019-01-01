@@ -17,6 +17,9 @@
 
 /*
  * This is the template for a bad request
+ *
+ * Called from:
+ * 	include/class-BadRequest.php
  */
 
 // unuseful when load directly

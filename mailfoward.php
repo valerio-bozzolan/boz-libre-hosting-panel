@@ -16,51 +16,56 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 /*
- * This is the domain edit page
+ * This is the single e-mail fowarding edit page
  */
 
 // load framework
 require 'load.php';
 
-// wanted domain
-list( $domain_name ) = url_parts( 1 );
+// wanted domain and mail fowarding source
+list( $domain_name, $mailfoward_source ) = url_parts( 2 );
 
 // retrieve domain
-$domain = ( new DomainAPI() )
+$mailfoward = ( new MailfowardFullAPI )
+	->select( [
+		'domain.domain_ID',
+		'domain.domain_name',
+		'domain.domain_active',
+		'mailfoward_source',
+		'mailfoward_destination',
+	] )
 	->whereDomainName( $domain_name )
+	->whereMailfowardSource( $mailfoward_source )
 	->whereDomainIsEditable()
 	->queryRow();
 
 // 404?
-$domain or PageNotFound::spawn();
+$mailfoward or PageNotFound::spawn();
+
+// handle save destination action
+if( is_action( 'mailfoward-save-destination' ) ) {
+	$destination = $_POST[ 'mailfoward_destination' ];
+	if( filter_var( $destination, FILTER_VALIDATE_EMAIL ) ) {
+		$mailfoward->update( [
+			new DBCol( 'mailfoward_destination', $destination, 's' ),
+		] );
+
+		// POST/redirect/GET
+		http_redirect( URL . $_SERVER[ 'REQUEST_URI' ] );
+	}
+}
 
 // spawn header
 Header::spawn( [
 	'title' => sprintf(
-		__( "Domain: %s" ),
-		"<em>" . esc_html( $domain_name ) . "</em>"
+		_( "Mailfoward: %s" ),
+		"<em>" . esc_html( $mailfoward->getMailfowardAddress() ) . "</em>"
 	),
 ] );
 
-// spawn the domain template
-template( 'domain', [
-	'mailboxes' =>
-		$domain->factoryMailbox()
-		->select( [
-			'domain_name',
-			'mailbox_username',
-			'mailbox_receive',
-		] )
-		->queryGenerator(),
-
-	'mailfowards' =>
-		$domain->factoryMailfoward()
-		->select( [
-			'domain_name',
-			'mailfoward_source',
-			'mailfoward_destination',
-		] )
-		->queryGenerator()
+// spawn the page content
+template( 'mailfoward', [
+	'mailfoward' => $mailfoward,
 ] );
 
 // spawn the footer

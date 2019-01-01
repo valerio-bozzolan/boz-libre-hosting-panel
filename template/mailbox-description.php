@@ -16,16 +16,14 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 /*
- * This is the template for a bad request
+ * This is the template for a single e-mail fowarding
  *
  * Called from:
- * 	include/class-PageNotFound.php
+ * 	template/mailbox.php
  */
 
 // unuseful when load directly
 defined( 'BOZ_PHP' ) or die;
 ?>
 
-<p class="alert alert-warning"><?php _e( "Oh no! A page not found error!" ) ?></p>
-
-<p><?php _e( "The page you was looking for is wrong or was deleted or you have not enough permissions to see it, etc. you know." ) ?></p>
+<p><?php _e( "A mailbox is a fully operative e-mail address that you can use to send and receive e-mails. As interface you can use a webmail, an e-mail client like Thunderbird, Evolution, or a mobile app like K-9 Mail, etc." ) ?></p>

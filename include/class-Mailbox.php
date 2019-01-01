@@ -65,7 +65,7 @@ class Mailbox extends Domain {
 			new DBCol( 'mailbox_password', $enc_password, 's' ),
 		], sprintf(
 			"domain_ID = %d AND mailbox_username = '%s'",
-			esc_sql( $this->get( 'domain_ID' )        ),
+			$this->getDomainID(),
 			esc_sql( $this->get( 'mailbox_username' ) )
 		) );
 		return $password;

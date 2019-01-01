@@ -16,16 +16,28 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 /*
- * This is the template for a bad request
+ * This is the template for a single e-mail fowarding
  *
  * Called from:
- * 	include/class-PageNotFound.php
+ * 	mailfoward.php
  */
 
 // unuseful when load directly
 defined( 'BOZ_PHP' ) or die;
 ?>
 
-<p class="alert alert-warning"><?php _e( "Oh no! A page not found error!" ) ?></p>
+<?php template( 'mailfoward-description' ) ?>
 
-<p><?php _e( "The page you was looking for is wrong or was deleted or you have not enough permissions to see it, etc. you know." ) ?></p>
+<h3><?php _e( "Destination" ) ?></h3>
+<form method="post">
+	<p>
+		<label for="mailfoward-destination"><?php printf(
+			__( "Your incoming e-mails from %s will be fowarded to %s. Here you can change this destination." ),
+			esc_html( $mailfoward->getMailfowardAddress() ),
+			esc_html( $mailfoward->getMailfowardDestination() )
+		) ?></label>
+		<br />
+		<input type="text" name="mailfoward_destination" id="mailfoward-destination"<?php _value( $mailfoward->getMailfowardDestination() ) ?> />
+	</p>
+	<p><button type="submit" class="btn btn-default" name="action" value="mailfoward-save-destination"><?php _e( "Save" ) ?></button></p>
+</form>

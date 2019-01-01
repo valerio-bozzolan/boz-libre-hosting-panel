@@ -16,7 +16,7 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Mailbox API (retrieve a full mailbox address)
+ * Mailbox API (a full mailbox address)
  */
 class MailboxFullAPI extends MailboxAPI {
 

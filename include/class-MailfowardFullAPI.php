@@ -15,17 +15,14 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-/*
- * This is the template for a bad request
- *
- * Called from:
- * 	include/class-PageNotFound.php
+/**
+ * Mailbox API (a full mailbox address)
  */
+class MailfowardFullAPI extends MailfowardAPI {
 
-// unuseful when load directly
-defined( 'BOZ_PHP' ) or die;
-?>
+	public function __construct() {
+		parent::__construct();
+		$this->joinMailfowardDomain();
+	}
 
-<p class="alert alert-warning"><?php _e( "Oh no! A page not found error!" ) ?></p>
-
-<p><?php _e( "The page you was looking for is wrong or was deleted or you have not enough permissions to see it, etc. you know." ) ?></p>
+}

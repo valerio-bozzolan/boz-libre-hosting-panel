@@ -2,11 +2,16 @@
 
 This projects was started to create another _keep it simple and stupid_ libre web hosting control panel suitable for providers of everyday shared hosting services.
 
-Features that will be supported:
+## Features
 
-* administration of own FTP accounts (thanks to Pure-FTPd over MariaDB)
-* administration of own mailboxes and aliases (thanks to Postfix and Dovecot over MariaDB)
-* administration of own MariaDB databases
+Let me say that I love listening to the whishlist of my costumers. Here are the most important features/TODOs:
+
+* administration of own mailboxes
+	* [X] password reset
+* administration of own mail aliases (thanks to Postfix and Dovecot over MariaDB)
+	* [X] change foward destination(s)
+* [ ] administration of own FTP accounts (thanks to Pure-FTPd over MariaDB)
+* [ ] administration of own MariaDB databases
 
 ## License
 

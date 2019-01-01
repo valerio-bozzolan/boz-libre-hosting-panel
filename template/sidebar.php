@@ -17,6 +17,9 @@
 
 /*
  * This is the template for the website sidebar
+ *
+ * Called from:
+ * 	template/footer.php
  */
 
 // unuseful when load directly

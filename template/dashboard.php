@@ -17,6 +17,9 @@
 
 /*
  * This is the template for the website dashboard
+ *
+ * Called from:
+ * 	index.php
  */
 
 // unuseful when load directly

@@ -16,7 +16,10 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 /*
- * This is the template for the website dashboard
+ * This is the template for the navigation menu
+ *
+ * Called from
+ * 	template/sidebar.php
  */
 
 // unuseful when load directly
@@ -24,7 +27,7 @@ defined( 'BOZ_PHP' ) or die;
 ?>
 
 	<ul>
-		<?php foreach( $args[ 'entries' ] as $entry ): ?>
+		<?php foreach( $entries as $entry ): ?>
 			<li class="collection-item">
 
 				<?php if( $entry->uid === Header::$args[ 'uid' ] ): ?>
@@ -32,8 +35,7 @@ defined( 'BOZ_PHP' ) or die;
 				<?php else: ?>
 					<?php echo HTML::a(
 						$entry->getSitePage(),
-						$entry->name,
-						$entry->get( 'title' )
+						$entry->name
 					) ?>
 				<?php endif ?>
 

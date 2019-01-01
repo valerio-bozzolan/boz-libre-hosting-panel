@@ -16,16 +16,35 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 /*
- * This is the template for a bad request
+ * This is the template for the mailboxes list
  *
  * Called from:
- * 	include/class-PageNotFound.php
+ * 	template/domain.php
  */
 
 // unuseful when load directly
 defined( 'BOZ_PHP' ) or die;
+
 ?>
+	<!-- mail boxes -->
+	<?php if( $mailboxes->valid() ): ?>
+		<h3><?php printf(
+			__( "Your %s" ),
+			__( "mailboxes" )
+		) ?></h3>
 
-<p class="alert alert-warning"><?php _e( "Oh no! A page not found error!" ) ?></p>
+		<?php template( 'mailbox-description' ) ?>
 
-<p><?php _e( "The page you was looking for is wrong or was deleted or you have not enough permissions to see it, etc. you know." ) ?></p>
+		<ul>
+			<?php foreach( $mailboxes as $mailbox ): ?>
+				<li>
+					<code><?php echo HTML::a(
+						$mailbox->getMailboxPermalink(),
+						$mailbox->getMailboxAddress()
+					) ?></code>
+				</li>
+			<?php endforeach ?>
+		</ul>
+	<?php endif ?>
+	<!-- end mail boxes -->
+

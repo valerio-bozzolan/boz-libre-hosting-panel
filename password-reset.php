@@ -23,6 +23,7 @@ require 'load.php';
 
 // do something
 if( is_action( 'password-reset' ) ) {
+	die( "Apologies. This feature is not ready :(" );
 	if( is_logged() ) {
 		send_email( __( "Password reset" ), $message, $to = false );
 	} else {

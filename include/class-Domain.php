@@ -30,12 +30,39 @@ class Domain extends Queried {
 	}
 
 	/**
+	 * Get domain ID
+	 *
+	 * @return int
+	 */
+	public function getDomainID() {
+		return $this->get( 'domain_ID' );
+	}
+
+	/**
 	 * Get the domain edit URl
 	 *
 	 * @return string
 	 */
 	public function getDomainPermalink( $absolute = false ) {
 		return ROOT . '/domain.php/' . $this->get( 'domain_name' );
+	}
+
+	/**
+	 * Factory mailbox from this domain
+	 *
+	 * @return MailboxFullAPI
+	 */
+	public function factoryMailbox() {
+		return ( new MailboxFullAPI() )->whereDomain( $this );
+	}
+
+	/**
+	 * Factory e-mail foward from this domain
+	 *
+	 * @return MailfowardFullAPI
+	 */
+	public function factoryMailfoward() {
+		return ( new MailfowardFullAPI() )->whereDomain( $this );
 	}
 
 }
