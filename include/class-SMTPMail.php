@@ -88,7 +88,7 @@ class SMTPMail {
 			$data .= "$header: $value\n";
 		}
 
-		$data .= "\r\n$subject";
+		$data .= "\r\n$body";
 
 		if (PEAR::isError( $this->smtp->data( $data ) ) ) {
 			die( "Unable to send data\n" );
