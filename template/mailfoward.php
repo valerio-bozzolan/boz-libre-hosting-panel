@@ -32,12 +32,12 @@ defined( 'BOZ_PHP' ) or die;
 <form method="post">
 	<p>
 		<label for="mailfoward-destination"><?php printf(
-			__( "Your incoming e-mails from %s will be fowarded to %s. Here you can change this destination." ),
+			__( "Your incoming e-mails from %s will be fowarded to %s. Here you can change this destination:" ),
 			esc_html( $mailfoward->getMailfowardAddress() ),
 			esc_html( $mailfoward->getMailfowardDestination() )
 		) ?></label>
 		<br />
-		<input type="text" name="mailfoward_destination" id="mailfoward-destination"<?php _value( $mailfoward->getMailfowardDestination() ) ?> />
+		<input type="email" name="mailfoward_destination" id="mailfoward-destination"<?php _value( $mailfoward->getMailfowardDestination() ) ?> />
 	</p>
 	<p><button type="submit" class="btn btn-default" name="action" value="mailfoward-save-destination"><?php _e( "Save" ) ?></button></p>
 </form>

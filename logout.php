@@ -34,14 +34,9 @@ if( is_action( 'logout' ) ) {
 
 // require to be logged, but do not redirect again here otherwise
 require_permission( 'read', false );
-?>
 
-	<p class="alert alert-warning"><?php _e( "Please manually confirm your action." ) ?></p>
+// spawn the logout template
+template( 'logout' );
 
-	<form method="post">
-		<button type="submit" name="action" value="logout" class="btn btn-default"><?php _e( "Logout" ) ?></button>
-	</form>
-
-<?php
 // spawn footer
 Footer::spawn();

@@ -61,19 +61,22 @@ class Header {
 			$args = array_replace( [
 				'title' => $page->name,
 			], $args );
+		} else {
+			$args[ 'uid' ] = null;
 		}
 
 		// populate default arguments
 		$args = array_replace( [
-			'container' => true,
-			'sidebar'   => true,
+			'container'    => true,
+			'sidebar'      => true,
+			'breadcrumb'   => [],
 		], $args );
 
 		// charset is usually UTF-8
 		header( 'Content-Type: text/html; charset=' . CHARSET );
 
 		// spawn header template
-		template( 'header', $args );
+		template( 'header', [ 'args' => $args ] );
 	}
 
 	/**

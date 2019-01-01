@@ -25,6 +25,14 @@
 // unuseful when load directly
 defined( 'BOZ_PHP' ) or die;
 
+// domain mailboxes
+$mailboxes = $domain->factoryMailbox()
+	->select( [
+			'domain_name',
+			'mailbox_username',
+			'mailbox_receive',
+	] )
+	->queryGenerator();
 ?>
 	<!-- mail boxes -->
 	<?php if( $mailboxes->valid() ): ?>

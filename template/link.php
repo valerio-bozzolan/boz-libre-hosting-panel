@@ -16,34 +16,18 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 /*
- * This is the domain edit page
+ * This is the template for a link
+ *
+ * Called from
+ * 	include/functions.php - the_link() function
+ *
+ * Available variables:
+ * 	$title string e.g. "Home"
+ * 	$href string e.g. "/"
+ * 	$args mixed
  */
 
-// load framework
-require 'load.php';
+// unuseful when load directly
+defined( 'BOZ_PHP' ) or die;
 
-// wanted domain
-list( $domain_name ) = url_parts( 1 );
-
-// retrieve domain
-$domain = ( new DomainAPI() )
-	->whereDomainName( $domain_name )
-	->whereDomainIsEditable()
-	->queryRow();
-
-// 404?
-$domain or PageNotFound::spawn();
-
-// spawn header
-Header::spawn( [
-	'title-prefix' => __( "Domain" ),
-	'title' => $domain_name,
-] );
-
-// spawn the domain template
-template( 'domain', [
-	'domain' => $domain,
-] );
-
-// spawn the footer
-Footer::spawn();
+?><a class="btn btn-link" href="<?php _esc_attr( $href ) ?>"><?php _esc_html( $title ) ?></a>

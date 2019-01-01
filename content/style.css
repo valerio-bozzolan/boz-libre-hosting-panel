@@ -1,0 +1,14 @@
+/**
+ * This is your custom stylesheet
+ *
+ * It overrides the default one
+ */
+#breadcrumb {
+	padding-left:0;
+}
+#breadcrumb li {
+	display:inline;
+}
+#breadcrumb li:not(:last-child)::after {
+	content: ' >';
+}

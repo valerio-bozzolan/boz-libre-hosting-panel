@@ -32,7 +32,7 @@ load_module( 'footer' );
 		<!-- /sidebar content -->
 
 		<!-- sidebar -->
-		<?php if( $sidebar ): ?>
+		<?php if( $args[ 'sidebar' ] ): ?>
 			<div class="col-sm-4">
 				<?php template( 'sidebar' ) ?>
 			</div>
@@ -42,7 +42,7 @@ load_module( 'footer' );
 	<!-- page row -->
 	</div>
 
-	<?php if( $container ): ?>
+	<?php if( $args[ 'container' ] ): ?>
 		</div>
 		<!-- /page container -->
 	<?php endif ?>

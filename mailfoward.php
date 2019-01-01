@@ -51,16 +51,17 @@ if( is_action( 'mailfoward-save-destination' ) ) {
 		] );
 
 		// POST/redirect/GET
-		http_redirect( URL . $_SERVER[ 'REQUEST_URI' ] );
+		http_redirect( URL . $_SERVER[ 'REQUEST_URI' ], 303 );
 	}
 }
 
 // spawn header
 Header::spawn( [
-	'title' => sprintf(
-		_( "Mailfoward: %s" ),
-		"<em>" . esc_html( $mailfoward->getMailfowardAddress() ) . "</em>"
-	),
+	'title-prefix' => __( "Mail fowarding" ),
+	'title' => $mailfoward->getMailfowardAddress(),
+	'breadcrumb' => [
+		new MenuEntry( null, $mailfoward->getDomainPermalink(), $mailfoward->getDomainName() ),
+	],
 ] );
 
 // spawn the page content

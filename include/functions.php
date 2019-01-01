@@ -108,3 +108,31 @@ function url_parts( $n ) {
 	}
 	return $parts;
 }
+
+/**
+ * Link to an existing page from the menu
+ *
+ * @param $uid string E.g. 'index'
+ * @param $args mixed Arguments
+ */
+function the_menu_link( $uid ) {
+	$page = get_menu_entry( $uid );
+	the_link( $page->getSitePage(), $page->name, $args );
+}
+
+/**
+ * Link to a whatever page
+ *
+ * P.S. link() is a reserved function
+ *
+ * @param $url string
+ * @param $title string
+ * @param $args mixed Arguments
+ */
+function the_link( $url, $title, $args = [] ) {
+	template( 'link', [
+		'title' => $title,
+		'url'   => $url,
+		'args'  => $args,
+	] );
+}

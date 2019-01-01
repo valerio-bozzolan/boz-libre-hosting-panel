@@ -48,10 +48,11 @@ if( is_action( 'mailbox-password-reset' ) ) {
 
 // spawn header
 Header::spawn( [
-	'title' => sprintf(
-		__( "Mailbox: %s" ),
-		"<em>" . esc_html( $mailbox->getMailboxAddress() ) . "</em>"
-	),
+	'title-prefix' => __( "Mailbox" ),
+	'title' => $mailbox->getMailboxAddress(),
+	'breadcrumb' => [
+		new MenuEntry( null, $mailbox->getDomainPermalink(), $mailbox->getDomainName() ),
+	],
 ] );
 
 // spawn the page content

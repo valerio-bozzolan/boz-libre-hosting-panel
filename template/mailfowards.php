@@ -25,6 +25,14 @@
 // unuseful when load directly
 defined( 'BOZ_PHP' ) or die;
 
+// domain mail fowardings
+$mailfowards = $domain->factoryMailfoward()
+	->select( [
+		'domain_name',
+		'mailfoward_source',
+		'mailfoward_destination',
+	] )
+	->queryGenerator();
 ?>
 	<!-- mail fowardings -->
 	<?php if( $mailfowards->valid() ): ?>

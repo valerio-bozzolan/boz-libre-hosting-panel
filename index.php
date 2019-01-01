@@ -26,7 +26,9 @@ require 'load.php';
 require_permission( 'read' );
 
 // spawn header
-Header::spawn();
+Header::spawn( [
+	'breadcrumb' => false,
+] );
 
 // user domains
 $domains = ( new DomainAPI() )

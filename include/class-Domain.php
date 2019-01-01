@@ -39,6 +39,15 @@ class Domain extends Queried {
 	}
 
 	/**
+	 * Get domain name
+	 *
+	 * @return string
+	 */
+	public function getDomainName() {
+		return $this->get( 'domain_name' );
+	}
+
+	/**
 	 * Get the domain edit URl
 	 *
 	 * @return string

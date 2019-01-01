@@ -45,9 +45,10 @@ define_default( 'BOOTSTRAP_DIR_URL', '/javascript/bootstrap' );
 define_default( 'NET_SMTP', '/usr/share/php/Net/SMTP.php' );
 
 // register JavaScript/CSS files
-register_js(  'jquery',    JQUERY_URL );
-register_js(  'bootstrap', BOOTSTRAP_DIR_URL .  '/js/bootstrap.min.js'  );
-register_css( 'bootstrap', BOOTSTRAP_DIR_URL . '/css/bootstrap.min.css' );
+register_js(  'jquery',     JQUERY_URL );
+register_js(  'bootstrap',  BOOTSTRAP_DIR_URL .  '/js/bootstrap.min.js'  );
+register_css( 'bootstrap',  BOOTSTRAP_DIR_URL . '/css/bootstrap.min.css' );
+register_css( 'custom-css', ROOT . '/content/style.css' );
 
 // GNU Gettext i18n
 define( 'GETTEXT_DOMAIN', 'reyboz-hosting-panel' );
@@ -60,17 +61,12 @@ define_default( 'CONTACT_EMAIL', 'support@' . DOMAIN );
 define_default( 'REPO_URL', 'https://github.com/valerio-bozzolan/boz-libre-hosting-panel' );
 
 // register web pages
-call_user_func( function () {
-	$logged = is_logged();
-	$show_to_user =   $logged ? null : 'hidden';
-	$show_to_anon = ! $logged ? null : 'hidden';
-	add_menu_entries( [
-			new MenuEntry( 'index',          '',                    __( "Dashboard" ),      $show_to_user ),
-			new MenuEntry( 'login',          'login.php',           __( "Login" ),          $show_to_anon ),
-			new MenuEntry( 'logout',         'logout.php',          __( "Logout" ),         $show_to_user ),
-			new MenuEntry( 'password-reset', 'password-reset.php',  __( "Password reset" ), $show_to_anon ),
-	] );
-} );
+add_menu_entries( [
+		new MenuEntry( 'index',          '/',                   __( "Dashboard" ) ),
+		new MenuEntry( 'login',          'login.php',           __( "Login" ) ),
+		new MenuEntry( 'logout',         'logout.php',          __( "Logout" ) ),
+		new MenuEntry( 'password-reset', 'password-reset.php',  __( "Password reset" ) ),
+] );
 
 // permissions
 register_permissions( 'user', [

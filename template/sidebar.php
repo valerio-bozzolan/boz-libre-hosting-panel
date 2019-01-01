@@ -31,6 +31,9 @@ defined( 'BOZ_PHP' ) or die;
 		__( "Welcome %s!" ),
 		esc_html( get_user( 'user_name' ) )
 	) ?></p>
+
+	<?php if( is_logged() ): ?>
+		<?php the_menu_link( 'logout' ) ?>
+	<?php endif ?>
 <?php endif ?>
 
-<?php MenuTree::spawn() ?>
