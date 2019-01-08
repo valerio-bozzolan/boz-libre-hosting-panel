@@ -17,12 +17,14 @@
 
 class BadRequest {
 
-	public static function spawn() {
+	public static function spawn( $message = null ) {
 		http_response_code( 400 );
 		Header::spawn( [
 			'title' => __( "Bad request" )
 		] );
-		template( 'bad-request' );
+		template( 'bad-request', [
+			'message' => $message,
+		] );
 		Footer::spawn();
 		exit;
 	}
