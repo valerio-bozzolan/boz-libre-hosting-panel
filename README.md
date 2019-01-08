@@ -6,12 +6,16 @@ This projects was started to create another _keep it simple and stupid_ libre we
 
 Let me say that I love listening to the whishlist of my costumers. Here are the most important features/TODOs:
 
-* administration of own mailboxes
-	* [X] password reset
-* administration of own mail aliases (thanks to Postfix and Dovecot over MariaDB)
-	* [X] change foward destination(s)
-* [ ] administration of own FTP accounts (thanks to Pure-FTPd over MariaDB)
-* [ ] administration of own MariaDB databases
+- administration of own mailboxes
+	- [X] password reset
+	- [ ] add
+	- [ ] remove
+- administration of own mail aliases (thanks to Postfix and Dovecot over MariaDB)
+	- [X] change foward destination(s)
+	- [X] add
+	- [ ] remove
+- [ ] administration of own FTP accounts (thanks to Pure-FTPd over MariaDB)
+- [ ] administration of own MariaDB databases
 
 ## License
 
