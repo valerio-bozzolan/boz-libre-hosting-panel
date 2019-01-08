@@ -28,10 +28,19 @@ class Mailfoward extends Domain {
 	 * @return string E-mail
 	 */
 	public function getMailfowardAddress() {
-		return sprintf( "%s@%s",
-			$this->get( 'mailfoward_source' ),
-			$this->get( 'domain_name' )
+		return sprintf( '%s@%s',
+			$this->getMailfowardSource(),
+			$this->getDomainName()
 		);
+	}
+
+	/**
+	 * Get the mailfoward source (just username)
+	 *
+	 * @return string
+	 */
+	public function getMailfowardSource() {
+		return $this->get( 'mailfoward_source' );
 	}
 
 	/**
@@ -46,12 +55,14 @@ class Mailfoward extends Domain {
 	/**
 	 * Get the mailfoward permalink
 	 *
+	 * @param $absolute boolean
 	 * @return string
 	 */
 	public function getMailfowardPermalink( $absolute = false ) {
 		return Mailfoward::permalink(
-			$this->get( 'domain_name' ),
-			$this->get( 'mailfoward_source' )
+			$this->getDomainName(),
+			$this->getMailfowardSource(),
+			$absolute
 		);
 	}
 
@@ -62,7 +73,7 @@ class Mailfoward extends Domain {
 		query_update( self::T, $columns, sprintf(
 			"domain_ID = %d AND mailfoward_source = '%s'",
 			$this->getDomainID(),
-			esc_sql( $this->get( 'mailfoward_source' ) )
+			esc_sql( $this->getMailfowardSource() )
 		) );
 	}
 
@@ -71,12 +82,11 @@ class Mailfoward extends Domain {
 	 *
 	 * @return string
 	 */
-	public static function permalink( $domain, $mailfoward ) {
-		return sprintf(
-			'%s/%s/%s',
-			ROOT . '/mailfoward.php',
-			$domain,
-			$mailfoward
-		);
+	public static function permalink( $domain, $mailfoward = false, $absolute = false ) {
+		$part = site_page( 'mailfoward.php', $absolute ) . _ . $domain;
+		if( $mailfoward ) {
+			$part .= _ . $mailfoward;
+		}
+		return $part;
 	}
 }
