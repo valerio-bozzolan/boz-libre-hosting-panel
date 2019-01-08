@@ -50,4 +50,15 @@ class MailfowardAPI extends DomainAPI {
 		return $this->whereStr( 'mailfoward_source', $mailfoward_source );
 	}
 
+	/**
+	 * Filter to a certain domain ID
+	 *
+	 * @param $domain_ID int
+	 * @return self
+	 * @override
+	 */
+	public function whereDomainID( $domain_ID ) {
+		return $this->whereInt( 'mailfoward.domain_ID', $domain_ID );
+	}
+
 }
