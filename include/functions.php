@@ -112,15 +112,33 @@ function is_action( $action ) {
 }
 
 /**
- * Get URL parts
+ * Get URL parts from the PATH_INFO
  *
- * @param $n
+ * It spawn a "bad request" page if something goes wrong.
+ *
+ * @param $max int If $min is specified, this is the maximum number of parameters. When unspecified, this is the exact number of parameters.
+ * @param $min int Mininum number of parameters.
+ * @return array
+ * @see https://httpd.apache.org/docs/2.4/mod/core.html#acceptpathinfo
  */
-function url_parts( $n ) {
+function url_parts( $max, $min = false ) {
+	if( $min === false ) {
+		$min = $max;
+	}
+
+	// split the PATH_INFO parts
 	$parts = explode( _, $_SERVER[ 'PATH_INFO' ] );
 	array_shift( $parts );
-	if( count( $parts ) !== $n ) {
-		BadRequest::spawn();
+
+	// eventually spawn the "bad request"
+	$n = count( $parts );
+	if( $n > $max || $n < $min ) {
+		BadRequest::spawn( __( "unexpected URL" ) );
+	}
+
+	// eventually fill expected fields
+	for( $i = $n; $i < $max; $i++ ) {
+		$parts[] = null;
 	}
 	return $parts;
 }
@@ -160,4 +178,14 @@ function the_link( $url, $title, $args = [] ) {
  */
 function generate_password( $bytes = 8 ) {
 	return rtrim( base64_encode( bin2hex( openssl_random_pseudo_bytes( $bytes ) ) ), '=' );
+}
+
+/**
+ * Validate a mailbox username
+ *
+ * @param $mailbox string
+ * @return bool
+ */
+function validate_mailbox_username( $mailbox ) {
+	return 1 === preg_match( '/^[a-z][a-z0-9-_.]+$/', $mailbox );
 }
