@@ -20,6 +20,10 @@
  *
  * Called from:
  * 	mailfoward.php
+ *
+ * Available variables:
+ * 	$domain Domain object
+ * 	$mailfoward Mailfoward object
  */
 
 // unuseful when load directly
@@ -28,16 +32,28 @@ defined( 'BOZ_PHP' ) or die;
 
 <?php template( 'mailfoward-description' ) ?>
 
-<h3><?php _e( "Destination" ) ?></h3>
 <form method="post">
 	<p>
-		<label for="mailfoward-destination"><?php printf(
-			__( "Your incoming e-mails from %s will be fowarded to %s. Here you can change this destination:" ),
-			esc_html( $mailfoward->getMailfowardAddress() ),
-			esc_html( $mailfoward->getMailfowardDestination() )
-		) ?></label>
-		<br />
-		<input type="email" name="mailfoward_destination" id="mailfoward-destination"<?php _value( $mailfoward->getMailfowardDestination() ) ?> />
+		<label for="mailfoward-source"><?php _e( "E-mail address:") ?></label><br />
+		<?php if( $mailfoward ): ?>
+			<input type="text" id="mailfoward-source" readonly<?php _value( $mailfoward->getMailfowardAddress() ) ?> />
+		<?php else: ?>
+			<input type="string" name="mailfoward_source" id="mailfoward-source"<?php
+				if( $mailfoward ) {
+					_value( $mailfoward->getMailfowardSource() );
+				}
+			?> /> <code>@<?php _esc_html( $domain->getDomainName() ) ?></code>
+		<?php endif ?>
 	</p>
-	<p><button type="submit" class="btn btn-default" name="action" value="mailfoward-save-destination"><?php _e( "Save" ) ?></button></p>
+	<p>
+		<label for="mailfoward-destination"><?php _e( "Foward the incoming e-mails to this destination:" ) ?></label><br />
+		<input type="email" name="mailfoward_destination" id="mailfoward-destination"<?php
+			if( $mailfoward ) {
+				_value( $mailfoward->getMailfowardDestination() );
+			}
+		?> />
+	</p>
+	<p><button type="submit" class="btn btn-default" name="action" value="mailfoward-save"><?php _e( "Save" ) ?></button></p>
 </form>
+
+<!-- end change destination -->

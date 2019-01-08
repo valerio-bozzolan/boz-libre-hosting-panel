@@ -22,50 +22,134 @@
 // load framework
 require 'load.php';
 
-// wanted domain and mail fowarding source
-list( $domain_name, $mailfoward_source ) = url_parts( 2 );
+// wanted informations
+$domain     = null;
+$mailfoward = null;
 
-// retrieve domain
-$mailfoward = ( new MailfowardFullAPI )
-	->select( [
-		'domain.domain_ID',
-		'domain.domain_name',
-		'domain.domain_active',
-		'mailfoward_source',
-		'mailfoward_destination',
-	] )
-	->whereDomainName( $domain_name )
-	->whereMailfowardSource( $mailfoward_source )
-	->whereDomainIsEditable()
-	->queryRow();
+// URL paramenters (maximum both domain and mailfoward source, minimum just domain)
+list( $domain_name, $mailfoward_source ) = url_parts( 2, 1 );
 
-// 404?
-$mailfoward or PageNotFound::spawn();
+// eventually retrieve mailfoward from database
+if( $mailfoward_source ) {
+	$mailfoward = ( new MailfowardFullAPI )
+		->select( [
+			'domain.domain_ID',
+			'domain.domain_name',
+			'mailfoward_source',
+			'mailfoward_destination',
+		] )
+		->whereDomainName( $domain_name )
+		->whereMailfowardSource( $mailfoward_source )
+		->whereDomainIsEditable()
+		->queryRow();
 
-// handle save destination action
-if( is_action( 'mailfoward-save-destination' ) ) {
-	$destination = $_POST[ 'mailfoward_destination' ];
+	// 404
+	$mailfoward or PageNotFound::spawn();
+
+	// recycle the mailfoward object that has domain informations
+	$domain = $mailfoward;
+}
+
+// eventually retrieve domain from database
+if( ! $domain ) {
+	$domain = ( new DomainAPI() )
+		->select( [
+			'domain.domain_ID',
+			'domain.domain_name',
+		] )
+		->whereDomainName( $domain_name )
+		->whereDomainIsEditable()
+		->queryRow();
+
+	// 404
+	$domain or PageNotFound::spawn();
+}
+
+// save destination action
+if( is_action( 'mailfoward-save' ) ) {
+
+	// columns to be saved
+	$changes = [];
+
+	// always require destination
+	if( empty( $_POST[ 'mailfoward_destination' ] ) ) {
+		BadRequest::spawn( __( "missing parameter" ) );
+	}
+
+	// validate destination
+	$destination = luser_input( $_POST[ 'mailfoward_destination' ], 128 );
 	if( filter_var( $destination, FILTER_VALIDATE_EMAIL ) ) {
-		$mailfoward->update( [
-			new DBCol( 'mailfoward_destination', $destination, 's' ),
-		] );
+		$changes[] = new DBCol( 'mailfoward_destination', $destination, 's' );
+	} else {
+		BadRequest::spawn( __( "fail e-mail validation" ) );
+	}
 
-		// POST/redirect/GET
-		http_redirect( URL . $_SERVER[ 'REQUEST_URI' ], 303 );
+	// save source only during creation
+	if( ! $mailfoward ) {
+
+		// require source (can be empty)
+		if( ! isset( $_POST[ 'mailfoward_source' ] ) ) {
+			BadRequest::spawn( __( "missing parameter" ) );
+		}
+
+		$source = luser_input( $_POST[ 'mailfoward_source' ], 128 );
+		if( ! empty( $source ) && ! validate_mailbox_username( $source ) ) {
+			BadRequest::spawn( __( "invalid mailbox name" ) );
+		}
+		$changes[] = new DBCol( 'mailfoward_source', $source, 's' );
+	}
+
+	if( $changes ) {
+		if( $mailfoward ) {
+			// update existing
+			$mailfoward->update( $changes );
+
+			// POST/redirect/GET
+			http_redirect( $mailfoward->getMailfowardPermalink( true ), 303 );
+		} else {
+			// insert as new
+
+			// check existence
+			$mailfoward_exists = ( new MailfowardAPI )
+				->select( 1 )
+				->whereDomain( $domain )
+				->whereMailfowardSource( $source )
+				->queryRow();
+
+			// die if exists
+			if( $mailfoward_exists ) {
+				BadRequest::spawn( __( "e-mail fowarding already existing" ) );
+			}
+
+			// insert as new row
+			insert_row( 'mailfoward', array_merge( $changes, [
+				new DBCol( 'domain_ID', $domain->getDomainID(), 'd' ),
+			] ) );
+
+			// POST/redirect/GET
+			http_redirect( Mailfoward::permalink(
+				$domain->getDomainName(),
+				$source,
+				true
+			), 303 );
+		}
 	}
 }
 
 // spawn header
 Header::spawn( [
-	'title-prefix' => __( "Mail fowarding" ),
-	'title' => $mailfoward->getMailfowardAddress(),
+	'title-prefix' => __( "E-mail fowarding" ),
+	'title' => $mailfoward
+		? $mailfoward->getMailfowardAddress()
+		: __( "create" ),
 	'breadcrumb' => [
-		new MenuEntry( null, $mailfoward->getDomainPermalink(), $mailfoward->getDomainName() ),
+		new MenuEntry( null, $domain->getDomainPermalink(), $domain->getDomainName() ),
 	],
 ] );
 
 // spawn the page content
 template( 'mailfoward', [
+	'domain'     => $domain,
 	'mailfoward' => $mailfoward,
 ] );
 
