@@ -38,6 +38,7 @@ enqueue_css( 'custom-css' );
 <html>
 <head>
 	<title><?php echo strip_tags( $args[ 'title' ] ) ?> - <?php echo strip_tags( SITE_NAME ) ?></title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 	<link rel="icon" href="<?php echo ROOT ?>/content/logo/logo-64.png" type="image/png" /><?php load_module( 'header' ) ?>
 
 </head>
