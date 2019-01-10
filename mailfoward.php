@@ -136,6 +136,19 @@ if( is_action( 'mailfoward-save' ) ) {
 	}
 }
 
+// delete action
+if( $mailfoward && is_action( 'mailfoward-delete' ) ) {
+	query( sprintf(
+		"DELETE FROM %s WHERE domain_ID = %d AND mailfoward_source = '%s'",
+		T( 'mailfoward' ),
+		$mailfoward->getDomainID(),
+		esc_html( $mailfoward->getMailfowardSource() )
+	) );
+
+	// POST/redirect/GET
+	http_redirect( $domain->getDomainPermalink( true ), 303 );
+}
+
 // spawn header
 Header::spawn( [
 	'title-prefix' => __( "E-mail fowarding" ),

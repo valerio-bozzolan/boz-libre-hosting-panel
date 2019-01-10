@@ -14,7 +14,7 @@ Let me say that I love listening to the whishlist of my costumers. Here are the 
 - administration of own mail aliases (thanks to Postfix and Dovecot over MariaDB)
 	- [X] change foward destination(s)
 	- [X] add
-	- [ ] remove
+	- [X] remove
 - [ ] administration of own FTP accounts (thanks to Pure-FTPd over MariaDB)
 - [ ] administration of own MariaDB databases
 

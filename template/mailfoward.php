@@ -53,7 +53,12 @@ defined( 'BOZ_PHP' ) or die;
 			}
 		?> />
 	</p>
-	<p><button type="submit" class="btn btn-default" name="action" value="mailfoward-save"><?php _e( "Save" ) ?></button></p>
+	<p>
+		<button type="submit" class="btn btn-default" name="action" value="mailfoward-save"><?php _e( "Save" ) ?></button>
+		<?php if( $mailfoward ): ?>
+			<button type="submit" class="btn btn-warning" name="action" value="mailfoward-delete"><?php _e( "Delete" ) ?></button>
+		<?php endif ?>
+	</p>
 </form>
 
 <!-- end change destination -->
