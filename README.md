@@ -12,7 +12,7 @@ Let me say that I love listening to the whishlist of my costumers. Here are the 
 	- [ ] remove
 	- [ ] view quota
 - administration of own mail aliases (thanks to Postfix and Dovecot over MariaDB)
-	- [X] change foward destination(s)
+	- [X] change forward destination(s)
 	- [X] add
 	- [X] remove
 - [ ] administration of own FTP accounts (thanks to Pure-FTPd over MariaDB)
