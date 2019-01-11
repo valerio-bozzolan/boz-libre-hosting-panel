@@ -53,10 +53,10 @@ $mailfowards = $domain->factoryMailfoward()
 				</li>
 			<?php endforeach ?>
 		</ul>
-
-		<p><?php the_link(
-			Mailfoward::permalink( $mailfoward->getDomainName() ),
-			__( "Create" )
-		) ?></p>
 	<?php endif ?>
+
+	<p><?php the_link(
+		Mailfoward::permalink( $domain->getDomainName() ),
+		__( "Create" )
+	) ?></p>
 	<!-- end mail fowardings -->
