@@ -1,5 +1,5 @@
 <?php
-# Copyright (C) 2018 Valerio Bozzolan
+# Copyright (C) 2018, 2019 Valerio Bozzolan
 # Boz Libre Hosting Panel
 #
 # This program is free software: you can redistribute it and/or modify
@@ -15,15 +15,14 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-/*
- * This is the template for a single e-mail fowarding
- *
- * Called from:
- * 	template/mailfoward.php
+/**
+ * Mailbox API (a full mailbox address)
  */
+class MailforwardFullAPI extends MailforwardAPI {
 
-// unuseful when load directly
-defined( 'BOZ_PHP' ) or die;
-?>
+	public function __construct() {
+		parent::__construct();
+		$this->joinMailforwardDomain();
+	}
 
-<p><?php _e( "A fowarding address is a simple e-mail address you can use to receive e-mails, fowarding them to another e-mail address of your choice." ) ?></p>
+}

@@ -28,5 +28,5 @@ defined( 'BOZ_PHP' ) or die;
 // spawn the mailboxes list
 template( 'mailboxes', [ 'domain' => $domain ] );
 
-// spawn the mail fowardings list
-template( 'mailfowards', [ 'domain' => $domain ] );
+// spawn the mail forwardings list
+template( 'mailforwards', [ 'domain' => $domain ] );

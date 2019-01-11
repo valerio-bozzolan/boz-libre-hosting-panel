@@ -1,5 +1,5 @@
 <?php
-# Copyright (C) 2018 Valerio Bozzolan
+# Copyright (C) 2018, 2019 Valerio Bozzolan
 # Boz Libre Hosting Panel
 #
 # This program is free software: you can redistribute it and/or modify
@@ -16,52 +16,52 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * An e-mail fowarding
+ * An e-mail forwarding
  */
-class Mailfoward extends Domain {
+class Mailforward extends Domain {
 
 	const T = 'mailfoward';
 
 	/**
-	 * Get the mailfoward address
+	 * Get the mailforward address
 	 *
 	 * @return string E-mail
 	 */
-	public function getMailfowardAddress() {
+	public function getMailforwardAddress() {
 		return sprintf( '%s@%s',
-			$this->getMailfowardSource(),
+			$this->getMailforwardSource(),
 			$this->getDomainName()
 		);
 	}
 
 	/**
-	 * Get the mailfoward source (just username)
+	 * Get the mailforward source (just username)
 	 *
 	 * @return string
 	 */
-	public function getMailfowardSource() {
+	public function getMailforwardSource() {
 		return $this->get( 'mailfoward_source' );
 	}
 
 	/**
-	 * Get the mailfoward destination
+	 * Get the mailforward destination
 	 *
 	 * @return string
 	 */
-	public function getMailfowardDestination() {
+	public function getMailforwardDestination() {
 		return $this->get( 'mailfoward_destination' );
 	}
 
 	/**
-	 * Get the mailfoward permalink
+	 * Get the mailforward permalink
 	 *
 	 * @param $absolute boolean
 	 * @return string
 	 */
-	public function getMailfowardPermalink( $absolute = false ) {
-		return Mailfoward::permalink(
+	public function getMailforwardPermalink( $absolute = false ) {
+		return Mailforward::permalink(
 			$this->getDomainName(),
-			$this->getMailfowardSource(),
+			$this->getMailforwardSource(),
 			$absolute
 		);
 	}
@@ -73,19 +73,19 @@ class Mailfoward extends Domain {
 		query_update( self::T, $columns, sprintf(
 			"domain_ID = %d AND mailfoward_source = '%s'",
 			$this->getDomainID(),
-			esc_sql( $this->getMailfowardSource() )
+			esc_sql( $this->getMailforwardSource() )
 		) );
 	}
 
 	/**
-	 * Get the mailfoward permalink
+	 * Get the mailforward permalink
 	 *
 	 * @return string
 	 */
-	public static function permalink( $domain, $mailfoward = false, $absolute = false ) {
-		$part = site_page( 'mailfoward.php', $absolute ) . _ . $domain;
-		if( $mailfoward ) {
-			$part .= _ . $mailfoward;
+	public static function permalink( $domain, $mailforward = false, $absolute = false ) {
+		$part = site_page( 'mailforward.php', $absolute ) . _ . $domain;
+		if( $mailforward ) {
+			$part .= _ . $mailforward;
 		}
 		return $part;
 	}

@@ -15,14 +15,15 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-/**
- * Mailbox API (a full mailbox address)
+/*
+ * This is the template for a single e-mail forwarding
+ *
+ * Called from:
+ * 	template/mailforward.php
  */
-class MailfowardFullAPI extends MailfowardAPI {
 
-	public function __construct() {
-		parent::__construct();
-		$this->joinMailfowardDomain();
-	}
+// unuseful when load directly
+defined( 'BOZ_PHP' ) or die;
+?>
 
-}
+<p><?php _e( "A forwarding address is a simple e-mail address you can use to receive e-mails, forwarding them to another e-mail address of your choice." ) ?></p>

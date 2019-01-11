@@ -16,7 +16,7 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 /*
- * This is the template for a single e-mail fowarding
+ * This is the template for a single e-mail forwarding
  *
  * Called from:
  * 	template/mailbox.php

@@ -25,8 +25,8 @@
 // unuseful when load directly
 defined( 'BOZ_PHP' ) or die;
 
-// domain mail fowardings
-$mailfowards = $domain->factoryMailfoward()
+// domain mail forwardings
+$mailforwards = $domain->factoryMailforward()
 	->select( [
 		'domain_name',
 		'mailfoward_source',
@@ -34,21 +34,21 @@ $mailfowards = $domain->factoryMailfoward()
 	] )
 	->queryGenerator();
 ?>
-	<!-- mail fowardings -->
+	<!-- mail forwardings -->
 	<h3><?php printf(
 		__( "Your %s" ),
-		__( "mail fowardings" )
+		__( "mail forwardings" )
 	) ?></h3>
-	<?php if( $mailfowards->valid() ): ?>
+	<?php if( $mailforwards->valid() ): ?>
 
-		<?php template( 'mailfoward-description' ) ?>
+		<?php template( 'mailforward-description' ) ?>
 
 		<ul>
-			<?php foreach( $mailfowards as $mailfoward ): ?>
+			<?php foreach( $mailforwards as $mailforward ): ?>
 				<li>
 					<code><?php echo HTML::a(
-						$mailfoward->getMailfowardPermalink(),
-						$mailfoward->getMailfowardAddress()
+						$mailforward->getMailforwardPermalink(),
+						$mailforward->getMailforwardAddress()
 					) ?></code>
 				</li>
 			<?php endforeach ?>
@@ -58,7 +58,7 @@ $mailfowards = $domain->factoryMailfoward()
 	<?php endif ?>
 
 	<p><?php the_link(
-		Mailfoward::permalink( $domain->getDomainName() ),
+		Mailforward::permalink( $domain->getDomainName() ),
 		__( "Create" )
 	) ?></p>
-	<!-- end mail fowardings -->
+	<!-- end mail forwardings -->

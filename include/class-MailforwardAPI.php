@@ -1,5 +1,5 @@
 <?php
-# Copyright (C) 2018 Valerio Bozzolan
+# Copyright (C) 2018, 2019 Valerio Bozzolan
 # Boz Libre Hosting Panel
 #
 # This program is free software: you can redistribute it and/or modify
@@ -16,24 +16,24 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * E-mail fowarding API
+ * E-mail forwarding API
  */
-class MailfowardAPI extends DomainAPI {
+class MailforwardAPI extends DomainAPI {
 
 	public function __construct() {
 		Query::__construct();
-		$this->from( Mailfoward::T );
-		$this->defaultClass( 'Mailfoward' );
+		$this->from( Mailforward::T );
+		$this->defaultClass( 'Mailforward' );
 	}
 
 	/**
-	 * Join mailfowardes and domain (once)
+	 * Join mailforwardes and domain (once)
 	 *
 	 * @return self
 	 */
-	public function joinMailfowardDomain() {
-		if( empty( $this->joinedMailfowardDomain ) ) {
-			$this->joinedMailfowardDomain = true;
+	public function joinMailforwardDomain() {
+		if( empty( $this->joinedMailforwardDomain ) ) {
+			$this->joinedMailforwardDomain = true;
 			$this->from( 'domain' );
 			$this->equals( 'domain.domain_ID', 'mailfoward.domain_ID' );
 		}
@@ -41,13 +41,13 @@ class MailfowardAPI extends DomainAPI {
 	}
 
 	/**
-	 * Filter to a certain mail fowarding source
+	 * Filter to a certain mail forwarding source
 	 *
-	 * @param mailfoward_source string
+	 * @param mailforward_source string
 	 * @return self
 	 */
-	public function whereMailfowardSource( $mailfoward_source ) {
-		return $this->whereStr( 'mailfoward_source', $mailfoward_source );
+	public function whereMailforwardSource( $mailforward_source ) {
+		return $this->whereStr( 'mailfoward_source', $mailforward_source );
 	}
 
 	/**

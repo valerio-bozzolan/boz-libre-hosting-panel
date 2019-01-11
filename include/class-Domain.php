@@ -66,12 +66,12 @@ class Domain extends Queried {
 	}
 
 	/**
-	 * Factory e-mail foward from this domain
+	 * Factory e-mail forward from this domain
 	 *
-	 * @return MailfowardFullAPI
+	 * @return MailforwardFullAPI
 	 */
-	public function factoryMailfoward() {
-		return ( new MailfowardFullAPI() )->whereDomain( $this );
+	public function factoryMailforward() {
+		return ( new MailforwardFullAPI() )->whereDomain( $this );
 	}
 
 }
