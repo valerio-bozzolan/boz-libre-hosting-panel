@@ -35,11 +35,11 @@ $mailfowards = $domain->factoryMailfoward()
 	->queryGenerator();
 ?>
 	<!-- mail fowardings -->
+	<h3><?php printf(
+		__( "Your %s" ),
+		__( "mail fowardings" )
+	) ?></h3>
 	<?php if( $mailfowards->valid() ): ?>
-		<h3><?php printf(
-			__( "Your %s" ),
-			__( "mail fowardings" )
-		) ?></h3>
 
 		<?php template( 'mailfoward-description' ) ?>
 
@@ -53,6 +53,8 @@ $mailfowards = $domain->factoryMailfoward()
 				</li>
 			<?php endforeach ?>
 		</ul>
+	<?php else: ?>
+		<p><?php _e( "None yet.") ?></p>
 	<?php endif ?>
 
 	<p><?php the_link(
