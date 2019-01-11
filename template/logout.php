@@ -26,8 +26,7 @@
 defined( 'BOZ_PHP' ) or die;
 ?>
 
-<p class="alert alert-warning"><?php _e( "Please manually confirm your action." ) ?></p>
-
-<form method="post">
-	<button type="submit" name="action" value="logout" class="btn btn-default"><?php _e( "Logout" ) ?></button>
-</form>
+	<p class="alert alert-warning"><?php _e( "Please manually confirm your action." ) ?></p>
+	<form method="post">
+		<button type="submit" name="action" value="logout" class="btn btn-default"><?php _e( "Logout" ) ?></button>
+	</form>

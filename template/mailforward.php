@@ -30,35 +30,33 @@
 defined( 'BOZ_PHP' ) or die;
 ?>
 
-<?php template( 'mailforward-description' ) ?>
+	<?php template( 'mailforward-description' ) ?>
 
-<form method="post">
-	<p>
-		<label for="mailforward-source"><?php _e( "E-mail address:") ?></label><br />
-		<?php if( $mailforward ): ?>
-			<input type="text" id="mailforward-source" readonly<?php _value( $mailforward->getMailforwardAddress() ) ?> />
-		<?php else: ?>
-			<input type="string" name="mailforward_source" id="mailforward-source"<?php
+	<form method="post">
+		<p>
+			<label for="mailforward-source"><?php _e( "E-mail address:") ?></label><br />
+			<?php if( $mailforward ): ?>
+				<input type="text" id="mailforward-source" readonly<?php _value( $mailforward->getMailforwardAddress() ) ?> />
+			<?php else: ?>
+				<input type="string" name="mailforward_source" id="mailforward-source"<?php
+					if( $mailforward ) {
+						_value( $mailforward->getMailforwardSource() );
+					}
+				?> /> <code>@<?php _esc_html( $domain->getDomainName() ) ?></code>
+			<?php endif ?>
+		</p>
+		<p>
+			<label for="mailforward-destination"><?php _e( "forward the incoming e-mails to this destination:" ) ?></label><br />
+			<input type="email" name="mailforward_destination" id="mailforward-destination"<?php
 				if( $mailforward ) {
-					_value( $mailforward->getMailforwardSource() );
+					_value( $mailforward->getMailforwardDestination() );
 				}
-			?> /> <code>@<?php _esc_html( $domain->getDomainName() ) ?></code>
-		<?php endif ?>
-	</p>
-	<p>
-		<label for="mailforward-destination"><?php _e( "forward the incoming e-mails to this destination:" ) ?></label><br />
-		<input type="email" name="mailforward_destination" id="mailforward-destination"<?php
-			if( $mailforward ) {
-				_value( $mailforward->getMailforwardDestination() );
-			}
-		?> />
-	</p>
-	<p>
-		<button type="submit" class="btn btn-default" name="action" value="mailforward-save"><?php _e( "Save" ) ?></button>
-		<?php if( $mailforward ): ?>
-			<button type="submit" class="btn btn-warning" name="action" value="mailforward-delete"><?php _e( "Delete" ) ?></button>
-		<?php endif ?>
-	</p>
-</form>
-
-<!-- end change destination -->
+			?> />
+		</p>
+		<p>
+			<button type="submit" class="btn btn-default" name="action" value="mailforward-save"><?php _e( "Save" ) ?></button>
+			<?php if( $mailforward ): ?>
+				<button type="submit" class="btn btn-warning" name="action" value="mailforward-delete"><?php _e( "Delete" ) ?></button>
+			<?php endif ?>
+		</p>
+	</form>

@@ -32,6 +32,5 @@ array_unshift( $args[ 'breadcrumb' ], get_menu_entry( 'index' ) );
 if( $args[ 'uid' ] !== 'index' ) {
 	$args[ 'breadcrumb' ][] = new MenuEntry( null, null, $args[ 'title' ] );
 }
-?>
 
-<?php Breadcrumb::spawn( $args[ 'breadcrumb' ] ) ?>
+Breadcrumb::spawn( $args[ 'breadcrumb' ] );

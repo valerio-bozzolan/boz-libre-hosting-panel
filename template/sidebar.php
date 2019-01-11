@@ -26,14 +26,13 @@
 defined( 'BOZ_PHP' ) or die;
 ?>
 
-<?php if( is_logged() ): ?>
-	<p><?php printf(
-		__( "Welcome %s!" ),
-		esc_html( get_user( 'user_name' ) )
-	) ?></p>
-
 	<?php if( is_logged() ): ?>
-		<p><?php the_menu_link( 'profile' ) ?></p>
-	<?php endif ?>
-<?php endif ?>
+		<p><?php printf(
+			__( "Welcome %s!" ),
+			esc_html( get_user( 'user_name' ) )
+		) ?></p>
 
+		<?php if( is_logged() ): ?>
+			<p><?php the_menu_link( 'profile' ) ?></p>
+		<?php endif ?>
+	<?php endif ?>

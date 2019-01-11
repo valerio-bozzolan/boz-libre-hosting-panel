@@ -29,12 +29,11 @@
 defined( 'BOZ_PHP' ) or die;
 ?>
 
-<p class="alert alert-danger">
-	<?php _e( "Your request cannot be processed." ) ?>
-	<?php if( $message ): ?>
-		<br />
-		<?php printf( __( "Error: %s. "), $message ) ?>
-	<?php endif ?>
-</p>
-
-<p><?php _e( "If you think that it's not your fault, contact us. Thanks!" ) ?></p>
+	<p class="alert alert-danger">
+		<?php _e( "Your request cannot be processed." ) ?>
+		<?php if( $message ): ?>
+			<br />
+			<?php printf( __( "Error: %s. "), $message ) ?>
+		<?php endif ?>
+	</p>
+	<p><?php _e( "If you think that it's not your fault, contact us. Thanks!" ) ?></p>

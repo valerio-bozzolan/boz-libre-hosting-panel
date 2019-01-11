@@ -26,6 +26,5 @@
 defined( 'BOZ_PHP' ) or die;
 ?>
 
-<p class="alert alert-warning"><?php _e( "Oh no! A page not found error!" ) ?></p>
-
-<p><?php _e( "The page you was looking for is wrong or was deleted or you have not enough permissions to see it, etc. you know." ) ?></p>
+	<p class="alert alert-warning"><?php _e( "Oh no! A page not found error!" ) ?></p>
+	<p><?php _e( "The page you was looking for is wrong or was deleted or you have not enough permissions to see it, etc. you know." ) ?></p>
