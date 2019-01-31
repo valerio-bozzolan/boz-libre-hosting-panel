@@ -60,6 +60,9 @@ define_default( 'SITE_NAME', "Boz Libre Hosting Panel" );
 define_default( 'CONTACT_EMAIL', 'support@' . DOMAIN );
 define_default( 'REPO_URL', 'https://github.com/valerio-bozzolan/boz-libre-hosting-panel' );
 
+// limit session duration to 5 minutes (60s * 5m)
+define_default( 'SESSION_DURATION', 300 );
+
 // register web pages
 add_menu_entries( [
 		new MenuEntry( 'index',          '/',                   __( "Dashboard" ) ),
