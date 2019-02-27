@@ -70,8 +70,8 @@ class Domain extends Queried {
 	 *
 	 * @return MailforwardFullAPI
 	 */
-	public function factoryMailforward() {
-		return ( new MailforwardFullAPI() )->whereDomain( $this );
+	public function factoryMailforwardfrom() {
+		return ( new MailforwardfromAPI() )->whereDomain( $this );
 	}
 
 }

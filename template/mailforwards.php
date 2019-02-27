@@ -20,17 +20,20 @@
  *
  * Called from:
  * 	template/domain.php
+ *
+ * Available variables:
+ * 	$domain object
  */
 
 // unuseful when load directly
 defined( 'BOZ_PHP' ) or die;
 
 // domain mail forwardings
-$mailforwards = $domain->factoryMailforward()
+$mailforwardfroms = $domain->factoryMailforwardfrom()
 	->select( [
+		'mailforwardfrom.mailforwardfrom_ID',
+		'mailforwardfrom_username',
 		'domain_name',
-		'mailfoward_source',
-		'mailfoward_destination',
 	] )
 	->queryGenerator();
 ?>
@@ -39,16 +42,16 @@ $mailforwards = $domain->factoryMailforward()
 		__( "Your %s" ),
 		__( "mail forwardings" )
 	) ?></h3>
-	<?php if( $mailforwards->valid() ): ?>
+	<?php if( $mailforwardfroms->valid() ): ?>
 
 		<?php template( 'mailforward-description' ) ?>
 
 		<ul>
-			<?php foreach( $mailforwards as $mailforward ): ?>
+			<?php foreach( $mailforwardfroms as $mailforwardfrom ): ?>
 				<li>
 					<code><?php echo HTML::a(
-						$mailforward->getMailforwardPermalink(),
-						$mailforward->getMailforwardAddress()
+						$mailforwardfrom->getMailforwardfromPermalink(),
+						$mailforwardfrom->getMailforwardfromAddress()
 					) ?></code>
 				</li>
 			<?php endforeach ?>
@@ -58,7 +61,7 @@ $mailforwards = $domain->factoryMailforward()
 	<?php endif ?>
 
 	<p><?php the_link(
-		Mailforward::permalink( $domain->getDomainName() ),
+		Mailforwardfrom::permalink( $domain->getDomainName() ),
 		__( "Create" )
 	) ?></p>
 	<!-- end mail forwardings -->

@@ -1,5 +1,5 @@
 <?php
-# Copyright (C) 2018 Valerio Bozzolan
+# Copyright (C) 2018, 2019 Valerio Bozzolan
 # Boz Libre Hosting Panel
 #
 # This program is free software: you can redistribute it and/or modify
@@ -23,31 +23,31 @@
 require 'load.php';
 
 // wanted informations
-$domain     = null;
-$mailforward = null;
+$domain          = null;
+$mailforwardfrom = null;
 
 // URL paramenters (maximum both domain and mailforward source, minimum just domain)
-list( $domain_name, $mailforward_source ) = url_parts( 2, 1 );
+list( $domain_name, $mailforwardfrom_username ) = url_parts( 2, 1 );
 
 // eventually retrieve mailforward from database
-if( $mailforward_source ) {
-	$mailforward = ( new MailforwardFullAPI )
+if( $mailforwardfrom_username ) {
+	$mailforwardfrom = ( new MailforwardfromAPI )
 		->select( [
 			'domain.domain_ID',
-			'domain.domain_name',
-			'mailfoward_source',
-			'mailfoward_destination',
+			'domain_name',
+			'mailforwardfrom.mailforwardfrom_ID',
+			'mailforwardfrom_username',
 		] )
 		->whereDomainName( $domain_name )
-		->whereMailforwardSource( $mailforward_source )
+		->whereMailforwardfromUsername( $mailforwardfrom_username )
 		->whereDomainIsEditable()
 		->queryRow();
 
 	// 404
-	$mailforward or PageNotFound::spawn();
+	$mailforwardfrom or PageNotFound::spawn();
 
 	// recycle the mailforward object that has domain informations
-	$domain = $mailforward;
+	$domain = $mailforwardfrom;
 }
 
 // eventually retrieve domain from database
@@ -77,52 +77,51 @@ if( is_action( 'mailforward-save' ) ) {
 	}
 
 	// validate destination
-	$destination = luser_input( $_POST[ 'mailforward_destination' ], 128 );
-	if( filter_var( $destination, FILTER_VALIDATE_EMAIL ) ) {
-		$changes[] = new DBCol( 'mailfoward_destination', $destination, 's' );
-	} else {
-		BadRequest::spawn( __( "fail e-mail validation" ) );
-	}
+	$destination = require_email( $destination );
+	$changes[] = new DBCol( 'mailforward_destination', $destination, 's' );
 
 	// save source only during creation
-	if( ! $mailforward ) {
+	if( ! $mailforwardfrom ) {
 
 		// require source (can be empty)
 		if( ! isset( $_POST[ 'mailforward_source' ] ) ) {
 			BadRequest::spawn( __( "missing parameter" ) );
 		}
 
-		$source = luser_input( $_POST[ 'mailforward_source' ], 128 );
-		if( ! empty( $source ) && ! validate_mailbox_username( $source ) ) {
-			BadRequest::spawn( __( "invalid mailbox name" ) );
+		$sources = luser_input( $_POST[ 'mailforward_source' ], 128 );
+		$sources = explode( ',', $_POST[ 'mailforward_source' ] );
+		foreach( $sources as $source ) {
+			if( ! empty( $source ) && ! validate_mailbox_username( $source ) ) {
+				BadRequest::spawn( __( "invalid mailbox name" ) );
+			}
+			$changes[] = new DBCol( 'mailforward_source', $source, 's' );
 		}
-		$changes[] = new DBCol( 'mailfoward_source', $source, 's' );
 	}
 
 	if( $changes ) {
-		if( $mailforward ) {
+		if( $mailforwardfrom ) {
 			// update existing
-			$mailforward->update( $changes );
+			$mailforwardfrom->update( $changes );
 
 			// POST/redirect/GET
-			http_redirect( $mailforward->getMailforwardPermalink( true ), 303 );
+			http_redirect( $mailforwardfrom->getMailforwardPermalink( true ), 303 );
 		} else {
 			// insert as new
 
 			// check existence
-			$mailforward_exists = ( new MailforwardAPI )
+			$mailforwardfrom_exists = ( new MailforwardAPI )
 				->select( 1 )
 				->whereDomain( $domain )
 				->whereMailforwardSource( $source )
 				->queryRow();
 
 			// die if exists
-			if( $mailforward_exists ) {
+			if( $mailforwardfrom_exists ) {
 				BadRequest::spawn( __( "e-mail forwarding already existing" ) );
 			}
 
 			// insert as new row
-			insert_row( 'mailfoward', array_merge( $changes, [
+			insert_row( 'mailforward', array_merge( $changes, [
 				new DBCol( 'domain_ID', $domain->getDomainID(), 'd' ),
 			] ) );
 
@@ -137,23 +136,60 @@ if( is_action( 'mailforward-save' ) ) {
 }
 
 // delete action
-if( $mailforward && is_action( 'mailforward-delete' ) ) {
-	query( sprintf(
-		"DELETE FROM %s WHERE domain_ID = %d AND mailfoward_source = '%s'",
-		T( 'mailfoward' ),
-		$mailforward->getDomainID(),
-		esc_html( $mailforward->getMailforwardSource() )
-	) );
+if( $mailforwardfrom ) {
 
-	// POST/redirect/GET
-	http_redirect( $domain->getDomainPermalink( true ), 303 );
+	// action fired when deleting a whole mailforward
+	if( is_action( 'mailforward-delete' ) ) {
+
+		// drop th
+		query( sprintf(
+			"DELETE FROM %s WHERE domain_ID = %d AND mailforward_source = '%s'",
+			T( 'mailforward' ),
+			$mailforwardfrom->getDomainID(),
+			esc_sql( $mailforwardfrom->getMailforwardSource() )
+		) );
+
+		// POST/redirect/GET
+		http_redirect( $domain->getDomainPermalink( true ), 303 );
+
+	}
+
+	// action fired when adding/removing a mailforward
+	if( ( is_action( 'mailforwardto-add' ) || is_action( 'mailforwardto-remove' ) ) && isset( $_POST[ 'address' ] ) ) {
+
+		$address = require_email( $_POST[ 'address' ] );
+
+		$existing_address =
+			( new MailforwardtoAPI() )
+				->whereMailforwardfrom( $mailforwardfrom )
+				->whereMailforwardtoAddress( $address )
+				->queryRow();
+
+		// action fired when removing a mailforward
+		if( is_action( 'mailforwardto-remove' ) && $existing_address ) {
+			query( sprintf(
+				"DELETE FROM %s WHERE mailforwardfrom_ID = %d and mailforwardto_address = '%s'",
+				T( 'mailforwardto' ),
+				$mailforwardfrom->getMailforwardfromID(),
+				esc_sql( $address )
+			) );
+		}
+
+		// action fired when adding a mailforward
+		if( is_action( 'mailforwardto-add' ) && ! $existing_address ) {
+			insert_row( 'mailforwardto', [
+				new DBCol( 'mailforwardfrom_ID',    $mailforwardfrom->getMailforwardfromID(), 'd' ),
+				new DBCol( 'mailforwardto_address', $address,                                 's' ),
+			] );
+		}
+	}
 }
 
 // spawn header
 Header::spawn( [
 	'title-prefix' => __( "E-mail forwarding" ),
-	'title' => $mailforward
-		? $mailforward->getMailforwardAddress()
+	'title' => $mailforwardfrom
+		? $mailforwardfrom->getMailforwardfromAddress()
 		: __( "create" ),
 	'breadcrumb' => [
 		new MenuEntry( null, $domain->getDomainPermalink(), $domain->getDomainName() ),
@@ -162,8 +198,8 @@ Header::spawn( [
 
 // spawn the page content
 template( 'mailforward', [
-	'domain'     => $domain,
-	'mailforward' => $mailforward,
+	'domain'          => $domain,
+	'mailforwardfrom' => $mailforwardfrom,
 ] );
 
 // spawn the footer

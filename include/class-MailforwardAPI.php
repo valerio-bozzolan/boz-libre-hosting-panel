@@ -18,12 +18,12 @@
 /**
  * E-mail forwarding API
  */
-class MailforwardAPI extends DomainAPI {
+class MailforwardfromAPI extends DomainAPI {
 
 	public function __construct() {
 		Query::__construct();
-		$this->from( Mailforward::T );
-		$this->defaultClass( 'Mailforward' );
+		$this->from( Mailforwardfrom::T );
+		$this->defaultClass( 'Mailforwardfrom' );
 	}
 
 	/**
@@ -31,23 +31,23 @@ class MailforwardAPI extends DomainAPI {
 	 *
 	 * @return self
 	 */
-	public function joinMailforwardDomain() {
-		if( empty( $this->joinedMailforwardDomain ) ) {
-			$this->joinedMailforwardDomain = true;
+	public function joinMailforwardfromDomain() {
+		if( empty( $this->joinedMailforwardfromDomain ) ) {
+			$this->joinedMailforwardfromDomain = true;
 			$this->from( 'domain' );
-			$this->equals( 'domain.domain_ID', 'mailfoward.domain_ID' );
+			$this->equals( 'domain.domain_ID', 'mailforwardfrom.domain_ID' );
 		}
 		return $this;
 	}
 
 	/**
-	 * Filter to a certain mail forwarding source
+	 * Filter to a certain mail forwarding username
 	 *
 	 * @param mailforward_source string
 	 * @return self
 	 */
-	public function whereMailforwardSource( $mailforward_source ) {
-		return $this->whereStr( 'mailfoward_source', $mailforward_source );
+	public function whereMailforwardfromUsername( $username ) {
+		return $this->whereStr( 'mailforwardfrom_username', $username );
 	}
 
 	/**
@@ -58,7 +58,7 @@ class MailforwardAPI extends DomainAPI {
 	 * @override
 	 */
 	public function whereDomainID( $domain_ID ) {
-		return $this->whereInt( 'mailfoward.domain_ID', $domain_ID );
+		return $this->whereInt( 'mailforwardfrom.domain_ID', $domain_ID );
 	}
 
 }

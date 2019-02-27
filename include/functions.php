@@ -1,5 +1,5 @@
 <?php
-# Copyright (C) 2018 Valerio Bozzolan
+# Copyright (C) 2018, 2019 Valerio Bozzolan
 # Reyboz another self-hosting panel project
 #
 # This program is free software: you can redistribute it and/or modify
@@ -188,4 +188,18 @@ function generate_password( $bytes = 8 ) {
  */
 function validate_mailbox_username( $mailbox ) {
 	return 1 === preg_match( '/^[a-z][a-z0-9-_.]+$/', $mailbox );
+}
+
+/**
+ * A certain value must be an e-mail
+ *
+ * @param $email string
+ * @return string filtered e-mail
+ */
+function require_email( $email ) {
+	$email = luser_input( $email, 128 );
+	if( filter_var( $email, FILTER_VALIDATE_EMAIL ) === false ) {
+		BadRequest::spawn( __( "fail e-mail validation" ) );
+	}
+	return $email;
 }

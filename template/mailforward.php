@@ -23,7 +23,7 @@
  *
  * Available variables:
  * 	$domain Domain object
- * 	$mailforward Mailforward object
+ * 	$mailforwardfrom Mailforward object
  */
 
 // unuseful when load directly
@@ -35,28 +35,26 @@ defined( 'BOZ_PHP' ) or die;
 	<form method="post">
 		<p>
 			<label for="mailforward-source"><?php _e( "E-mail address:") ?></label><br />
-			<?php if( $mailforward ): ?>
-				<input type="text" id="mailforward-source" readonly<?php _value( $mailforward->getMailforwardAddress() ) ?> />
+			<?php if( $mailforwardfrom ): ?>
+				<input type="text" id="mailforward-address" readonly<?php _value( $mailforwardfrom->getMailforwardfromAddress() ) ?> />
 			<?php else: ?>
-				<input type="string" name="mailforward_source" id="mailforward-source"<?php
-					if( $mailforward ) {
-						_value( $mailforward->getMailforwardSource() );
+				<input type="string" name="mailforwardfrom_username" id="mailforwardfrom-username"<?php
+					if( $mailforwardfrom ) {
+						_value( $mailforwardfrom->getMailforwardfromUsername() );
 					}
 				?> /> <code>@<?php _esc_html( $domain->getDomainName() ) ?></code>
 			<?php endif ?>
-		</p>
-		<p>
-			<label for="mailforward-destination"><?php _e( "forward the incoming e-mails to this destination:" ) ?></label><br />
-			<input type="email" name="mailforward_destination" id="mailforward-destination"<?php
-				if( $mailforward ) {
-					_value( $mailforward->getMailforwardDestination() );
-				}
-			?> />
-		</p>
-		<p>
-			<button type="submit" class="btn btn-default" name="action" value="mailforward-save"><?php _e( "Save" ) ?></button>
-			<?php if( $mailforward ): ?>
-				<button type="submit" class="btn btn-warning" name="action" value="mailforward-delete"><?php _e( "Delete" ) ?></button>
+
+			<?php if( $mailforwardfrom ): ?>
+				<button type="submit" class="btn btn-danger" name="action" value="mailforward-delete"><?php _e( "Delete" ) ?></button>
+			<?php else: ?>
+				<button type="submit" class="btn btn-default" name="action" value="mailforward-save"><?php _e( "Create" ) ?></button>
 			<?php endif ?>
 		</p>
 	</form>
+
+	<p><?php _e( "Forward the incoming e-mails to these destinations:" ) ?></label></p>
+	<?php template( 'mailforwardto', [
+		'domain'          => $domain,
+		'mailforwardfrom' => $mailforwardfrom,
+	] ) ?>

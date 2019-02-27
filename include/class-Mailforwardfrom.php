@@ -15,41 +15,35 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-/**
- * An e-mail forwarding
- */
-class Mailforward extends Domain {
-
-	const T = 'mailfoward';
+trait MailforwardfromTrait {
+	/**
+	 * Get the mailforward from ID
+	 *
+	 * @return int
+	 */
+	public function getMailforwardfromID() {
+		return $this->get( 'mailforwardfrom_ID' );
+	}
 
 	/**
-	 * Get the mailforward address
+	 * Get the mailforward from address
 	 *
 	 * @return string E-mail
 	 */
-	public function getMailforwardAddress() {
+	public function getMailforwardfromAddress() {
 		return sprintf( '%s@%s',
-			$this->getMailforwardSource(),
+			$this->getMailforwardfromUsername(),
 			$this->getDomainName()
 		);
 	}
 
 	/**
-	 * Get the mailforward source (just username)
+	 * Get the mailforward from username
 	 *
 	 * @return string
 	 */
-	public function getMailforwardSource() {
-		return $this->get( 'mailfoward_source' );
-	}
-
-	/**
-	 * Get the mailforward destination
-	 *
-	 * @return string
-	 */
-	public function getMailforwardDestination() {
-		return $this->get( 'mailfoward_destination' );
+	public function getMailforwardfromUsername() {
+		return $this->get( 'mailforwardfrom_username' );
 	}
 
 	/**
@@ -58,22 +52,30 @@ class Mailforward extends Domain {
 	 * @param $absolute boolean
 	 * @return string
 	 */
-	public function getMailforwardPermalink( $absolute = false ) {
-		return Mailforward::permalink(
+	public function getMailforwardfromPermalink( $absolute = false ) {
+		return Mailforwardfrom::permalink(
 			$this->getDomainName(),
-			$this->getMailforwardSource(),
+			$this->getMailforwardfromUsername(),
 			$absolute
 		);
 	}
+}
+
+/**
+ * An e-mail forwarding
+ */
+class Mailforwardfrom extends Domain {
+	use MailforwardfromTrait;
+
+	const T = 'mailforwardfrom';
 
 	/**
 	 * Update the related database row
 	 */
 	public function update( $columns ) {
 		query_update( self::T, $columns, sprintf(
-			"domain_ID = %d AND mailfoward_source = '%s'",
-			$this->getDomainID(),
-			esc_sql( $this->getMailforwardSource() )
+			"mailforwardfrom_ID = %d",
+			$this->getMailforwardfromID()
 		) );
 	}
 
