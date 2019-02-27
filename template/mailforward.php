@@ -53,8 +53,10 @@ defined( 'BOZ_PHP' ) or die;
 		</p>
 	</form>
 
-	<p><?php _e( "Forward the incoming e-mails to these destinations:" ) ?></label></p>
-	<?php template( 'mailforwardto', [
-		'domain'          => $domain,
-		'mailforwardfrom' => $mailforwardfrom,
-	] ) ?>
+	<?php if( $mailforwardfrom ): ?>
+		<p><?php _e( "Forward the incoming e-mails to these destinations:" ) ?></label></p>
+		<?php template( 'mailforwardto', [
+			'domain'          => $domain,
+			'mailforwardfrom' => $mailforwardfrom,
+		] ) ?>
+	<?php endif ?>
