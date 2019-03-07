@@ -68,70 +68,42 @@ if( ! $domain ) {
 // save destination action
 if( is_action( 'mailforward-save' ) ) {
 
-	// columns to be saved
-	$changes = [];
-
-	// always require destination
-	if( empty( $_POST[ 'mailforward_destination' ] ) ) {
-		BadRequest::spawn( __( "missing parameter" ) );
-	}
-
-	// validate destination
-	$destination = require_email( $destination );
-	$changes[] = new DBCol( 'mailforward_destination', $destination, 's' );
-
 	// save source only during creation
 	if( ! $mailforwardfrom ) {
 
-		// require source (can be empty)
-		if( ! isset( $_POST[ 'mailforward_source' ] ) ) {
+		// sanitize
+		if( ! isset( $_POST[ 'mailforwardfrom_username' ] ) ) {
 			BadRequest::spawn( __( "missing parameter" ) );
 		}
-
-		$sources = luser_input( $_POST[ 'mailforward_source' ], 128 );
-		$sources = explode( ',', $_POST[ 'mailforward_source' ] );
-		foreach( $sources as $source ) {
-			if( ! empty( $source ) && ! validate_mailbox_username( $source ) ) {
-				BadRequest::spawn( __( "invalid mailbox name" ) );
-			}
-			$changes[] = new DBCol( 'mailforward_source', $source, 's' );
+		$username = luser_input( $_POST[ 'mailforwardfrom_username' ], 128 );
+		if( ! validate_mailbox_username( $username ) ) {
+			BadRequest::spawn( __( "invalid mailbox name" ) );
 		}
-	}
 
-	if( $changes ) {
-		if( $mailforwardfrom ) {
-			// update existing
-			$mailforwardfrom->update( $changes );
+		// check existence
+		$mailforwardfrom_exists = ( new MailforwardfromAPI )
+			->select( 1 )
+			->whereDomain( $domain )
+			->whereMailforwardfromUsername( $source )
+			->queryRow();
 
-			// POST/redirect/GET
-			http_redirect( $mailforwardfrom->getMailforwardPermalink( true ), 303 );
-		} else {
-			// insert as new
-
-			// check existence
-			$mailforwardfrom_exists = ( new MailforwardAPI )
-				->select( 1 )
-				->whereDomain( $domain )
-				->whereMailforwardSource( $source )
-				->queryRow();
-
-			// die if exists
-			if( $mailforwardfrom_exists ) {
-				BadRequest::spawn( __( "e-mail forwarding already existing" ) );
-			}
-
-			// insert as new row
-			insert_row( 'mailforward', array_merge( $changes, [
-				new DBCol( 'domain_ID', $domain->getDomainID(), 'd' ),
-			] ) );
-
-			// POST/redirect/GET
-			http_redirect( Mailforward::permalink(
-				$domain->getDomainName(),
-				$source,
-				true
-			), 303 );
+		// die if exists
+		if( $mailforwardfrom_exists ) {
+			BadRequest::spawn( __( "e-mail forwarding already existing" ) );
 		}
+
+		// insert as new row
+		insert_row( 'mailforwardfrom', [
+			new DBCol( 'domain_ID',                $domain->getDomainID(), 'd' ),
+			new DBCol( 'mailforwardfrom_username', $username,              's' ),
+		] );
+
+		// POST/redirect/GET
+		http_redirect( Mailforwardfrom::permalink(
+			$domain->getDomainName(),
+			$username,
+			true
+		), 303 );
 	}
 }
 
@@ -143,10 +115,10 @@ if( $mailforwardfrom ) {
 
 		// drop th
 		query( sprintf(
-			"DELETE FROM %s WHERE domain_ID = %d AND mailforward_source = '%s'",
-			T( 'mailforward' ),
+			"DELETE FROM %s WHERE domain_ID = %d AND mailforwardfrom_username = '%s'",
+			T( 'mailforwardfrom' ),
 			$mailforwardfrom->getDomainID(),
-			esc_sql( $mailforwardfrom->getMailforwardSource() )
+			$mailforwardfrom->getMailforwardfromUsername()
 		) );
 
 		// POST/redirect/GET
