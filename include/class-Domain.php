@@ -74,4 +74,13 @@ class Domain extends Queried {
 		return ( new MailforwardfromAPI() )->whereDomain( $this );
 	}
 
+	/**
+	 * Factory FTP users from this domain
+	 *
+	 * @return FTPAPI
+	 */
+	public function factoryFTP() {
+		return ( new FTPAPI() )->whereDomain( $this );
+	}
+
 }

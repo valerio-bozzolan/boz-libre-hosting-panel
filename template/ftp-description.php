@@ -1,5 +1,5 @@
 <?php
-# Copyright (C) 2018 Valerio Bozzolan
+# Copyright (C) 2019 Valerio Bozzolan
 # Boz Libre Hosting Panel
 #
 # This program is free software: you can redistribute it and/or modify
@@ -16,20 +16,14 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 /*
- * This is the template for the website domain dashboard page
+ * This is the template for the description of an FTP account
  *
  * Called from:
- * 	domain.php
+ * 	template/ftp-list.php
  */
 
 // unuseful when load directly
 defined( 'BOZ_PHP' ) or die;
+?>
 
-// spawn the mailboxes list
-template( 'mailboxes',    [ 'domain' => $domain ] );
-
-// spawn the mail forwardings list
-template( 'mailforwards', [ 'domain' => $domain ] );
-
-// spawn the ftp list
-template( 'ftp-users',    [ 'domain' => $domain ] );
+	<p><?php _e( "With an FTP user you can read and write files of your website. You can create various users limited to specific directories of your website." ) ?></p>
