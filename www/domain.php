@@ -16,49 +16,33 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 /*
- * This is the mailbox edit page
+ * This is the domain edit page
  */
 
 // load framework
-require 'load.php';
+require '../load.php';
 
-// wanted domain and mailbox username
-list( $domain_name, $mailbox_username ) = url_parts( 2 );
+// wanted domain
+list( $domain_name ) = url_parts( 1 );
 
 // retrieve domain
-$mailbox = ( new MailboxFullAPI() )
-	->select( [
-		'domain.domain_ID',
-		'domain.domain_name',
-		'domain.domain_active',
-		'mailbox_username',
-	] )
-	->whereStr( 'domain_name', $domain_name )
-	->whereStr( 'mailbox_username', $mailbox_username )
+$domain = ( new DomainAPI() )
+	->whereDomainName( $domain_name )
 	->whereDomainIsEditable()
 	->queryRow();
 
 // 404?
-$mailbox or PageNotFound::spawn();
-
-$password = null;
-if( is_action( 'mailbox-password-reset' ) ) {
-	$password = $mailbox->updateMailboxPassword();
-}
+$domain or PageNotFound::spawn();
 
 // spawn header
 Header::spawn( [
-	'title-prefix' => __( "Mailbox" ),
-	'title' => $mailbox->getMailboxAddress(),
-	'breadcrumb' => [
-		new MenuEntry( null, $mailbox->getDomainPermalink(), $mailbox->getDomainName() ),
-	],
+	'title-prefix' => __( "Domain" ),
+	'title' => $domain_name,
 ] );
 
-// spawn the page content
-template( 'mailbox', [
-	'mailbox'  => $mailbox,
-	'password' => $password,
+// spawn the domain template
+template( 'domain', [
+	'domain' => $domain,
 ] );
 
 // spawn the footer

@@ -16,34 +16,27 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 /*
- * This is the domain edit page
+ * This is the logout page
  */
 
 // load framework
-require 'load.php';
-
-// wanted domain
-list( $domain_name ) = url_parts( 1 );
-
-// retrieve domain
-$domain = ( new DomainAPI() )
-	->whereDomainName( $domain_name )
-	->whereDomainIsEditable()
-	->queryRow();
-
-// 404?
-$domain or PageNotFound::spawn();
+require '../load.php';
 
 // spawn header
 Header::spawn( [
-	'title-prefix' => __( "Domain" ),
-	'title' => $domain_name,
+	'title' => __( "Please confirm logout" ),
 ] );
 
-// spawn the domain template
-template( 'domain', [
-	'domain' => $domain,
-] );
+// check login
+if( is_action( 'logout' ) ) {
+	logout();
+}
 
-// spawn the footer
+// require to be logged, but do not redirect again here otherwise
+require_permission( 'read', false );
+
+// spawn the logout template
+template( 'logout' );
+
+// spawn footer
 Footer::spawn();

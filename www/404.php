@@ -20,6 +20,6 @@
  */
 
 // load framework
-require 'load.php';
+require '../load.php';
 
 PageNotFound::spawn();

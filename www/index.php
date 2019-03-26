@@ -20,7 +20,7 @@
  */
 
 // load framework
-require 'load.php';
+require '../load.php';
 
 // require read permissions
 require_permission( 'read' );
