@@ -36,7 +36,9 @@ if( is_action( 'logout' ) ) {
 require_permission( 'read', false );
 
 // spawn the logout template
-template( 'logout' );
+template( 'logout', [
+	'please' => true,
+] );
 
 // spawn footer
 Footer::spawn();

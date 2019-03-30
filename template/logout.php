@@ -1,5 +1,5 @@
 <?php
-# Copyright (C) 2018 Valerio Bozzolan
+# Copyright (C) 2018, 2019 Valerio Bozzolan
 # Boz Libre Hosting Panel
 #
 # This program is free software: you can redistribute it and/or modify
@@ -20,13 +20,18 @@
  *
  * Called from
  * 	logout.php
+ *
+ * Parameters:
+ * 	$please (boolean) If true, will show the "Please confirm logout" warning.
  */
 
 // unuseful when load directly
 defined( 'BOZ_PHP' ) or die;
 ?>
 
-	<p class="alert alert-warning"><?php _e( "Please manually confirm your action." ) ?></p>
-	<form method="post">
+	<?php if( $please ): ?>
+		<p class="alert alert-warning"><?php _e( "Please manually confirm your action." ) ?></p>
+	<?php endif ?>
+	<form method="post" action="<?php echo ROOT ?>/logout.php">
 		<button type="submit" name="action" value="logout" class="btn btn-default"><?php _e( "Logout" ) ?></button>
 	</form>
