@@ -72,13 +72,12 @@ class FTP extends Domain {
 	 * @param string $login FTP user login
 	 * @return string
 	 */
-	public static function permalink( $domain, $login ) {
-		return sprintf(
-			'%s/%s/%s',
-			ROOT . '/ftp.php',
-			$domain,
-			$login
-		);
+	public static function permalink( $domain, $login = null ) {
+		$url = sprintf( '%s/%s', ROOT . '/ftp.php', $domain );
+		if( $login ) {
+			$url = "/$login";
+		}
+		return $url;
 	}
 
 }
