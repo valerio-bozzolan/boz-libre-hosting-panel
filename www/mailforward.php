@@ -84,7 +84,7 @@ if( is_action( 'mailforward-save' ) ) {
 		$mailforwardfrom_exists = ( new MailforwardfromAPI )
 			->select( 1 )
 			->whereDomain( $domain )
-			->whereMailforwardfromUsername( $source )
+			->whereMailforwardfromUsername( $username )
 			->queryRow();
 
 		// die if exists
