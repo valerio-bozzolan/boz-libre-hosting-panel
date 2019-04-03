@@ -131,6 +131,10 @@ if( $mailforwardfrom ) {
 
 		$address = require_email( $_POST[ 'address' ] );
 
+		if( $address === $mailforwardfrom->getMailforwardfromAddress() ) {
+			BadRequest::spawn( __( "do not try to create a loop" ) );
+		}
+
 		$existing_address =
 			( new MailforwardtoAPI() )
 				->whereMailforwardfrom( $mailforwardfrom )
