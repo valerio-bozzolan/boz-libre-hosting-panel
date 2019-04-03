@@ -1,6 +1,30 @@
-# Boz Libre Hosting Panel
+# Boz's Libre Hosting Panel
 
 This projects was started to create another _keep it simple and stupid_ libre web hosting control panel suitable for providers of everyday shared hosting services.
+
+## Disclaimer
+
+Do not try to become a system administrator if you do not like responsibilities, if you do not want to understand your infrastructure, if you do not want to have information security paranoia, etc.
+
+## Preamble
+
+An hosting panel is just the iceberg summit of a lot of technologies and protocols involved. Do not try to implement such project in production if you do not know what you are doing. You must gain confidence with the technologies involved.
+
+Papers:
+* RFC 5321 - Simple Mail Transfer Protocol
+* RFC 7208 - Sender Policy Framework (SPF)
+* RFC 6376 - DomainKeys Identified Mail (DKIM) Signatures
+* RFC 7489 - Domain-based Message Authentication, Reporting, and Conformance (DMARC)
+
+Software involved:
+* Debian GNU/Linux stable
+* MariaDB / MySQL
+* Postfix
+* Dovecot
+* PureFTPd
+* OpenDKIM
+* Apache HTTP server / nginx
+* PHP
 
 ## Features
 
