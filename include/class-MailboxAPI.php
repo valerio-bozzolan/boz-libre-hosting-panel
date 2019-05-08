@@ -1,5 +1,5 @@
 <?php
-# Copyright (C) 2018 Valerio Bozzolan
+# Copyright (C) 2018, 2019 Valerio Bozzolan
 # Boz Libre Hosting Panel
 #
 # This program is free software: you can redistribute it and/or modify
@@ -41,4 +41,14 @@ class MailboxAPI extends DomainAPI {
 		return $this;
 	}
 
+	/**
+	 * Check if I can edit this mailbox
+	 *
+	 * Actually it just checks if you can edit the whole domain.
+	 *
+	 * @return boolean
+	 */
+	public function whereMailboxIsEditable() {
+		return $this->whereDomainIsEditable();
+	}
 }
