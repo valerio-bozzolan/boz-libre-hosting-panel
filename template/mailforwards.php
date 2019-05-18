@@ -42,10 +42,9 @@ $mailforwardfroms = $domain->factoryMailforwardfrom()
 		__( "Your %s" ),
 		__( "mail forwardings" )
 	) ?></h3>
+	<?php template( 'mailforward-description' ) ?>
+
 	<?php if( $mailforwardfroms->valid() ): ?>
-
-		<?php template( 'mailforward-description' ) ?>
-
 		<ul>
 			<?php foreach( $mailforwardfroms as $mailforwardfrom ): ?>
 				<li>

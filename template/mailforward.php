@@ -28,8 +28,8 @@
 
 // unuseful when load directly
 defined( 'BOZ_PHP' ) or die;
-?>
 
+?>
 	<?php template( 'mailforward-description' ) ?>
 
 	<form method="post">

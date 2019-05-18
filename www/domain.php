@@ -1,5 +1,5 @@
 <?php
-# Copyright (C) 2018 Valerio Bozzolan
+# Copyright (C) 2018, 2019 Valerio Bozzolan
 # Boz Libre Hosting Panel
 #
 # This program is free software: you can redistribute it and/or modify
@@ -23,27 +23,55 @@
 require '../load.php';
 
 // wanted domain
-list( $domain_name ) = url_parts( 1 );
+list( $domain_name ) = url_parts( 1, 0 );
 
-// retrieve domain
-$domain = ( new DomainAPI() )
-	->whereDomainName( $domain_name )
-	->whereDomainIsEditable()
-	->queryRow();
+$domain = null;
 
-// 404?
-$domain or PageNotFound::spawn();
+if( $domain_name ) {
+	// retrieve domain
+	$domain = ( new DomainAPI() )
+		->whereDomainName( $domain_name )
+		->whereDomainIsEditable()
+		->queryRow();
+
+	// 404?
+	$domain or PageNotFound::spawn();
+} else {
+	// try to create
+
+	require_permission( 'edit-domain-all' );
+
+	if( is_action( 'add-domain' ) && isset( $_POST[ 'domain_name' ] ) ) {
+		$domain_name = luser_input( $_POST[ 'domain_name' ], 64 );
+
+		// @TODO: check for duplicates
+
+		insert_row( Domain::T, [
+			new DBCol( 'domain_name',   $domain_name, 's' ),
+			new DBCol( 'domain_active', 1,            'd' ),
+			new DBCol( 'domain_born',  'NOW()',       '-' ),
+		] );
+
+		// POST -> redirect -> GET
+		http_redirect( Domain::permalink( $domain_name, true ) );
+	}
+}
 
 // spawn header
 Header::spawn( [
 	'title-prefix' => __( "Domain" ),
-	'title' => $domain_name,
+	'title' => $domain_name ? $domain_name : __( "Add" ),
 ] );
 
-// spawn the domain template
-template( 'domain', [
-	'domain' => $domain,
-] );
+if( $domain ) {
+	// spawn the domain template
+	template( 'domain', [
+		'domain' => $domain,
+	] );
+} else {
+	// form to create the domain
+	template( 'domain-create' );
+}
 
 // spawn the footer
 Footer::spawn();

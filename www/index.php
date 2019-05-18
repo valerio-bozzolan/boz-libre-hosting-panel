@@ -53,7 +53,7 @@ $domains = ( new DomainAPI() )
 			__( "domains" )
 		) ?></h3>
 		<ul>
-		<?php foreach( $domains as $domain ): ?>
+			<?php foreach( $domains as $domain ): ?>
 			<li>
 				<code>
 				<?php if( $domain->domain_active ): ?>
@@ -66,8 +66,12 @@ $domains = ( new DomainAPI() )
 				<?php endif ?>
 				</code>
 			</li>
-		<?php endforeach ?>
+			<?php endforeach ?>
 		</ul>
+
+		<?php if( has_permission( 'edit-domain-all' ) ): ?>
+			<p><a class="btn btn-default" href="<?php echo ROOT ?>/domain.php"><?php _e( "Add" ) ?></a></p>
+		<?php endif ?>
 	<?php endif ?>
 
 <?php

@@ -1,5 +1,5 @@
 <?php
-# Copyright (C) 2018 Valerio Bozzolan
+# Copyright (C) 2018, 2019 Valerio Bozzolan
 # Boz Libre Hosting Panel
 #
 # This program is free software: you can redistribute it and/or modify
@@ -23,42 +23,109 @@
 require '../load.php';
 
 // wanted domain and mailbox username
-list( $domain_name, $mailbox_username ) = url_parts( 2 );
+list( $domain_name, $mailbox_username ) = url_parts( 2, 1 );
 
-// retrieve domain
-$mailbox = ( new MailboxFullAPI() )
-	->select( [
-		'domain.domain_ID',
-		'domain.domain_name',
-		'domain.domain_active',
-		'mailbox_username',
-	] )
-	->whereStr( 'domain_name', $domain_name )
-	->whereStr( 'mailbox_username', $mailbox_username )
-	->whereDomainIsEditable()
-	->queryRow();
+$domain   = null;
+$mailbox  = null;
+$mailbox_password = null;
+if( $mailbox_username ) {
+	// retrieve the mailbox and its domain
+	$mailbox = ( new MailboxFullAPI() )
+		->select( [
+			'domain.domain_ID',
+			'domain_name',
+			'domain_active',
+			'mailbox_username',
+		] )
+		->whereDomainName( $domain_name )
+		->whereStr( 'mailbox_username', $mailbox_username )
+		->whereMailboxIsEditable()
+		->queryRow();
 
-// 404?
-$mailbox or PageNotFound::spawn();
+	// 404?
+	$mailbox or PageNotFound::spawn();
 
-$password = null;
-if( is_action( 'mailbox-password-reset' ) ) {
-	$password = $mailbox->updateMailboxPassword();
+	// the mailbox has the domain stuff
+	$domain = $mailbox;
+} else {
+	// retrieve just the domain
+	$domain = ( new DomainAPI() )
+		->select( [
+			'domain.domain_ID',
+			'domain_name',
+			'domain_active',
+		] )
+		->whereDomainName( $domain_name )
+		->whereDomainIsEditable()
+		->queryRow();
+
+	// 404?
+	$domain or PageNotFound::spawn();
+}
+
+/*
+ * Change the mailbox password
+ */
+if( $mailbox && is_action( 'mailbox-password-reset' ) ) {
+	$mailbox_password = $mailbox->updateMailboxPassword();
+}
+
+/*
+ * Create the mailbox
+ */
+if( !$mailbox && is_action( 'mailbox-create' ) && isset( $_POST[ 'mailbox_username' ] ) ) {
+
+	// TODO: check max. creation number in single domain props
+	require_permission( 'edit-email-all' );
+
+	$_POST[ 'mailbox_username' ] = luser_input( $_POST[ 'mailbox_username' ], 64 );
+
+	$mailbox = ( new MailboxFullAPI() )
+		->select( [
+			'domain.domain_ID',
+			'domain_name',
+			'mailbox_username',
+		] )
+		->whereDomainName( $domain_name )
+		->whereStr( 'mailbox_username', $_POST[ 'mailbox_username' ] )
+		->queryRow();
+
+	if( !$mailbox ) {
+		insert_row( 'mailbox', [
+			new DBCol( 'mailbox_username', $_POST[ 'mailbox_username' ], 's' ),
+			new DBCol( 'domain_ID',        $domain->getDomainID(),       'd' ),
+		] );
+	}
+
+	$mailbox = ( new MailboxFullAPI() )
+		->select( [
+			'domain.domain_ID',
+			'domain_name',
+			'mailbox_username',
+		] )
+		->whereDomainName( $domain_name )
+		->whereStr( 'mailbox_username', $_POST[ 'mailbox_username' ] )
+		->queryRow();
+
+	if( $mailbox ) {
+		http_redirect( $mailbox->getMailboxPermalink( true ) );
+	}
 }
 
 // spawn header
 Header::spawn( [
 	'title-prefix' => __( "Mailbox" ),
-	'title' => $mailbox->getMailboxAddress(),
+	'title' => $mailbox ? $mailbox->getMailboxAddress() : __( "create" ),
 	'breadcrumb' => [
-		new MenuEntry( null, $mailbox->getDomainPermalink(), $mailbox->getDomainName() ),
+		new MenuEntry( null, $domain->getDomainPermalink(), $domain->getDomainName() ),
 	],
 ] );
 
 // spawn the page content
 template( 'mailbox', [
-	'mailbox'  => $mailbox,
-	'password' => $password,
+	'mailbox'          => $mailbox,
+	'mailbox_password' => $mailbox_password,
+	'domain'           => $domain,
 ] );
 
 // spawn the footer

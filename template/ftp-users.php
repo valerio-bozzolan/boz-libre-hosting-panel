@@ -40,10 +40,9 @@ $ftps = $domain->factoryFTP()
 		__( "Your %s" ),
 		__( "FTP users" )
 	) ?></h3>
+	<?php template( 'ftp-description' ) ?>
+
 	<?php if( $ftps->valid() ): ?>
-
-		<?php template( 'ftp-description' ) ?>
-
 		<ul>
 			<?php foreach( $ftps as $ftp ): ?>
 				<li>

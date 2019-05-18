@@ -50,10 +50,11 @@ class Domain extends Queried {
 	/**
 	 * Get the domain edit URl
 	 *
+	 * @param boolean $absolute True for an absolute URL
 	 * @return string
 	 */
 	public function getDomainPermalink( $absolute = false ) {
-		return ROOT . '/domain.php/' . $this->get( 'domain_name' );
+		return Domain::permalink( $this->get( 'domain_name' ), $absolute );
 	}
 
 	/**
@@ -83,4 +84,17 @@ class Domain extends Queried {
 		return ( new FTPAPI() )->whereDomain( $this );
 	}
 
+	/**
+	 * Get the domain permalink
+	 *
+	 * @param string  $domain_name Domain name
+	 * @param boolean $absolute    True for an absolute URL
+	 */
+	public static function permalink( $domain_name = null, $absolute = false ) {
+		$url = 'domain.php';
+		if( $domain_name ) {
+			$url .= _ . $domain_name;
+		}
+		return site_page( $url, $absolute );
+	}
 }

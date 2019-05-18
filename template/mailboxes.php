@@ -28,21 +28,21 @@ defined( 'BOZ_PHP' ) or die;
 // domain mailboxes
 $mailboxes = $domain->factoryMailbox()
 	->select( [
-			'domain_name',
-			'mailbox_username',
-			'mailbox_receive',
+		'domain_name',
+		'mailbox_username',
+		'mailbox_receive',
 	] )
 	->queryGenerator();
 ?>
 	<!-- mail boxes -->
+	<h3><?php printf(
+		__( "Your %s" ),
+		__( "mailboxes" )
+	) ?></h3>
+
+	<?php template( 'mailbox-description' ) ?>
+
 	<?php if( $mailboxes->valid() ): ?>
-		<h3><?php printf(
-			__( "Your %s" ),
-			__( "mailboxes" )
-		) ?></h3>
-
-		<?php template( 'mailbox-description' ) ?>
-
 		<ul>
 			<?php foreach( $mailboxes as $mailbox ): ?>
 				<li>
@@ -53,6 +53,11 @@ $mailboxes = $domain->factoryMailbox()
 				</li>
 			<?php endforeach ?>
 		</ul>
+	<?php endif ?>
+
+	<?php /* TODO: check counter on domain */ ?>
+	<?php if( has_permission( 'edit-email-all' ) ): ?>
+		<p><?php the_link( Mailbox::permalink( $domain->getDomainName() ), __( "Create" ) ) ?></p>
 	<?php endif ?>
 	<!-- end mail boxes -->
 

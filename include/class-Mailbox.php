@@ -74,15 +74,17 @@ class Mailbox extends Domain {
 	/**
 	 * Get the mailbox permalink
 	 *
+	 * @param $domain string
+	 * @param $mailbox string
+	 * @param $absolute boolean
 	 * @return string
 	 */
-	public static function permalink( $domain, $mailbox ) {
-		return sprintf(
-			'%s/%s/%s',
-			ROOT . '/mailbox.php',
-			$domain,
-			$mailbox
-		);
+	public static function permalink( $domain, $mailbox = null, $absolute = false ) {
+		$part = site_page( 'mailbox.php', $absolute ) . _ . $domain;
+		if( $mailbox ) {
+			$part .= _ . $mailbox;
+		}
+		return $part;
 	}
 
 	/**
