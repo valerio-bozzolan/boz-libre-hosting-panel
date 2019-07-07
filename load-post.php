@@ -65,11 +65,11 @@ define_default( 'SESSION_DURATION', 6000 );
 
 // register web pages
 add_menu_entries( [
-		new MenuEntry( 'index',          '/',                   __( "Dashboard" ) ),
-		new MenuEntry( 'login',          'login.php',           __( "Login" ) ),
-		new MenuEntry( 'profile',        'profile.php',         __( "Profile" ) ),
-		new MenuEntry( 'logout',         'logout.php',          __( "Logout" ) ),
-		new MenuEntry( 'password-reset', 'password-reset.php',  __( "Password reset" ) ),
+	new MenuEntry( 'index',          '/',                   __( "Dashboard" ) ),
+	new MenuEntry( 'login',          'login.php',           __( "Login" ) ),
+	new MenuEntry( 'profile',        'profile.php',         __( "Profile" ) ),
+	new MenuEntry( 'logout',         'logout.php',          __( "Logout" ) ),
+	new MenuEntry( 'password-reset', 'password-reset.php',  __( "Password reset" ) ),
 ] );
 
 // permissions
@@ -77,6 +77,7 @@ register_permissions( 'user', [
 	'read',
 	'backend',
 ] );
+
 inherit_permissions( 'admin', 'user', [
 	'edit-user-all',
 	'edit-email-all',
