@@ -75,7 +75,7 @@ class FTP extends Domain {
 	public static function permalink( $domain, $login = null ) {
 		$url = sprintf( '%s/%s', ROOT . '/ftp.php', $domain );
 		if( $login ) {
-			$url = "/$login";
+			$url .= "/$login";
 		}
 		return $url;
 	}
