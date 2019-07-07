@@ -48,7 +48,7 @@ $mailforwardfroms = $domain->factoryMailforwardfrom()
 		<ul>
 			<?php foreach( $mailforwardfroms as $mailforwardfrom ): ?>
 				<li>
-					<code><?php echo HTML::a(
+					<code><?= HTML::a(
 						$mailforwardfrom->getMailforwardfromPermalink(),
 						$mailforwardfrom->getMailforwardfromAddress()
 					) ?></code>
@@ -56,7 +56,7 @@ $mailforwardfroms = $domain->factoryMailforwardfrom()
 			<?php endforeach ?>
 		</ul>
 	<?php else: ?>
-		<p><?php _e( "None yet.") ?></p>
+		<p><?= __( "None yet.") ?></p>
 	<?php endif ?>
 
 	<p><?php the_link(

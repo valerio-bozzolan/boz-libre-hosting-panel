@@ -30,16 +30,21 @@ Software involved:
 
 Let me say that I love listening to the whishlist of my costumers. Here are the most important features/TODOs:
 
-- administration of own mailboxes
+- administration of own mailboxes (thanks to Postfix and Dovecot over MariaDB)
+	- [X] list
 	- [X] password reset
-	- [ ] add
+	- [X] add
 	- [ ] remove
 	- [ ] view quota
 - administration of own mail aliases (thanks to Postfix and Dovecot over MariaDB)
+	- [X] list
 	- [X] change forward destination(s)
 	- [X] add
 	- [X] remove
-- [ ] administration of own FTP accounts (thanks to Pure-FTPd over MariaDB)
+- administration of own FTP accounts (thanks to Pure-FTPd over MariaDB)
+	- [X] list
+	- [ ] add
+	- [ ] remove
 - [ ] administration of own MariaDB databases
 
 ## License

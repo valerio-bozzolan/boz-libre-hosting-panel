@@ -31,9 +31,9 @@ defined( 'BOZ_PHP' ) or die;
 			<li class="collection-item">
 
 				<?php if( $entry->uid === Header::$args[ 'uid' ] ): ?>
-					<?php _esc_html( $entry->name ) ?>
+					<?= esc_html( $entry->name ) ?>
 				<?php else: ?>
-					<?php echo HTML::a(
+					<?= HTML::a(
 						$entry->getSitePage(),
 						$entry->name
 					) ?>

@@ -26,4 +26,4 @@
 defined( 'BOZ_PHP' ) or die;
 ?>
 
-	<p><?php _e( "A forwarding address is a simple e-mail address you can use to receive e-mails, forwarding them to another e-mail address of your choice." ) ?></p>
+	<p><?= __( "A forwarding address is a simple e-mail address you can use to receive e-mails, forwarding them to another e-mail address of your choice." ) ?></p>

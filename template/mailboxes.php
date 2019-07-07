@@ -46,7 +46,7 @@ $mailboxes = $domain->factoryMailbox()
 		<ul>
 			<?php foreach( $mailboxes as $mailbox ): ?>
 				<li>
-					<code><?php echo HTML::a(
+					<code><?= HTML::a(
 						$mailbox->getMailboxPermalink(),
 						$mailbox->getMailboxAddress()
 					) ?></code>

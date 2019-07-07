@@ -26,7 +26,7 @@
 defined( 'BOZ_PHP' ) or die;
 
 // add home to the breadcrumb
-array_unshift( $args[ 'breadcrumb' ], get_menu_entry( 'index' ) );
+array_unshift( $args[ 'breadcrumb' ], menu_entry( 'index' ) );
 
 // add "this page" to the breadcrumb
 if( $args[ 'uid' ] !== 'index' ) {

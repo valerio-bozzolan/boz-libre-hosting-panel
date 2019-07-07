@@ -49,4 +49,4 @@ define( 'ABSPATH', __DIR__ );
 define( 'ROOT', '' );
 
 // path to the boz-php framework
-require '/usr/share/php/boz-php/load.php';
+require '/usr/share/php/suckless-php/load.php';

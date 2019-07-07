@@ -30,7 +30,7 @@
 defined( 'BOZ_PHP' ) or die;
 ?>
 
-	<p><?php _e( "To enter in your website with this FTP user you can copy this address into your file manager (then it should ask for the related password):" ) ?></p>
+	<p><?= __( "To enter in your website with this FTP user you can copy this address into your file manager (then it should ask for the related password):" ) ?></p>
 
 	<blockquote>
 		<code>ftp://<?php

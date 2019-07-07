@@ -89,7 +89,7 @@ function require_permission( $permission, $redirect = true ) {
 			Footer::spawn();
 			exit;
 		} else {
-			$login = get_menu_entry( 'login' );
+			$login = menu_entry( 'login' );
 			$url = $login->getSitePage( URL );
 			if( $redirect && isset( $_SERVER[ 'REQUEST_URI' ] ) ) {
 				$url = http_build_get_query( $url, [
@@ -99,16 +99,6 @@ function require_permission( $permission, $redirect = true ) {
 			http_redirect( $url, 307 );
 		}
 	}
-}
-
-/**
- * Check the POST action
- *
- * @param $action string e.g. 'save-domain'
- * @return bool
- */
-function is_action( $action ) {
-	return isset( $_POST[ 'action' ] ) && $_POST[ 'action' ] === $action;
 }
 
 /**
@@ -150,7 +140,7 @@ function url_parts( $max, $min = false ) {
  * @param $args mixed Arguments
  */
 function the_menu_link( $uid, $args = [] ) {
-	$page = get_menu_entry( $uid );
+	$page = menu_entry( $uid );
 	the_link( $page->getSitePage(), $page->name, $args );
 }
 

@@ -58,7 +58,7 @@ load_module( 'footer' );
 			<!-- help -->
 			<?php if( CONTACT_EMAIL ): ?>
 			<div class="col-sm-2">
-				<?php _e( "Help:" ) ?><br />
+				<?= __( "Help:" ) ?><br />
 				<?php email_blur( CONTACT_EMAIL ) ?>
 			</div>
 			<?php endif ?>
@@ -67,8 +67,8 @@ load_module( 'footer' );
 			<!-- fork -->
 			<?php if( REPO_URL ): ?>
 			<div class="col-sm-2">
-				<?php _e( "Contribute:" ) ?><br />
-				<a href="<?php echo REPO_URL ?>" target="_blank"><?php _e( "project repository" ) ?></a>
+				<?= __( "Contribute:" ) ?><br />
+				<a href="<?= REPO_URL ?>" target="_blank"><?php echo __( "project repository" ) ?></a>
 			</div>
 			<?php endif ?>
 			<!-- end for -->

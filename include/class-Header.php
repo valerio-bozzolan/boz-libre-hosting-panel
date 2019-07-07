@@ -53,7 +53,7 @@ class Header {
 
 		// retrieve page informations
 		$page = isset(       $args[ 'uid' ] )
-		   ? get_menu_entry( $args[ 'uid' ] )
+		   ? menu_entry( $args[ 'uid' ] )
 		   : null;
 
 		// populate the page informations

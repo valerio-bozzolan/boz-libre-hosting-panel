@@ -26,4 +26,4 @@
 defined( 'BOZ_PHP' ) or die;
 ?>
 
-	<p><?php _e( "With an FTP user you can read and write files of your website. You can create various users limited to specific directories of your website." ) ?></p>
+	<p><?= __( "With an FTP user you can read and write files of your website. You can create various users limited to specific directories of your website." ) ?></p>

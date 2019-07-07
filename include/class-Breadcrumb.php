@@ -1,5 +1,5 @@
 <?php
-# Copyright (C) 2018 Valerio Bozzolan
+# Copyright (C) 2018, 2019 Valerio Bozzolan
 # Boz Libre Hosting Panel
 #
 # This program is free software: you can redistribute it and/or modify
@@ -35,7 +35,7 @@ class Breadcrumb {
 			<ol itemscope itemtype="http://schema.org/BreadcrumbList" id="breadcrumb">
 				<?php $i = 0 ?>
 				<?php foreach( $breadcrumbs as $crumb ): ?>
-					<?php self::menuEntryLink( ++$i, $crumb ) ?>
+					<?= self::menuEntryLink( ++$i, $crumb ) ?>
 				<?php endforeach ?>
 			</ol>
 		<?php
@@ -46,6 +46,7 @@ class Breadcrumb {
 	 *
 	 * @param $i int
 	 * @param $entry MenuEntry
+	 * @return string
 	 */
 	public static function menuEntryLink( $i, $entry ) {
 		$url = $entry->url ? $entry->getSitePage() : null;
@@ -53,19 +54,26 @@ class Breadcrumb {
 	}
 
 	/**
-	 * Spawn a link with microdata
+	 * Get a link with microdata
+	 *
+	 * @param int $i
+	 * @param string $url
+	 * @param string $title
+	 * @return string
 	 */
 	public static function link( $i, $url, $title ) {
-		echo '<li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">';
+		$s = '<li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">';
 		if( $url ) {
-			echo '<a itemprop="item" href="' . esc_attr( $url ) . '">';
-			echo '<span itemprop="name">' . esc_html( $title ) . '</span>';
-			echo '</a>';
+			$s .= '<a itemprop="item" href="' . esc_attr( $url ) . '">';
+			$s .= '<span itemprop="name">' . esc_html( $title ) . '</span>';
+			$s .= '</a>';
 		} else {
-			echo '<span itemprop="name">' . _esc_html( $title ) . '</span>';
+			$s .= '<span itemprop="name">' . esc_html( $title ) . '</span>';
 		}
-		echo '<meta itemprop="position" content="' . $i . '" />';
-		echo "</li>\n";
+		$s .= '<meta itemprop="position" content="' . $i . '" />';
+		$s .= "</li>\n";
+
+		return $s;
 	}
 
 }

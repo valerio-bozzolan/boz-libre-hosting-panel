@@ -30,8 +30,9 @@ defined( 'BOZ_PHP' ) or die;
 ?>
 
 	<?php if( $please ): ?>
-		<p class="alert alert-warning"><?php _e( "Please manually confirm your action." ) ?></p>
+		<p class="alert alert-warning"><?= __( "Please manually confirm your action." ) ?></p>
 	<?php endif ?>
-	<form method="post" action="<?php echo ROOT ?>/logout.php">
-		<button type="submit" name="action" value="logout" class="btn btn-default"><?php _e( "Logout" ) ?></button>
+	<form method="post" action="<?= ROOT ?>/logout.php">
+		<?php form_action( 'logout' ) ?>
+		<button type="submit" class="btn btn-default"><?= __( "Logout" ) ?></button>
 	</form>

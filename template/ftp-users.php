@@ -46,7 +46,7 @@ $ftps = $domain->factoryFTP()
 		<ul>
 			<?php foreach( $ftps as $ftp ): ?>
 				<li>
-					<code><?php echo HTML::a(
+					<code><?= HTML::a(
 						FTP::permalink(
 							$domain->getDomainName(),
 							$ftp->getFTPLogin()
@@ -57,7 +57,7 @@ $ftps = $domain->factoryFTP()
 			<?php endforeach ?>
 		</ul>
 	<?php else: ?>
-		<p><?php _e( "None yet.") ?></p>
+		<p><?= __( "None yet.") ?></p>
 	<?php endif ?>
 
 	<?php if( has_permission( 'edit-ftp-all' ) ): ?>

@@ -32,26 +32,32 @@ defined( 'BOZ_PHP' ) or die;
 
 	<?php template( 'ftp-description' ) ?>
 
-	<?php if( $ftp ) {
-		template( 'ftp-access', [
+	<?php if( $ftp ): ?>
+
+		<?php template( 'ftp-access', [
 			'domain' => $domain,
 			'ftp'    => $ftp,
-		] );
-	} ?>
+		] ) ?>
 
-	<form method="post">
-		<p>
-			<?php if( $ftp ): ?>
-				<input type="hidden" readonly<?php _value( $ftp->getFTPLogin() ) ?> />
-			<?php else: ?>
-				<label for="ftp-login"><?php _e( "FTP login:") ?></label><br />
+		<!-- delete form -->
+		<form method="post">
+			<?php form_action( 'ftp-delete' ) ?>
+			<?= HTML::input( 'hidden', 'ftp_login', $ftp->getFTPLogin() ) ?>
+			<button type="submit" class="btn btn-danger"><?= __( "Delete" ) ?></button>
+		</form>
+		<!-- /delete form -->
+
+	<?php else: ?>
+
+		<!-- create form -->
+		<form method="post">
+			<?php form_action( 'ftp-save' ) ?>
+			<p>
+				<label for="ftp-login"><?= __( "FTP login:") ?></label><br />
 				<input type="text" id="ftp-login" name="ftp_login" />
-			<?php endif ?>
+				<button type="submit" class="btn btn-default"><?= __( "Create" ) ?></button>
+			</p>
+		</form>
+		<!-- /create form -->
 
-			<?php if( $ftp ): ?>
-				<button type="submit" class="btn btn-danger" name="action" value="ftp-delete"><?php _e( "Delete" ) ?></button>
-			<?php else: ?>
-				<button type="submit" class="btn btn-default" name="action" value="ftp-save"><?php _e( "Create" ) ?></button>
-			<?php endif ?>
-		</p>
-	</form>
+	<?php endif ?>

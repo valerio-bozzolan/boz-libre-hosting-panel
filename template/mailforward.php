@@ -32,29 +32,40 @@ defined( 'BOZ_PHP' ) or die;
 ?>
 	<?php template( 'mailforward-description' ) ?>
 
+	<!-- save form -->
 	<form method="post">
+		<?php form_action( 'mailforward-save' ) ?>
 		<p>
-			<label for="mailforward-source"><?php _e( "E-mail address:") ?></label><br />
+			<label for="mailforward-source"><?= __( "E-mail address:") ?></label><br />
 			<?php if( $mailforwardfrom ): ?>
-				<input type="text" id="mailforward-address" readonly<?php _value( $mailforwardfrom->getMailforwardfromAddress() ) ?> />
+				<input type="text" id="mailforward-address" readonly<?= value( $mailforwardfrom->getMailforwardfromAddress() ) ?> />
 			<?php else: ?>
 				<input type="string" name="mailforwardfrom_username" id="mailforwardfrom-username"<?php
 					if( $mailforwardfrom ) {
 						_value( $mailforwardfrom->getMailforwardfromUsername() );
 					}
-				?> /> <code>@<?php _esc_html( $domain->getDomainName() ) ?></code>
+				?> /> <code>@<?= esc_html( $domain->getDomainName() ) ?></code>
 			<?php endif ?>
 
-			<?php if( $mailforwardfrom ): ?>
-				<button type="submit" class="btn btn-danger" name="action" value="mailforward-delete"><?php _e( "Delete" ) ?></button>
-			<?php else: ?>
-				<button type="submit" class="btn btn-default" name="action" value="mailforward-save"><?php _e( "Create" ) ?></button>
+			<?php if( !$mailforwardfrom ): ?>
+				<button type="submit" class="btn btn-default"><?= __( "Create" ) ?></button>
 			<?php endif ?>
 		</p>
 	</form>
+	<!-- / save form -->
+
+	<!-- delete form -->
+	<?php if( $mailforwardfrom ): ?>
+		<form method="post">
+			<?php form_action( 'mailforward-delete' ) ?>
+			<?= HTML::input( 'hidden', 'mailforwardfrom_username', $mailforwardfrom->getMailforwardfromAddress() ) ?>
+			<button type="submit" class="btn btn-danger"><?= __( "Delete" ) ?></button>
+		</form>
+	<?php endif ?>
+	<!-- /delete form -->
 
 	<?php if( $mailforwardfrom ): ?>
-		<p><?php _e( "Forward the incoming e-mails to these destinations:" ) ?></label></p>
+		<p><?= __( "Forward the incoming e-mails to these destinations:" ) ?></label></p>
 		<?php template( 'mailforwardto', [
 			'domain'          => $domain,
 			'mailforwardfrom' => $mailforwardfrom,

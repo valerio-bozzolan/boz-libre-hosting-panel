@@ -37,19 +37,19 @@ enqueue_css( 'custom-css' );
 <!DOCTYPE html>
 <html>
 <head>
-	<title><?php echo strip_tags( $args[ 'title' ] ) ?> - <?php echo strip_tags( SITE_NAME ) ?></title>
+	<title><?= strip_tags( $args[ 'title' ] ) ?> - <?php echo strip_tags( SITE_NAME ) ?></title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-	<link rel="icon" href="<?php echo ROOT ?>/content/logo/logo-64.png" type="image/png" /><?php load_module( 'header' ) ?>
+	<link rel="icon" href="<?= ROOT ?>/content/logo/logo-64.png" type="image/png" /><?php load_module( 'header' ) ?>
 
 </head>
 <body>
 	<div class="container">
-		<h1><?php echo SITE_NAME ?></h1>
+		<h1><?= SITE_NAME ?></h1>
 
 		<?php if( isset( $args[ 'title-prefix' ] ) ): ?>
-			<h2><?php _esc_html( $args[ 'title-prefix' ] ) ?>: <em><?php _esc_html( $args[ 'title' ] ) ?></em></h2>
+			<h2><?= esc_html( $args[ 'title-prefix' ] ) ?>: <em><?php _esc_html( $args[ 'title' ] ) ?></em></h2>
 		<?php else: ?>
-			<h2><?php _esc_html( $args[ 'title' ] ) ?></h2>
+			<h2><?= esc_html( $args[ 'title' ] ) ?></h2>
 		<?php endif ?>
 
 		<?php if( isset( $args[ 'breadcrumb' ] ) && $args[ 'breadcrumb' ] !== false ): ?>

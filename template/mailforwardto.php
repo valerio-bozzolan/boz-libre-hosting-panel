@@ -40,17 +40,23 @@ $mailforwardto =
 	<?php if( $mailforwardto->valid() ): ?>
 		<?php foreach( $mailforwardto as $address ): ?>
 			<li>
+				<!-- remove -->
 				<form method="post">
-					<input type="email" name="address"<?php _value( $address->getMailforwardtoAddress() ) ?> readonly />
-					<button type="submit" class="btn btn-warning" name="action" value="mailforwardto-remove"><?php _e( "Remove" ) ?></button>
+					<?php form_action( 'mailforwardto-remove' ) ?>
+					<input type="email" name="address"<?= value( $address->getMailforwardtoAddress() ) ?> readonly />
+					<button type="submit" class="btn btn-warning"><?= __( "Remove" ) ?></button>
 				</form>
+				<!-- /remove -->
 			</li>
 		<?php endforeach ?>
 	<?php endif ?>
 	<li>
+		<!-- add -->
 		<form method="post">
+			<?php form_action( 'mailforwardto-add' ) ?>
 			<input type="email" id="mailforwardto-address" name="address" />
-			<button type="submit" class="btn btn-default" name="action" value="mailforwardto-add"><?php _e( "Add" ) ?></button>
+			<button type="submit" class="btn btn-default"><?= __( "Add" ) ?></button>
 		</form>
+		<!-- /add -->
 	</li>
 </ul>

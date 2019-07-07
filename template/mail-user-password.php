@@ -39,16 +39,16 @@ defined( 'BOZ_PHP' ) or die;
 ) ?>
 
 
-<?php echo $uid ?>
+<?= $uid ?>
 
-<?php echo $password ?>
-
-
-<?php _e( "I remember you that the login page is there:" ) ?>
+<?= $password ?>
 
 
-<?php echo http_build_get_query(
-	get_menu_entry( 'login' )->getSitePage( true ), [
+<?= __( "I remember you that the login page is there:" ) ?>
+
+
+<?= http_build_get_query(
+	menu_entry( 'login' )->getSitePage( true ), [
 		'user_uid' => $uid
 	]
 ) ?>

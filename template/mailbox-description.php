@@ -26,4 +26,4 @@
 defined( 'BOZ_PHP' ) or die;
 ?>
 
-	<p><?php _e( "A mailbox is a fully operative e-mail address that you can use to send and receive e-mails. As interface you can use a webmail, an e-mail client like Thunderbird, Evolution, or a mobile app like K-9 Mail, etc." ) ?></p>
+	<p><?= __( "A mailbox is a fully operative e-mail address that you can use to send and receive e-mails. As interface you can use a webmail, an e-mail client like Thunderbird, Evolution, or a mobile app like K-9 Mail, etc." ) ?></p>
