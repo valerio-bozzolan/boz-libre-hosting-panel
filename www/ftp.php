@@ -86,25 +86,25 @@ if( is_action( 'ftp-save' ) ) {
 		}
 
 		// check existence
-		$ftp_exists = ( new MailforwardfromAPI )
+		$ftp_exists = ( new FTPAPI )
 			->select( 1 )
 			->whereDomain( $domain )
-			->whereFTPLogin( $source )
+			->whereFTPLogin( $username )
 			->queryRow();
 
 		// die if exists
 		if( $ftp_exists ) {
-			BadRequest::spawn( __( "e-mail forwarding already existing" ) );
+			BadRequest::spawn( __( "FTP account already existing" ) );
 		}
 
 		// insert as new row
 		insert_row( 'ftp', [
-			new DBCol( 'domain_ID',                $domain->getDomainID(), 'd' ),
+			new DBCol( 'domain_ID', $domain->getDomainID(), 'd' ),
 			new DBCol( 'ftp_login', $username,              's' ),
 		] );
 
 		// POST/redirect/GET
-		http_redirect( Mailforwardfrom::permalink(
+		http_redirect( FTP::permalink(
 			$domain->getDomainName(),
 			$username,
 			true
@@ -118,13 +118,10 @@ if( $ftp ) {
 	// action fired when deleting a whole mailforward
 	if( is_action( 'ftp-delete' ) ) {
 
-		// drop th
-		query( sprintf(
-			"DELETE FROM %s WHERE domain_ID = %d AND ftp_login = '%s'",
-			T( 'ftp' ),
-			$ftp->getDomainID(),
-			$ftp->getFTPLogin()
-		) );
+		// delete the account
+		( new FTPAPI() )
+			->whereFTP( $ftp )
+			->delete();
 
 		// POST/redirect/GET
 		http_redirect( $domain->getDomainPermalink( true ), 303 );
