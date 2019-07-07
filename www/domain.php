@@ -42,17 +42,28 @@ if( $domain_name ) {
 	require_permission( 'edit-domain-all' );
 
 	if( is_action( 'add-domain' ) && isset( $_POST[ 'domain_name' ] ) ) {
+
+		// trim and normalize to max length
 		$domain_name = luser_input( $_POST[ 'domain_name' ], 64 );
 
-		// @TODO: check for duplicates
+		// existing domain
+		$existing = ( new DomainAPI() )
+			->whereDomainName( $domain_name )
+			->queryRow();
 
+		// go to the existing one
+		if( $existing ) {
+			http_redirect( $existing->getDomainPermalink() );
+		}
+
+		// insert this new domain
 		insert_row( Domain::T, [
 			new DBCol( 'domain_name',   $domain_name, 's' ),
 			new DBCol( 'domain_active', 1,            'd' ),
 			new DBCol( 'domain_born',  'NOW()',       '-' ),
 		] );
 
-		// POST -> redirect -> GET
+		// go to the new domain
 		http_redirect( Domain::permalink( $domain_name, true ) );
 	}
 }
