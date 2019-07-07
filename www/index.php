@@ -57,12 +57,12 @@ $domains = ( new DomainAPI() )
 			<li>
 				<code>
 				<?php if( $domain->domain_active ): ?>
-					<?php echo HTML::a(
+					<?= HTML::a(
 						$domain->getDomainPermalink(),
 						$domain->domain_name
 					) ?>
 				<?php else: ?>
-					<del><?php _esc_html( $domain->domain_name ) ?></del>
+					<del><?= esc_html( $domain->domain_name ) ?></del>
 				<?php endif ?>
 				</code>
 			</li>
@@ -70,7 +70,7 @@ $domains = ( new DomainAPI() )
 		</ul>
 
 		<?php if( has_permission( 'edit-domain-all' ) ): ?>
-			<p><a class="btn btn-default" href="<?php echo ROOT ?>/domain.php"><?php _e( "Add" ) ?></a></p>
+			<p><a class="btn btn-default" href="<?= ROOT ?>/domain.php"><?php echo __( "Add" ) ?></a></p>
 		<?php endif ?>
 	<?php endif ?>
 

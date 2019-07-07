@@ -38,11 +38,11 @@ Header::spawn();
 	<form method="post">
 		<?php if( ! is_logged() ): ?>
 			<div class="form-group">
-				<label for="user-uid"><?php _e( "Username" ) ?></label>
-				<input type="text" class="form-control" name="user_uid" id="user-uid" placeholder="<?php _e( "foo.bar" ) ?>"<?php _value( @ $_REQUEST[ 'user_uid' ] ) ?> />
+				<label for="user-uid"><?= __( "Username" ) ?></label>
+				<input type="text" class="form-control" name="user_uid" id="user-uid" placeholder="<?= __( "foo.bar" ) ?>"<?php echo value( @ $_REQUEST[ 'user_uid' ] ) ?> />
 			</div>
 		<?php endif ?>
-		<button type="submit" class="btn btn-default" name="action" value="password-reset"><?php _e( "Proceed" ) ?></button>
+		<button type="submit" class="btn btn-default" name="action" value="password-reset"><?= __( "Proceed" ) ?></button>
 	</form>
 
 <?php

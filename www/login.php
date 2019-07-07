@@ -32,7 +32,7 @@ if( login() ) {
 ?>
 
 	<?php if( isset( $_POST[ 'user_uid' ] ) ): ?>
-		<p class="alert alert-warning"><?php _e( "Authentication failed!" ) ?></p>
+		<p class="alert alert-warning"><?= __( "Authentication failed!" ) ?></p>
 	<?php endif ?>
 
 	<p><?php printf(
@@ -42,25 +42,22 @@ if( login() ) {
 
 	<form method="post">
 		<div class="form-group">
-			<label for="user-uid"><?php _e( "Username" ) ?></label>
-			<input type="text" class="form-control" name="user_uid" id="user-uid" placeholder="<?php _e( "foo.bar" ) ?>"<?php _value( @ $_REQUEST[ 'user_uid' ] ) ?> />
+			<label for="user-uid"><?= __( "Username" ) ?></label>
+			<input type="text" class="form-control" name="user_uid" id="user-uid" placeholder="<?= __( "foo.bar" ) ?>"<?php echo value( @ $_REQUEST[ 'user_uid' ] ) ?> />
 		</div>
 		<div class="form-group">
-			<label for="user-password"><?php _e( "Password" ) ?></label>
+			<label for="user-password"><?= __( "Password" ) ?></label>
 			<input type="password" class="form-control" name="user_password" id="user-password" />
 		</div>
 
 		<?php if( ! empty( $_POST[ 'user_uid' ] ) ): ?>
-			<p><a href="<?php
-				// the password reset URL
-				echo http_build_get_query(
-					get_menu_entry( 'password-reset' )->getSitePage( ROOT ), [
-					'user_uid' => @ $_REQUEST[ 'user_uid' ],
-				] );
-			?>"><?php _e( "Lost password?" ) ?></a></p>
+			<p><a href="<?= http_build_get_query(
+				menu_entry( 'password-reset' )->getURL(), [
+				'user_uid' => @ $_REQUEST[ 'user_uid' ],
+			] ) ?>"><?= __( "Lost password?" ) ?></a></p>
 		<?php endif ?>
 
-		<button type="submit" class="btn btn-default"><?php _e( "Login" ) ?></button>
+		<button type="submit" class="btn btn-default"><?= __( "Login" ) ?></button>
 	</form>
 
 <?php
@@ -74,6 +71,6 @@ function after_login_URL() {
 	if( isset( $_GET[ 'redirect' ] ) && 0 === strpos( $_GET[ 'redirect' ], '/' ) ) {
 		return site_page( $_GET[ 'redirect' ], URL );
 	}
-	return get_menu_entry( 'index' )
+	return menu_entry( 'index' )
 		->getSitePage( URL );
 }

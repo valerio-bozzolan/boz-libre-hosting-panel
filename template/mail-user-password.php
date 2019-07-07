@@ -48,7 +48,7 @@ defined( 'BOZ_PHP' ) or die;
 
 
 <?= http_build_get_query(
-	menu_entry( 'login' )->getSitePage( true ), [
+	menu_entry( 'login' )->getAbsoluteURL(), [
 		'user_uid' => $uid
 	]
 ) ?>
