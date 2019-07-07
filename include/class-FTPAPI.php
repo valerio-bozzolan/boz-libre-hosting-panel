@@ -20,6 +20,11 @@
  */
 class FTPAPI extends DomainAPI {
 
+	/**
+	 * @override
+	 */
+	const DOMAIN_ID = 'ftp.domain_ID';
+
 	public function __construct() {
 		Query::__construct();
 		$this->from( FTP::T );
@@ -52,14 +57,14 @@ class FTPAPI extends DomainAPI {
 	}
 
 	/**
-	 * Filter to a certain domain ID
+	 * Limit to a specific FTP account
 	 *
-	 * @param int $id int
+	 * @param object $ftp FTP account
 	 * @return self
-	 * @override
 	 */
-	public function whereDomainID( $id ) {
-		return $this->whereInt( 'ftp.domain_ID', $id );
+	public function whereFTP( $ftp ) {
+		return $this->whereDomain(   $ftp )
+		            ->whereFTPLogin( $ftp->getFTPLogin() );
 	}
 
 }

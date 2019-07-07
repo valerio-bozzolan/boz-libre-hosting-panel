@@ -21,6 +21,7 @@
 class Domain extends Queried {
 
 	const T = 'domain';
+
 	const UID = 'domain_name';
 
 	public function __construct() {

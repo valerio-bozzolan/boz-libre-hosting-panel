@@ -20,6 +20,16 @@
  */
 class MailforwardfromAPI extends DomainAPI {
 
+	/**
+	 * Domain ID column name
+	 *
+	 * @override
+	 */
+	const DOMAIN_ID = Mailforwardfrom::T . DOT . 'domain_ID';
+
+	/**
+	 * @constructor
+	 */
 	public function __construct() {
 		Query::__construct();
 		$this->from( Mailforwardfrom::T );
@@ -48,17 +58,6 @@ class MailforwardfromAPI extends DomainAPI {
 	 */
 	public function whereMailforwardfromUsername( $username ) {
 		return $this->whereStr( 'mailforwardfrom_username', $username );
-	}
-
-	/**
-	 * Filter to a certain domain ID
-	 *
-	 * @param $domain_ID int
-	 * @return self
-	 * @override
-	 */
-	public function whereDomainID( $domain_ID ) {
-		return $this->whereInt( 'mailforwardfrom.domain_ID', $domain_ID );
 	}
 
 }

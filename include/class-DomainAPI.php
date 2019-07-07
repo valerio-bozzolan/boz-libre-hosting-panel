@@ -22,6 +22,11 @@ class DomainAPI extends Query {
 
 	const UID = 'name';
 
+	/**
+	 * Domain ID column name
+	 */
+	const DOMAIN_ID = 'domain.domain_ID';
+
 	public function __construct() {
 		parent::__construct();
 		$this->from( Domain::T );
@@ -71,7 +76,7 @@ class DomainAPI extends Query {
 	 * @return self
 	 */
 	public function whereDomainID( $domain_ID ) {
-		return $this->whereInt( 'domain.domain_ID', $domain_ID );
+		return $this->whereInt( static::DOMAIN_ID, $domain_ID );
 	}
 
 	/**
