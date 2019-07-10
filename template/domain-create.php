@@ -30,5 +30,5 @@ defined( 'BOZ_PHP' ) or die;
 <form method="post">
 	<?php form_action( 'add-domain' ) ?>
 	<input type="text" name="domain_name" />
-	<button type="submit" class="btn"><?= __( "Add" ) ?></button>
+	<button type="submit" class="btn btn-default"><?= __( "Add" ) ?></button>
 </form>
