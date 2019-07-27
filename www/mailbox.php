@@ -114,6 +114,7 @@ if( !$mailbox && is_action( 'mailbox-create' ) && isset( $_POST[ 'mailbox_userna
 
 // spawn header
 Header::spawn( [
+	'uid' => false,
 	'title-prefix' => __( "Mailbox" ),
 	'title' => $mailbox ? $mailbox->getMailboxAddress() : __( "create" ),
 	'breadcrumb' => [

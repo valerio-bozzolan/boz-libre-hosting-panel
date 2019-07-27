@@ -47,7 +47,7 @@ enqueue_css( 'custom-css' );
 		<h1><?= SITE_NAME ?></h1>
 
 		<?php if( isset( $args[ 'title-prefix' ] ) ): ?>
-			<h2><?= esc_html( $args[ 'title-prefix' ] ) ?>: <em><?php _esc_html( $args[ 'title' ] ) ?></em></h2>
+			<h2><?= esc_html( $args[ 'title-prefix' ] ) ?>: <em><?= esc_html( $args[ 'title' ] ) ?></em></h2>
 		<?php else: ?>
 			<h2><?= esc_html( $args[ 'title' ] ) ?></h2>
 		<?php endif ?>

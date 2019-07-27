@@ -49,7 +49,7 @@ class Breadcrumb {
 	 * @return string
 	 */
 	public static function menuEntryLink( $i, $entry ) {
-		$url = $entry->url ? $entry->getSitePage() : null;
+		$url = $entry->url ? $entry->getURL() : null;
 		return self::link( $i, $url, $entry->name );
 	}
 

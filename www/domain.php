@@ -70,6 +70,7 @@ if( $domain_name ) {
 
 // spawn header
 Header::spawn( [
+	'uid' => false,
 	'title-prefix' => __( "Domain" ),
 	'title' => $domain_name ? $domain_name : __( "Add" ),
 ] );

@@ -1,5 +1,5 @@
 <?php
-# Copyright (C) 2018 Valerio Bozzolan
+# Copyright (C) 2018, 2019 Valerio Bozzolan
 # Boz Libre Hosting Panel
 #
 # This program is free software: you can redistribute it and/or modify
@@ -46,23 +46,31 @@ class Header {
 			$args = [ 'uid' => $args ];
 		}
 
-		// eventually retrieve actual page UID
-		if( ! isset( $args[ 'uid' ] ) ) {
-			$args[ 'uid' ] = self::actualPageUID();
+		// eventually retrieve actual page UID from the URL
+		if( !isset( $args['uid'] ) ) {
+			$args['uid'] = self::actualPageUID();
 		}
 
-		// retrieve page informations
-		$page = isset(       $args[ 'uid' ] )
-		   ? menu_entry( $args[ 'uid' ] )
-		   : null;
+		// get menu entry (MenuEntry)
+		$page = null;
+		if( $args['uid'] ) {
 
-		// populate the page informations
-		if( $page ) {
+			// check if this menu entry is registered
+			$page = menu_entry( $args['uid'] );
+			if( !$page ) {
+				error( "unexisting menu entry {$args['uid']}" );
+				PageNotFound::spawn();
+			}
+
+			// populate arguments with page informations
 			$args = array_replace( [
 				'title' => $page->name,
 			], $args );
-		} else {
-			$args[ 'uid' ] = null;
+
+			// check if the page should be visible
+			if( !$page->isVisible() ) {
+				require_more_privileges();
+			}
 		}
 
 		// populate default arguments

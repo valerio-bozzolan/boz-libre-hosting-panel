@@ -132,6 +132,7 @@ if( $ftp ) {
 
 // spawn header
 Header::spawn( [
+	'uid' => false,
 	'title-prefix' => __( "FTP user" ),
 	'title' => $ftp
 		? $ftp->getFTPLogin()

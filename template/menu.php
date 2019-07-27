@@ -1,5 +1,5 @@
 <?php
-# Copyright (C) 2018 Valerio Bozzolan
+# Copyright (C) 2018, 2019 Valerio Bozzolan
 # Boz Libre Hosting Panel
 #
 # This program is free software: you can redistribute it and/or modify
@@ -34,7 +34,7 @@ defined( 'BOZ_PHP' ) or die;
 					<?= esc_html( $entry->name ) ?>
 				<?php else: ?>
 					<?= HTML::a(
-						$entry->getSitePage(),
+						$entry->getURL(),
 						$entry->name
 					) ?>
 				<?php endif ?>

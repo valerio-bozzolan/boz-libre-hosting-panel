@@ -15,27 +15,47 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-/*
- * This is the template for FTP instructions
- *
- * Called from:
- * 	ftp.php
- *
- * Available variables:
- * 	$domain Domain object
- * 	$ftp FTP object
+/**
+ * User users API
  */
+class UserPager extends QueryPager {
 
-// unuseful when load directly
-defined( 'BOZ_PHP' ) or die;
-?>
+	/**
+	 * Constructor
+	 *
+	 * @param $data array
+	 */
+	public function __construct( $data = [] ) {
+		parent::__construct();
 
-	<p><?= esc_html( __( "To enter in your website with this FTP user you can copy this address into your file manager (then it should ask for the related password):" ) ) ?></p>
+		if( isset( $data['uid'] ) ) {
+			$data['uid'] = luser_input( $data['uid'], 32 );
+			$this->setArg( 'uid', $data['uid'] );
+		}
+	}
 
-	<blockquote>
-		<code>ftp://<?=
-			esc_html( $ftp->getFTPLogin() ) .
-			'@' .
-			esc_html( $domain->getDomainName() );
-		?></code>
-	</blockquote>
+	/**
+	 * Create a Query for User(s)
+	 *
+	 * @return Query
+	 */
+	public function createQuery() {
+		$query = new UserAPI();
+
+		$query->whereUserIsEditable();
+
+		return $query;
+	}
+
+
+	/**
+	 * Eventually apply an order
+	 *
+	 * @override
+	 */
+	public function applyOrder( & $query, $order_by, $direction ) {
+
+
+	}
+
+}

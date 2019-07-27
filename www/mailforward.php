@@ -163,6 +163,7 @@ if( $mailforwardfrom ) {
 
 // spawn header
 Header::spawn( [
+	'uid' => false,
 	'title-prefix' => __( "E-mail forwarding" ),
 	'title' => $mailforwardfrom
 		? $mailforwardfrom->getMailforwardfromAddress()

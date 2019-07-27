@@ -1,5 +1,5 @@
 <?php
-# Copyright (C) 2018 Valerio Bozzolan
+# Copyright (C) 2018, 2019 Valerio Bozzolan
 # Boz Libre Hosting Panel
 #
 # This program is free software: you can redistribute it and/or modify
@@ -26,7 +26,7 @@ require '../load.php';
 Header::spawn();
 
 // go to the wanted page (or homepage)
-if( login() ) {
+if( isset( $_POST['user_uid'] ) && login() ) {
 	http_redirect( after_login_url(), 307 );
 }
 ?>
@@ -43,11 +43,11 @@ if( login() ) {
 	<form method="post">
 		<div class="form-group">
 			<label for="user-uid"><?= __( "Username" ) ?></label>
-			<input type="text" class="form-control" name="user_uid" id="user-uid" placeholder="<?= __( "foo.bar" ) ?>"<?php echo value( @ $_REQUEST[ 'user_uid' ] ) ?> />
+			<input type="text" class="form-control" name="user_uid" id="user-uid" placeholder="<?= __( "foo.bar" ) ?>"<?= value( @ $_REQUEST[ 'user_uid' ] ) ?> required="required" />
 		</div>
 		<div class="form-group">
 			<label for="user-password"><?= __( "Password" ) ?></label>
-			<input type="password" class="form-control" name="user_password" id="user-password" />
+			<input type="password" class="form-control" name="user_password" id="user-password" required="required" />
 		</div>
 
 		<?php if( ! empty( $_POST[ 'user_uid' ] ) ): ?>
@@ -68,9 +68,10 @@ Footer::spawn();
  * Return the back URL to be redirected after the login action
  */
 function after_login_URL() {
-	if( isset( $_GET[ 'redirect' ] ) && 0 === strpos( $_GET[ 'redirect' ], '/' ) ) {
-		return site_page( $_GET[ 'redirect' ], URL );
+	if( isset( $_GET[ 'redirect' ] ) ) {
+		if( 0 === strpos( $_GET[ 'redirect' ], '/' ) ) {
+			return site_page( $_GET[ 'redirect' ], URL );
+		}
 	}
-	return menu_entry( 'index' )
-		->getSitePage( URL );
+	return menu_entry( 'index' )->getURL();
 }

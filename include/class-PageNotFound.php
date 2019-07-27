@@ -1,5 +1,5 @@
 <?php
-# Copyright (C) 2018 Valerio Bozzolan
+# Copyright (C) 2018, 2019 Valerio Bozzolan
 # Boz Libre Hosting Panel
 #
 # This program is free software: you can redistribute it and/or modify
@@ -19,11 +19,19 @@ class PageNotFound {
 
 	public static function spawn() {
 		http_response_code( 404 );
+
 		Header::spawn( [
+			// this is not a real page
+			'uid'   => false,
+
+			// page title
 			'title' => __( "Page not found" )
 		] );
+
 		template( '404' );
+
 		Footer::spawn();
+
 		exit;
 	}
 

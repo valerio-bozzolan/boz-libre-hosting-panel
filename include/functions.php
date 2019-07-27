@@ -82,25 +82,31 @@ function send_email( $subject, $message, $to = false ) {
  */
 function require_permission( $permission, $redirect = true ) {
 	if( ! has_permission( $permission ) ) {
-		if( is_logged() ) {
-			Header::spawn( [
-				'title' => __( "Permission denied" ),
-			] );
-			Footer::spawn();
-			exit;
-		} else {
-			$login = menu_entry( 'login' );
-			$url = $login->getSitePage( URL );
-			if( $redirect && isset( $_SERVER[ 'REQUEST_URI' ] ) ) {
-				$url = http_build_get_query( $url, [
-					'redirect' => $_SERVER[ 'REQUEST_URI' ],
-				] );
-			}
-			http_redirect( $url, 307 );
-		}
+		require_more_privileges( $redirect );
 	}
 }
 
+/**
+ * Require more privileges then actual ones
+ */
+function require_more_privileges( $redirect = true ) {
+	if( is_logged() ) {
+		Header::spawn( [
+			'title' => __( "Permission denied" ),
+		] );
+		Footer::spawn();
+		exit;
+	} else {
+		$login = menu_entry( 'login' );
+		$url = $login->getAbsoluteURL();
+		if( $redirect && isset( $_SERVER[ 'REQUEST_URI' ] ) ) {
+			$url = http_build_get_query( $url, [
+				'redirect' => $_SERVER[ 'REQUEST_URI' ],
+			] );
+		}
+		http_redirect( $url, 307 );
+	}
+}
 /**
  * Get URL parts from the PATH_INFO
  *
@@ -141,7 +147,7 @@ function url_parts( $max, $min = false ) {
  */
 function the_menu_link( $uid, $args = [] ) {
 	$page = menu_entry( $uid );
-	the_link( $page->getSitePage(), $page->name, $args );
+	the_link( $page->getURL(), $page->name, $args );
 }
 
 /**
