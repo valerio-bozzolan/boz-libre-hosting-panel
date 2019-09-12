@@ -1,5 +1,5 @@
 <?php
-# Copyright (C) 2018 Valerio Bozzolan
+# Copyright (C) 2018, 2019 Valerio Bozzolan
 # Boz Libre Hosting Panel
 #
 # This program is free software: you can redistribute it and/or modify
@@ -16,22 +16,9 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Domain API
+ * Methods related to a Domain class
  */
-class DomainAPI extends Query {
-
-	const UID = 'name';
-
-	/**
-	 * Domain ID column name
-	 */
-	const DOMAIN_ID = 'domain.domain_ID';
-
-	public function __construct() {
-		parent::__construct();
-		$this->from( Domain::T );
-		$this->defaultClass( 'Domain' );
-	}
+trait DomainAPITrait {
 
 	/**
 	 * Where the domains are editable by me
@@ -43,6 +30,16 @@ class DomainAPI extends Query {
 			$this->whereDomainUser();
 		}
 		return $this;
+	}
+
+	/**
+	 * Where the Domain is Active (or not)
+	 *
+	 * @param  boolean $active If you want the active, or the inactive
+	 * @return self
+	 */
+	public function whereDomainIsActive( $active = true ) {
+		return $this->wheerInt( 'domain_active', $active );
 	}
 
 	/**
@@ -103,4 +100,46 @@ class DomainAPI extends Query {
 		}
 		return $this;
 	}
+
+	/**
+	 * Join whatever table with the domain table
+	 *
+	 * @return self
+	 */
+	public function joinDomain() {
+		return $this->joinOn( 'INNER', static::DOMAIN_ID, 'domain.domain_ID' );
+	}
+
+}
+
+/**
+ * Domain API
+ */
+class DomainAPI extends Query {
+
+	use DomainAPITrait;
+
+	/**
+	 * @TODO: what is this shit? Is this used?
+	 */
+	const UID = 'name';
+
+	/**
+	 * Domain ID column name
+	 */
+	const DOMAIN_ID = 'domain.domain_ID';
+
+	/**
+	 * Constructor
+	 *
+	 * @param object $db Database (or NULL for the current one)
+	 */
+	public function __construct( $db = null ) {
+		// set database and class name
+		parent::__construct( $db, 'Domain' );
+
+		// set database table
+		$this->from( Domain::T );
+	}
+
 }
