@@ -1,5 +1,5 @@
 <?php
-# Copyright (C) 2018 Valerio Bozzolan
+# Copyright (C) 2018, 2019 Valerio Bozzolan
 # Boz Libre Hosting Panel
 #
 # This program is free software: you can redistribute it and/or modify
@@ -21,9 +21,6 @@
 
 // load framework
 require '../load.php';
-
-// require read permissions
-require_permission( 'read' );
 
 // spawn header
 Header::spawn( [
@@ -72,6 +69,13 @@ $domains = ( new DomainAPI() )
 		<?php if( has_permission( 'edit-domain-all' ) ): ?>
 			<p><a class="btn btn-default" href="<?= ROOT ?>/domain.php"><?php echo __( "Add" ) ?></a></p>
 		<?php endif ?>
+	<?php endif ?>
+
+	<?php if( has_permission( 'edit-user-all' ) ): ?>
+		<h3><?= HTML::a(
+			menu_entry( 'user-list' )->getURL(),
+			__( "Users" )
+		) ?></h3>
 	<?php endif ?>
 
 <?php

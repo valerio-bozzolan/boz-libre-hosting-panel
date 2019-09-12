@@ -27,6 +27,15 @@ class Mailbox extends Domain {
 	}
 
 	/**
+	 * Get the mailbox username
+	 *
+	 * @return string
+	 */
+	public function getMailboxUsername() {
+		return $this->get( 'mailbox_username' );
+	}
+
+	/**
 	 * Get the mailbox address
 	 *
 	 * @return string E-mail

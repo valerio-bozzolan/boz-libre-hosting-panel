@@ -31,7 +31,7 @@ class UserAPI extends DomainAPI {
 	public function __construct() {
 		Query::__construct();
 		$this->from( User::T );
-		$this->defaultClass( 'User' );
+		$this->defaultClass( User::class );
 	}
 
 	/**
@@ -42,6 +42,16 @@ class UserAPI extends DomainAPI {
 	 */
 	public function whereUserUID( $uid ) {
 		return $this->whereStr( 'user_uid', $uid );
+	}
+
+	/**
+	 * Filter to a certain User E-mail
+	 *
+	 * @param string $email User E-mail
+	 * @return self
+	 */
+	public function whereUserEmail( $email ) {
+		return $this->whereStr( 'user_email', $email );
 	}
 
 	/**
@@ -60,7 +70,7 @@ class UserAPI extends DomainAPI {
 	 * @return self
 	 */
 	public function whereUserIsMe() {
-		$id = get_user()->getSessionuserID();
+		$id = get_user()->getUserID();
 		return $this->whereUserID( $id );
 	}
 
@@ -72,7 +82,7 @@ class UserAPI extends DomainAPI {
 	public function whereUserIsEditable() {
 
 		// if I can't see everyone, just see myself
-		if( !has_permission( 'edit-all-users' ) ) {
+		if( !has_permission( 'edit-user-all' ) ) {
 			$this->whereUserIsMe();
 		}
 
@@ -86,7 +96,7 @@ class UserAPI extends DomainAPI {
 	 * @return self
 	 */
 	public function whereUser( $user ) {
-		$id = $user->whereSessionuserID();
+		$id = $user->getSessionuserID();
 		return $this->whereUserID( $id );
 	}
 

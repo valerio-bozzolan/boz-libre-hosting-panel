@@ -29,6 +29,9 @@ spl_autoload_register( function( $name ) {
 	}
 } );
 
+// override default user class
+define( 'SESSIONUSER_CLASS', 'User' );
+
 // load common functions
 require INCLUDE_PATH . __ . 'functions.php';
 
@@ -63,21 +66,33 @@ define_default( 'REPO_URL', 'https://github.com/valerio-bozzolan/boz-libre-hosti
 // limit session duration to 5 minutes (60s * 100m)
 define_default( 'SESSION_DURATION', 6000 );
 
+/**
+ * Mailbox base path
+ *
+ * Used by CLI scripts to calculate the current quotas.
+ *
+ * The mailboxes should have paths like:
+ *     MAILBOX_BASE_PATH/domain_name/user_name/
+ */
+define_default( 'MAILBOX_BASE_PATH', '/home/vmail' );
+
 // register web pages
 add_menu_entries( [
-	new MenuEntry( 'index',          '/',                   __( "Dashboard" ) ),
-	new MenuEntry( 'login',          'login.php',           __( "Login" ) ),
-	new MenuEntry( 'profile',        'profile.php',         __( "Profile" ) ),
-	new MenuEntry( 'logout',         'logout.php',          __( "Logout" ) ),
-	new MenuEntry( 'password-reset', 'password-reset.php',  __( "Password reset" ) ),
+	new MenuEntry( 'index',          '/',                   __( "Dashboard"      ), null, 'backend'       ),
+	new MenuEntry( 'login',          'login.php',           __( "Login"          )                        ),
+	new MenuEntry( 'profile',        'profile.php',         __( "Profile"        )                        ),
+	new MenuEntry( 'logout',         'logout.php',          __( "Logout"         ), null, 'read'          ),
+	new MenuEntry( 'user-list',      'user-list.php',       __( "Users"          ), null, 'edit-user-all' ),
+	new MenuEntry( 'password-reset', 'password-reset.php',  __( "Password reset" )                        ),
 ] );
 
-// permissions
+// permissions of a normal user
 register_permissions( 'user', [
 	'read',
 	'backend',
 ] );
 
+// permissions of an admin
 inherit_permissions( 'admin', 'user', [
 	'edit-user-all',
 	'edit-email-all',

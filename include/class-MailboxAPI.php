@@ -27,6 +27,16 @@ class MailboxAPI extends DomainAPI {
 	}
 
 	/**
+	 * Where the Mailbox is Active (or not)
+	 *
+	 * @param  boolean $active If you want the active, or the inactive
+	 * @return self
+	 */
+	public function whereMailboxIsActive( $active = true ) {
+		return $this->wheerInt( 'mailbox_active', $active );
+	}
+
+	/**
 	 * Join mailboxes and domain (once)
 	 *
 	 * @return self

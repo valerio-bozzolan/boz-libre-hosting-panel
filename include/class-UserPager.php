@@ -32,6 +32,11 @@ class UserPager extends QueryPager {
 			$data['uid'] = luser_input( $data['uid'], 32 );
 			$this->setArg( 'uid', $data['uid'] );
 		}
+
+		if( isset( $data['email'] ) ) {
+			$data['email'] = luser_input( $data['email'], 32 );
+			$this->setArg( 'email', $data['email'] );
+		}
 	}
 
 	/**
@@ -44,6 +49,18 @@ class UserPager extends QueryPager {
 
 		$query->whereUserIsEditable();
 
+		// search by login
+		$uid   = $this->getArg( 'uid' );
+		$email = $this->getArg( 'email' );
+
+		if( $uid ) {
+			$query->whereUserUID( $uid );
+		}
+
+		if( $email ) {
+			$query->whereUserEmail( $email );
+		}
+
 		return $query;
 	}
 
@@ -55,6 +72,7 @@ class UserPager extends QueryPager {
 	 */
 	public function applyOrder( & $query, $order_by, $direction ) {
 
+		$query->orderBy( 'user_uid' );
 
 	}
 
