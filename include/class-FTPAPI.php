@@ -16,20 +16,9 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * FTP users API
+ * Methods related to an FTPAPI class
  */
-class FTPAPI extends DomainAPI {
-
-	/**
-	 * @override
-	 */
-	const DOMAIN_ID = 'ftp.domain_ID';
-
-	public function __construct() {
-		Query::__construct();
-		$this->from( FTP::T );
-		$this->defaultClass( 'FTP' );
-	}
+trait FTPAPITrait {
 
 	/**
 	 * Join FTP and domain tables (once)
@@ -65,6 +54,44 @@ class FTPAPI extends DomainAPI {
 	public function whereFTP( $ftp ) {
 		return $this->whereDomain(   $ftp )
 		            ->whereFTPLogin( $ftp->getFTPLogin() );
+	}
+
+	/**
+	 * Join whatever table with the FTP users table
+	 *
+	 * @param object
+	 * @return self
+	 */
+	public function joinFTP() {
+		return $this->joinOn( 'INNER', 'ftp', static::FTP_ID, 'ftp.ftp_ID' );
+	}
+
+}
+
+// assure load of dependent traits
+class_exists( 'DomainAPI', true );
+
+/**
+ * FTP users API
+ */
+class FTPAPI extends Query {
+
+	use FTPAPITrait;
+	use DomainAPITrait;
+
+	/**
+	 * Univoque domain ID column name
+	 *
+	 * @override
+	 */
+	const DOMAIN_ID = 'ftp.domain_ID';
+
+	public function __construct( $db = null ) {
+		// set database and class
+		parent::__construct( $db, 'FTP' );
+
+		// set table name
+		$this->from( FTP::T );
 	}
 
 }
