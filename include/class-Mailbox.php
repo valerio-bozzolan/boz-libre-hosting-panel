@@ -62,21 +62,23 @@ class Mailbox extends Domain {
 	/**
 	 * Update this mailbox password
 	 *
-	 * @param $password string
+	 * @param  string $password
 	 * @return string
 	 */
 	public function updateMailboxPassword( $password = null ) {
 		if( ! $password ) {
 			$password = generate_password();
 		}
+
 		$enc_password = Mailbox::encryptPassword( $password );
-		query_update( 'mailbox', [
-			new DBCol( 'mailbox_password', $enc_password, 's' ),
-		], sprintf(
-			"domain_ID = %d AND mailbox_username = '%s'",
-			$this->getDomainID(),
-			esc_sql( $this->get( 'mailbox_username' ) )
-		) );
+
+		// update
+		( new MailboxAPI() )
+			->whereMailbox( $this )
+			->update( [
+				new DBCol( 'mailbox_password', $enc_password, 's' ),
+			] );
+
 		return $password;
 	}
 

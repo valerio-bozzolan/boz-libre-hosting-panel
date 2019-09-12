@@ -27,6 +27,27 @@ class MailboxAPI extends DomainAPI {
 	}
 
 	/**
+	 * Limit to a specific mailbox
+	 *
+	 * @param  object $mailbox Mailbox
+	 * @return self
+	 */
+	public function whereMailbox( $mailbox ) {
+		return $this->whereDomain( $mailbox )
+		            ->whereMaiboxUsername( $mailbox->getMailboxUsername() );
+	}
+
+	/**
+	 * Filter a specific Mailbox username
+	 *
+	 * @param  string $username Mailbox username (without domain name)
+	 * @return self
+	 */
+	public function whereMailboxUsername( $username ) {
+		return $this->whereStr( Mailbox::USERNAME, $username );
+	}
+
+	/**
 	 * Where the Mailbox is Active (or not)
 	 *
 	 * @param  boolean $active If you want the active, or the inactive

@@ -49,11 +49,12 @@ defined( 'BOZ_PHP' ) or die;
 	<?php if( $mailbox ): ?>
 		<h3><?= __( "Actions" ) ?></h3>
 		<form method="post">
+			<?php form_action( 'mailbox-password-reset' ) ?>
 			<?php if( $mailbox_password ): ?>
 				<label for="password"><?= __( "Please copy your new password:" ) ?><br />
 				<input type="text" id="password" readonly<?= value( $mailbox_password ) ?> />
 			<?php else: ?>
-				<p><button type="submit" class="btn btn-default" name="action" value="mailbox-password-reset"><?= __( "Generate new password" ) ?></button></p>
+				<p><button type="submit" class="btn btn-default"><?= __( "Generate new password" ) ?></button></p>
 			<?php endif ?>
 		</form>
 	<?php else: ?>
