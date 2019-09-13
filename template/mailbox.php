@@ -31,7 +31,9 @@
 defined( 'BOZ_PHP' ) or die;
 ?>
 
-	<?php template( 'mailbox-description' ) ?>
+	<?php template( 'mailbox-description', [
+		'mailbox' => $mailbox,
+	] ) ?>
 
 	<!-- resources -->
 	<?php if( $mailbox ): ?>

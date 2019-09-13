@@ -1,5 +1,5 @@
 <?php
-# Copyright (C) 2018 Valerio Bozzolan
+# Copyright (C) 2018, 2019 Valerio Bozzolan
 # Boz Libre Hosting Panel
 #
 # This program is free software: you can redistribute it and/or modify
@@ -20,10 +20,30 @@
  *
  * Called from:
  * 	template/mailbox.php
+ *
+ * Variables:
+ *  $mailbox object|null Mailbox
  */
+
+// you can override from your 'load.php' configuration file your own instructions. For now, I just set my own one :)
+// just define this constant with the 'define' standard function.
+define_default( 'MAILBOX_INSTRUCTIONS', 'https://mail.reyboz.it/?&email=%s' );
 
 // unuseful when load directly
 defined( 'BOZ_PHP' ) or die;
 ?>
 
-	<p><?= __( "A mailbox is a fully operative e-mail address that you can use to send and receive e-mails. As interface you can use a webmail, an e-mail client like Thunderbird, Evolution, or a mobile app like K-9 Mail, etc." ) ?></p>
+	<p><?= esc_html( __( "A mailbox is a fully operative e-mail address that you can use to send and receive e-mails. As interface you can use a webmail, an e-mail client like Thunderbird, Evolution, or a mobile app like K-9 Mail, etc." ) ) ?></p>
+
+	<!-- mailbox instructions -->
+	<?php if( $mailbox ): ?>
+		<!-- TODO: create a dedicated template for this, to allow easy override of just this -->
+		<p><?= HTML::a(
+			sprintf(
+				MAILBOX_INSTRUCTIONS,
+				urlencode( $mailbox->getMailboxPermalink( true ) )
+			),
+			esc_html( __( "How to configure your e-mail client" ) )
+		) ?></p>
+	<?php endif ?>
+	<!-- /mailbox instructions -->
