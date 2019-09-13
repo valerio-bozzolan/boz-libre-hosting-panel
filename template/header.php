@@ -1,5 +1,5 @@
 <?php
-# Copyright (C) 2018 Valerio Bozzolan
+# Copyright (C) 2019 Valerio Bozzolan
 # Boz Libre Hosting Panel
 #
 # This program is free software: you can redistribute it and/or modify
@@ -25,12 +25,9 @@
  * 	$args array
  */
 
-// unuseful when load directly
-defined( 'BOZ_PHP' ) or die;
-
 // load Bootstrap stuff
-enqueue_js(  'jquery'     );
-enqueue_js(  'bootstrap'  );
+//enqueue_js(  'jquery'     );
+//enqueue_js(  'bootstrap'  );
 enqueue_css( 'bootstrap'  );
 enqueue_css( 'custom-css' );
 ?>

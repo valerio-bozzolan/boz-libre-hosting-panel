@@ -2,6 +2,13 @@
 
 This projects was started to create another _keep it simple and stupid_ libre web hosting control panel suitable for providers of everyday shared hosting services.
 
+The panel is designed to **respect the freedom** of the users. In order to do it, it works **without proprietary JavaScript**. To be honest, without **any line of JavaScript** in any form.
+
+I would like to thank Giorgio Maone for his project NoScript, for the moral incentive, and Richard Stallman, for _The JavaScript Trap_ paper.
+
+* https://www.gnu.org/philosophy/javascript-trap.html
+* https://noscript.net/
+
 ## Disclaimer
 
 Do not try to become a system administrator if you do not like responsibilities, if you do not want to understand your infrastructure, if you do not want to have information security paranoia, etc.
