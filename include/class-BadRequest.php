@@ -1,5 +1,5 @@
 <?php
-# Copyright (C) 2018 Valerio Bozzolan
+# Copyright (C) 2018, 2019 Valerio Bozzolan
 # Boz Libre Hosting Panel
 #
 # This program is free software: you can redistribute it and/or modify
@@ -17,15 +17,27 @@
 
 class BadRequest {
 
-	public static function spawn( $message = null ) {
-		http_response_code( 400 );
+	/**
+	 * Spawn a bad request message
+	 *
+	 * @param string $message
+	 * @param int    $code    HTTP status code
+	 */
+	public static function spawn( $message = null, $code = 400 ) {
+
+		http_response_code( $code );
+
 		Header::spawn( [
+			'uid'   => false,
 			'title' => __( "Bad request" )
 		] );
+
 		template( 'bad-request', [
 			'message' => $message,
 		] );
+
 		Footer::spawn();
+
 		exit;
 	}
 
