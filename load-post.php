@@ -23,6 +23,7 @@ define_default( 'TEMPLATE_PATH', ABSPATH . __ . 'template' );
 
 // autoload classes from the /include directory
 spl_autoload_register( function( $name ) {
+	// TODO: autoload classes and create DomainTrait and use in Mailbox
 	$path = INCLUDE_PATH . __ . "class-$name.php";
 	if( is_file( $path ) ) {
 		require $path;
