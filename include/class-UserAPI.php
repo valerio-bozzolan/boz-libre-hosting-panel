@@ -1,5 +1,5 @@
 <?php
-# Copyright (C) 2019 Valerio Bozzolan
+# Copyright (C) 2018, 2019 Valerio Bozzolan
 # Boz Libre Hosting Panel
 #
 # This program is free software: you can redistribute it and/or modify
@@ -16,23 +16,9 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * User users API
+ * Methods for an UserAPI class
  */
-class UserAPI extends DomainAPI {
-
-	/**
-	 * Column name of the User ID
-	 */
-	const USER_ID = 'user.user_ID';
-
-	/**
-	 * Constructor
-	 */
-	public function __construct() {
-		Query::__construct();
-		$this->from( User::T );
-		$this->defaultClass( User::class );
-	}
+trait UserAPITrait {
 
 	/**
 	 * Filter to a certain User UID
@@ -98,6 +84,34 @@ class UserAPI extends DomainAPI {
 	public function whereUser( $user ) {
 		$id = $user->getSessionuserID();
 		return $this->whereUserID( $id );
+	}
+
+}
+
+/**
+ * Query the 'user' database table
+ */
+class UserAPI extends Query {
+
+	use UserAPITrait;
+
+	/**
+	 * Univoque column name of the User ID
+	 */
+	const USER_ID = 'user.user_ID';
+
+	/**
+	 * Constructor
+	 *
+	 * @param object $db Database (or NULL for the current one)
+	 */
+	public function __construct( $db = null ) {
+
+		// set database and class name
+		parent::__construct( $db, User::class );
+
+		// set database table
+		$this->from( User::T );
 	}
 
 }

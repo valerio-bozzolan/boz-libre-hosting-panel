@@ -87,6 +87,16 @@ trait DomainAPITrait {
 	}
 
 	/**
+	 * Order by the Domain name
+	 *
+	 * @param  string $direction DESC|ASC
+	 * @return self
+	 */
+	public function orderByDomainName( $direction = null ) {
+		return $this->orderBy( 'domain_name', $direction );
+	}
+
+	/**
 	 * Join domain and users (once)
 	 *
 	 * @return self
@@ -107,7 +117,7 @@ trait DomainAPITrait {
 	 * @return self
 	 */
 	public function joinDomain() {
-		return $this->joinOn( 'INNER', static::DOMAIN_ID, 'domain.domain_ID' );
+		return $this->joinOn( 'INNER', 'domain', static::DOMAIN_ID, 'domain.domain_ID' );
 	}
 
 }

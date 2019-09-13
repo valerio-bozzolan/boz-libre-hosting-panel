@@ -1,5 +1,5 @@
 <?php
-# Copyright (C) 2018 Valerio Bozzolan
+# Copyright (C) 2018, 2019 Valerio Bozzolan
 # Boz Libre Hosting Panel
 #
 # This program is free software: you can redistribute it and/or modify
@@ -15,14 +15,20 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+// load dependent traits
+class_exists( 'Domain' );
+
 /**
  * A mailbox
  */
-class Mailbox extends Domain {
+class Mailbox extends Queried {
+
+	use DomainTrait;
 
 	const T = 'mailbox';
 
 	public function __construct() {
+		$this->normalizeDomain();
 		$this->booleans( 'mailbox_receive' );
 	}
 

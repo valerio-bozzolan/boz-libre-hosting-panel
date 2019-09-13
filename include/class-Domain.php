@@ -1,5 +1,5 @@
 <?php
-# Copyright (C) 2018 Valerio Bozzolan
+# Copyright (C) 2018, 2019 Valerio Bozzolan
 # Boz Libre Hosting Panel
 #
 # This program is free software: you can redistribute it and/or modify
@@ -16,19 +16,9 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * A domain handled by the user
+ * Methods for a Domain class
  */
-class Domain extends Queried {
-
-	const T = 'domain';
-
-	const UID = 'domain_name';
-
-	public function __construct() {
-		$this->integers( 'domain_ID' );
-		$this->booleans( 'domain_active' );
-		$this->dates( 'domain_born', 'domain_expiration' );
-	}
+trait DomainTrait {
 
 	/**
 	 * Get domain ID
@@ -39,7 +29,7 @@ class Domain extends Queried {
 		return $this->get( 'domain_ID' );
 	}
 
-	/**
+	/*
 	 * Get domain name
 	 *
 	 * @return string
@@ -86,6 +76,38 @@ class Domain extends Queried {
 	}
 
 	/**
+	 * Normalize a Domain object after being retrieved from database
+	 */
+	protected function normalizeDomain() {
+		$this->integers( 'domain_ID' );
+		$this->booleans( 'domain_active' );
+		$this->dates( 'domain_born', 'domain_expiration' );
+	}
+
+}
+
+/**
+ * Describe the 'domain' table
+ */
+class Domain extends Queried {
+
+	use DomainTrait;
+
+	/**
+	 * Table name
+	 */
+	const T = 'domain';
+
+	const UID = 'domain_name';
+
+	/**
+	 * Constructor
+	 */
+	public function __construct() {
+		$this->normalizeDomain();
+	}
+
+	/**
 	 * Get the domain permalink
 	 *
 	 * @param string  $domain_name Domain name
@@ -98,4 +120,5 @@ class Domain extends Queried {
 		}
 		return site_page( $url, $absolute );
 	}
+
 }

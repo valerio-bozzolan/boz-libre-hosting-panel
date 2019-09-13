@@ -24,12 +24,14 @@
  * Available variables:
  * 	$user         object|null
  *	$new_password string|null
+ *  $user_domains object|null (generator)
  */
 
 // unuseful when load directly
 defined( 'BOZ_PHP' ) or die;
 ?>
 
+<!-- name, surname, ... -->
 <form method="post" class="card">
 	<?php form_action( 'save-user' ) ?>
 
@@ -43,6 +45,7 @@ defined( 'BOZ_PHP' ) or die;
 	</div>
 	<button type="submit" class="btn btn-primary"><?= esc_html( __( "Save" ) ) ?></button>
 </form>
+<!-- /name, surname -->
 
 <!-- password handler -->
 <section>
@@ -58,3 +61,38 @@ defined( 'BOZ_PHP' ) or die;
 	<?php endif ?>
 </section>
 <!-- /password handler -->
+
+<!-- user domains -->
+<?php if( $user_domains ): ?>
+<section>
+	<h3><?= esc_html( __( "Domains" ) ) ?></h3>
+	<ul>
+		<?php foreach( $user_domains as $domain ): ?>
+			<li><?= HTML::a(
+				$domain->getDomainPermalink(),
+				esc_html( $domain->getDomainName() )
+			) ?></li>
+		<?php endforeach ?>
+	</ul>
+</section>
+<?php endif ?>
+<!-- /user domains -->
+
+<!-- assign domain -->
+<?php if( has_permission( 'edit-user-all' ) ): ?>
+<section>
+	<form method="post">
+		<h3><?= esc_html( __( "Add Domain" ) ) ?></h3>
+
+		<?php form_action( 'add-domain' ) ?>
+
+		<div class="form-group">
+			<label for="domain-name-search"><?= esc_html( __( "Domain Name" ) ) ?></label>
+			<input type="text" name="domain_name" id="domain-name-search" class="form-control" />
+		</div>
+
+		<button type="submit" class="btn btn-primary"><?= esc_html( __( "Add" ) ) ?></button>
+	</form>
+</section>
+<?php endif ?>
+<!-- /assign domain -->

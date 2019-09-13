@@ -22,6 +22,9 @@
 // load framework
 require '../load.php';
 
+// require the permission to see the backend
+require_permission( 'backend' );
+
 // wanted informations
 $user = null;
 
@@ -49,6 +52,79 @@ if( is_action( 'user-save' ) ) {
 
 }
 
+// add a Domain to the user
+if( is_action( 'add-domain' ) ){
+
+	// check for permissions
+	if( !has_permission( 'edit-user-all' ) ) {
+		error_die( "Not authorized to add a Domain" );
+	}
+
+	// get the Domain by name
+	$domain_name = $_POST['domain_name'] ?? null;
+	if( !$domain_name ) {
+		die( "Please fill that damn Domain name" );
+	}
+
+	// search the Domain name
+	$domain =
+		( new DomainAPI() )
+			->whereDomainName( $domain_name )
+			->queryRow();
+
+	query( 'START TRANSACTION' );
+
+	// domain ID to be assigned to the User
+	$domain_ID = null;
+
+	// does the Domain already exist?
+	if( $domain ) {
+		$domain_ID = $domain->getDomainID();
+	} else {
+		// can I add this Domain?
+		if( has_permission( 'edit-domain-all' ) ) {
+
+			// add this Domain
+			( new DomainAPI() )
+				->insertRow( [
+					'domain_name'   => $domain_name,
+					'domain_active' => 1,
+					new DBCol( 'domain_born', 'NOW()', '-' ),
+				] );
+
+			$domain_ID = last_inserted_ID();
+		}
+	}
+
+	if( $domain_ID ) {
+
+		$is_domain_mine =
+			( new DomainUserAPI() )
+				->whereUserIsMe()
+				->whereDomainID( $domain_ID )
+				->queryRow();
+
+		// is it already mine?
+		if( !$is_domain_mine ) {
+
+			// associate this domain to myself
+			( new DomainUserAPI() )
+				->insertRow( [
+					'domain_ID' => $domain_ID,
+					'user_ID'   => $user->getUserID(),
+					new DBCol( 'domain_user_creation_date', 'NOW()', '-' ),
+				] );
+		}
+
+	} else {
+		die( "this Domain is not registered and can't be added" );
+	}
+
+	query( 'COMMIT' );
+
+	// end add Domain to User
+}
+
 // register action to generate a new password
 $new_password = null;
 if( is_action( 'change-password' ) && $user ) {
@@ -61,6 +137,19 @@ if( is_action( 'change-password' ) && $user ) {
 		->update( [
 			new DBCol( User::PASSWORD, $encrypted, 's' ),
 		] );
+}
+
+// expose the User domains
+$user_domains = [];
+if( $user ) {
+
+	// get User domains
+	$user_domains =
+		( new DomainUserAPI() )
+			->joinDomain()
+			->whereUser( $user )
+			->orderByDomainName()
+			->queryGenerator();
 }
 
 // spawn header
@@ -76,6 +165,7 @@ Header::spawn( [
 template( 'user', [
 	'user'         => $user,
 	'new_password' => $new_password,
+	'user_domains' => $user_domains,
 ] );
 
 // spawn the footer
