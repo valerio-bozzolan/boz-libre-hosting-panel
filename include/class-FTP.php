@@ -15,11 +15,19 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+// load dependent traits
+class_exists( 'Domain' );
+
 /**
  * An FTP user
  */
-class FTP extends Domain {
+class FTP extends Queried {
 
+	use DomainAPITrait;
+
+	/**
+	 * Table name
+	 */
 	const T = 'ftp';
 
 	/**
@@ -28,6 +36,7 @@ class FTP extends Domain {
 	 * Normalize the object obtained from the database
 	 */
 	public function __construct() {
+		$this->normalizeDomain();
 		$this->booleans( 'ftp_active' );
 		$this->integers( 'ftp_ulbandwidth',
 		                 'ftp_dlbandwidth',

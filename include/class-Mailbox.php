@@ -18,19 +18,9 @@
 // load dependent traits
 class_exists( 'Domain' );
 
-/**
- * A mailbox
- */
-class Mailbox extends Queried {
+trait MailboxTrait {
 
 	use DomainTrait;
-
-	const T = 'mailbox';
-
-	public function __construct() {
-		$this->normalizeDomain();
-		$this->booleans( 'mailbox_receive' );
-	}
 
 	/**
 	 * Get the mailbox username
@@ -89,6 +79,35 @@ class Mailbox extends Queried {
 	}
 
 	/**
+	 * Normalize a Mailbox after being fetched from database
+	 */
+	protected function normalizeMailbox() {
+		$this->normalizeDomain();
+		$this->booleans( 'mailbox_receive' );
+	}
+
+}
+
+/**
+ * A mailbox
+ */
+class Mailbox extends Queried {
+
+	use MailboxTrait;
+
+	/**
+	 * Database table
+	 */
+	const T = 'mailbox';
+
+	/**
+	 * Constructor
+	 */
+	public function __construct() {
+		$this->normalizeMailbox();
+	}
+
+	/**
 	 * Get the mailbox permalink
 	 *
 	 * @param $domain string
@@ -113,4 +132,5 @@ class Mailbox extends Queried {
 		$salt = bin2hex( openssl_random_pseudo_bytes( 3 ) );
 		return '{SHA512-CRYPT}' . crypt( $password, "$6$$salt" );
 	}
+
 }

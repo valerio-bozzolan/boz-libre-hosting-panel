@@ -33,31 +33,42 @@ $mailboxes = $domain->factoryMailbox()
 		'mailbox_receive',
 	] )
 	->queryGenerator();
+
+// total number of mailboxes
+$count = DB::instance()->affectedRows();
 ?>
-	<!-- mail boxes -->
-	<h3><?php printf(
-		__( "Your %s" ),
-		__( "mailboxes" )
-	) ?></h3>
 
-	<?php template( 'mailbox-description' ) ?>
+<!-- mail boxes -->
+<h3><?php printf(
+	__( "Your %s" ),
+	__( "mailboxes" )
+) ?></h3>
 
-	<?php if( $mailboxes->valid() ): ?>
-		<ul>
-			<?php foreach( $mailboxes as $mailbox ): ?>
-				<li>
-					<code><?= HTML::a(
-						$mailbox->getMailboxPermalink(),
-						$mailbox->getMailboxAddress()
-					) ?></code>
-				</li>
-			<?php endforeach ?>
-		</ul>
-	<?php endif ?>
+<?php template( 'mailbox-description' ) ?>
 
-	<?php /* TODO: check counter on domain */ ?>
-	<?php if( has_permission( 'edit-email-all' ) ): ?>
-		<p><?php the_link( Mailbox::permalink( $domain->getDomainName() ), __( "Create" ) ) ?></p>
-	<?php endif ?>
-	<!-- end mail boxes -->
+<?php if( $mailboxes->valid() ): ?>
+	<ul>
+		<?php foreach( $mailboxes as $mailbox ): ?>
+			<li>
+				<code><?= HTML::a(
+					$mailbox->getMailboxPermalink(),
+					$mailbox->getMailboxAddress()
+				) ?></code>
+			</li>
+		<?php endforeach ?>
+	</ul>
+<?php endif ?>
+
+<p><?= esc_html( sprintf(
+	__( "Your Plan \"%s\" allows %s %s." ),
+	$plan->getPlanName(),
+	$plan->getPlanMailboxes(),
+	__( "Mailboxes" )
+) ) ?></p>
+
+<?php if( $plan->getPlanMailboxes() > $count || has_permission( 'edit-email-all' ) ): ?>
+	<p><?php the_link( Mailbox::permalink( $domain->getDomainName() ), __( "Create" ) ) ?></p>
+<?php endif ?>
+
+<!-- end mail boxes -->
 

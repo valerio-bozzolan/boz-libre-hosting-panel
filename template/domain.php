@@ -22,17 +22,24 @@
  * 	domain.php
  *
  * Available variables:
- * 	$domain object
+ * 	$domain object Domain
+ *  $plan   object Plan
  */
 
 // unuseful when load directly
 defined( 'BOZ_PHP' ) or die;
 
+// pass the same arguments to the sub-templates
+$args = [
+	'domain' => $domain,
+	'plan'   => $plan,
+];
+
 // spawn the mailboxes list
-template( 'mailboxes',    [ 'domain' => $domain ] );
+template( 'mailboxes', $args );
 
 // spawn the mail forwardings list
-template( 'mailforwards', [ 'domain' => $domain ] );
+template( 'mailforwards', $args );
 
 // spawn the ftp list
-template( 'ftp-users',    [ 'domain' => $domain ] );
+template( 'ftp-users', $args );

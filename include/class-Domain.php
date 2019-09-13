@@ -15,10 +15,15 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+// load Plan trait
+class_exists( 'Plan' );
+
 /**
  * Methods for a Domain class
  */
 trait DomainTrait {
+
+	use PlanTrait;
 
 	/**
 	 * Get domain ID
@@ -82,6 +87,8 @@ trait DomainTrait {
 		$this->integers( 'domain_ID' );
 		$this->booleans( 'domain_active' );
 		$this->dates( 'domain_born', 'domain_expiration' );
+
+		$this->normalizePlan();
 	}
 
 }

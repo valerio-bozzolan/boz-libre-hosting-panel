@@ -15,10 +15,15 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+// load dependent traits
+class_exists( 'PlanAPI' );
+
 /**
  * Methods related to a Domain class
  */
 trait DomainAPITrait {
+
+	use PlanAPITrait;
 
 	/**
 	 * Where the domains are editable by me
@@ -130,14 +135,14 @@ class DomainAPI extends Query {
 	use DomainAPITrait;
 
 	/**
-	 * @TODO: what is this shit? Is this used?
-	 */
-	const UID = 'name';
-
-	/**
-	 * Domain ID column name
+	 * Univoque Domain ID column name
 	 */
 	const DOMAIN_ID = 'domain.domain_ID';
+
+	/**
+	 * Univoque Plan ID column name
+	 */
+	const PLAN_ID = 'domain.plan_ID';
 
 	/**
 	 * Constructor

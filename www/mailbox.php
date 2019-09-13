@@ -27,18 +27,16 @@ list( $domain_name, $mailbox_username ) = url_parts( 2, 1 );
 
 $domain   = null;
 $mailbox  = null;
+$plan     = null;
 $mailbox_password = null;
+
 if( $mailbox_username ) {
-	// retrieve the mailbox and its domain
+
+	// retrieve the mailbox and its domain and its Plan
 	$mailbox = ( new MailboxFullAPI() )
-		->select( [
-			'domain.domain_ID',
-			'domain_name',
-			'domain_active',
-			'mailbox_username',
-		] )
+		->joinPlan()
 		->whereDomainName( $domain_name )
-		->whereStr( 'mailbox_username', $mailbox_username )
+		->whereMailboxUsername( $mailbox_username )
 		->whereMailboxIsEditable()
 		->queryRow();
 
@@ -47,20 +45,39 @@ if( $mailbox_username ) {
 
 	// the mailbox has the domain stuff
 	$domain = $mailbox;
+
+	// the mailbox has the Plan stuff
+	$plan   = $mailbox;
 } else {
-	// retrieve just the domain
+
+	// retrieve just the domain and its Plan
 	$domain = ( new DomainAPI() )
-		->select( [
-			'domain.domain_ID',
-			'domain_name',
-			'domain_active',
-		] )
 		->whereDomainName( $domain_name )
 		->whereDomainIsEditable()
+		->joinPlan()
 		->queryRow();
 
 	// 404?
 	$domain or PageNotFound::spawn();
+
+	$plan = $domain;
+}
+
+// does the user want to create a Mailbox?
+if( !$mailbox ) {
+
+	// count the actual number of Domain Mailbox(es)
+	$mailbox_count = (int)
+		( new MailboxAPI() )
+			->select( 'COUNT(*) count' )
+			->whereDomain( $domain )
+			->queryValue( 'count' );
+
+	// check if I can add another Mailbox
+	if( $mailbox_count >= $plan->getPlanMailboxes() && !has_permission( 'edit-email-all' ) ) {
+		BadRequest::spawn( __( "Your Plan does not allow this action" ), 401 );
+	}
+
 }
 
 /*
@@ -74,9 +91,6 @@ if( $mailbox && is_action( 'mailbox-password-reset' ) ) {
  * Create the mailbox
  */
 if( !$mailbox && is_action( 'mailbox-create' ) && isset( $_POST[ 'mailbox_username' ] ) ) {
-
-	// TODO: check max. creation number in single domain props
-	require_permission( 'edit-email-all' );
 
 	$_POST[ 'mailbox_username' ] = luser_input( $_POST[ 'mailbox_username' ], 64 );
 

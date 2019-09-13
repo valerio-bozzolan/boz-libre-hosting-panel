@@ -15,16 +15,15 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-/**
- * Mailbox API
- */
-class MailboxAPI extends DomainAPI {
+// load dependend traits
+class_exists( 'DomainAPI' );
 
-	public function __construct() {
-		Query::__construct();
-		$this->from( Mailbox::T );
-		$this->defaultClass( 'Mailbox' );
-	}
+/**
+ * Methods for a MailboxAPI class
+ */
+trait MailboxAPITrait {
+
+	use DomainAPITrait;
 
 	/**
 	 * Limit to a specific mailbox
@@ -44,7 +43,7 @@ class MailboxAPI extends DomainAPI {
 	 * @return self
 	 */
 	public function whereMailboxUsername( $username ) {
-		return $this->whereStr( Mailbox::USERNAME, $username );
+		return $this->whereStr( 'mailbox_username', $username );
 	}
 
 	/**
@@ -82,4 +81,38 @@ class MailboxAPI extends DomainAPI {
 	public function whereMailboxIsEditable() {
 		return $this->whereDomainIsEditable();
 	}
+
+}
+
+/**
+ * Mailbox API
+ */
+class MailboxAPI extends Query {
+
+	use MailboxAPITrait;
+
+	/**
+	 * Univoque Domain ID column name
+	 *
+	 * Used by DomainAPITrait
+	 */
+	const DOMAIN_ID = 'mailbox.domain_ID';
+
+	/**
+	 * Univoque Plan ID column name
+	 */
+	const PLAN_ID = 'domain.plan_ID';
+
+	/**
+	 * Constructor
+	 */
+	public function __construct( $db = null ) {
+
+		// set database and class name
+		parent::__construct( $db, Mailbox::class );
+
+		// set database table
+		$this->from( Mailbox::T );
+	}
+
 }

@@ -32,6 +32,7 @@ if( $domain_name ) {
 	$domain = ( new DomainAPI() )
 		->whereDomainName( $domain_name )
 		->whereDomainIsEditable()
+		->joinPlan()
 		->queryRow();
 
 	// 404?
@@ -79,6 +80,7 @@ if( $domain ) {
 	// spawn the domain template
 	template( 'domain', [
 		'domain' => $domain,
+		'plan'   => $domain,
 	] );
 } else {
 	// form to create the domain

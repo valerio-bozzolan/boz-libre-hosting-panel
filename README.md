@@ -53,6 +53,9 @@ Let me say that I love listening to the whishlist of my costumers. Here are the 
 	- [X] create a Domain for that User
 	- [ ] change login
 	- [ ] change e-mail
+- [X] plans
+	- [X] limit number of mailboxes per domain
+	- [ ] limit number of mail forwardings
 
 ## License
 

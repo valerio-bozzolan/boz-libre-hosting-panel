@@ -98,5 +98,6 @@ inherit_permissions( 'admin', 'user', [
 	'edit-user-all',
 	'edit-email-all',
 	'edit-domain-all',
+	'edit-plan-all',
 	'edit-ftp-all',
 ] );
