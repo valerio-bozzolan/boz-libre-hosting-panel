@@ -19,30 +19,11 @@
 class_exists( 'Domain' );
 
 /**
- * An FTP user
+ * Methods for an FTP class
  */
-class FTP extends Queried {
+trait FTPTrait {
 
-	use DomainAPITrait;
-
-	/**
-	 * Table name
-	 */
-	const T = 'ftp';
-
-	/**
-	 * Constructor
-	 *
-	 * Normalize the object obtained from the database
-	 */
-	public function __construct() {
-		$this->normalizeDomain();
-		$this->booleans( 'ftp_active' );
-		$this->integers( 'ftp_ulbandwidth',
-		                 'ftp_dlbandwidth',
-		                 'ftp_quotasize',
-		                 'ftp_quotafiles' );
-	}
+	use DomainTrait;
 
 	/**
 	 * Get the FTP login username
@@ -72,6 +53,39 @@ class FTP extends Queried {
 			$this->getDomainName(),
 			$this->getFTPLogin()
 		);
+	}
+
+	protected function normalizeFTP() {
+		$this->normalizeDomain();
+		$this->booleans( 'ftp_active' );
+		$this->integers( 'ftp_ulbandwidth',
+		                 'ftp_dlbandwidth',
+		                 'ftp_quotasize',
+		                 'ftp_quotafiles'
+		);
+	}
+
+}
+
+/**
+ * An FTP user
+ */
+class FTP extends Queried {
+
+	use FTPTrait;
+
+	/**
+	 * Table name
+	 */
+	const T = 'ftp';
+
+	/**
+	 * Constructor
+	 *
+	 * Normalize the object obtained from the database
+	 */
+	public function __construct() {
+		$this->normalizeFTP();
 	}
 
 	/**
