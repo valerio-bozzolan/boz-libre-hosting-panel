@@ -27,7 +27,7 @@ Header::spawn();
 
 // go to the wanted page (or homepage)
 if( isset( $_POST['user_uid'] ) && login() ) {
-	http_redirect( after_login_url(), 307 );
+	http_redirect( after_login_url(), 303 ); // Redirection "See Other"
 }
 ?>
 
