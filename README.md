@@ -43,9 +43,15 @@ Let me say that I love listening to the whishlist of my costumers. Here are the 
 	- [X] remove
 - administration of own FTP accounts (thanks to Pure-FTPd over MariaDB)
 	- [X] list
-	- [ ] add
-	- [ ] remove
+	- [X] add
+	- [X] remove
+	- [ ] password reset
 - [ ] administration of own MariaDB databases
+- [ ] administration of User(s)
+	- [X] password reset
+	- [X] create a Domain for that User
+	- [ ] change login
+	- [ ] change e-mail
 
 ## License
 
