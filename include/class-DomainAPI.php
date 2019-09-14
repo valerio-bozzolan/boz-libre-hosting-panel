@@ -44,7 +44,7 @@ trait DomainAPITrait {
 	 * @return self
 	 */
 	public function whereDomainIsActive( $active = true ) {
-		return $this->wheerInt( 'domain_active', $active );
+		return $this->whereInt( 'domain_active', $active );
 	}
 
 	/**

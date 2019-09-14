@@ -53,7 +53,7 @@ trait MailboxAPITrait {
 	 * @return self
 	 */
 	public function whereMailboxIsActive( $active = true ) {
-		return $this->wheerInt( 'mailbox_active', $active );
+		return $this->whereInt( 'mailbox_active', $active );
 	}
 
 	/**
