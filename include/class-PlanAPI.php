@@ -63,10 +63,11 @@ trait PlanAPITrait {
 	/**
 	 * Join whatever table with the plan table
 	 *
+	 * @param  string $type Join type
 	 * @return self
 	 */
-	public function joinPlan() {
-		return $this->joinOn( 'INNER', 'plan', static::PLAN_ID, 'plan.plan_ID' );
+	public function joinPlan( $type = 'INNER' ) {
+		return $this->joinOn( $type, 'plan', static::PLAN_ID, 'plan.plan_ID' );
 	}
 
 }

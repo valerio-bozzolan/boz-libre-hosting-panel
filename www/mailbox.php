@@ -34,7 +34,7 @@ if( $mailbox_username ) {
 
 	// retrieve the mailbox and its domain and its Plan
 	$mailbox = ( new MailboxFullAPI() )
-		->joinPlan()
+		->joinPlan( 'LEFT' )
 		->whereDomainName( $domain_name )
 		->whereMailboxUsername( $mailbox_username )
 		->whereMailboxIsEditable()
@@ -54,7 +54,7 @@ if( $mailbox_username ) {
 	$domain = ( new DomainAPI() )
 		->whereDomainName( $domain_name )
 		->whereDomainIsEditable()
-		->joinPlan()
+		->joinPlan( 'LEFT' )
 		->queryRow();
 
 	// 404?
@@ -105,9 +105,14 @@ if( !$mailbox && is_action( 'mailbox-create' ) && isset( $_POST[ 'mailbox_userna
 		->queryRow();
 
 	if( !$mailbox ) {
+		// assign a damn temporary password
+		$mailbox_password = generate_password();
+		$mailbox_password_safe = Mailbox::encryptPassword( $mailbox_password );
+
 		insert_row( 'mailbox', [
 			new DBCol( 'mailbox_username', $_POST[ 'mailbox_username' ], 's' ),
 			new DBCol( 'domain_ID',        $domain->getDomainID(),       'd' ),
+			new DBCol( 'mailbox_password', $mailbox_password_safe,       's' ),
 		] );
 	}
 

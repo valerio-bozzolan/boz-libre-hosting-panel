@@ -32,7 +32,7 @@ if( $domain_name ) {
 	$domain = ( new DomainAPI() )
 		->whereDomainName( $domain_name )
 		->whereDomainIsEditable()
-		->joinPlan()
+		->joinPlan( 'LEFT' )
 		->queryRow();
 
 	// 404?

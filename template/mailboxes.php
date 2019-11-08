@@ -44,7 +44,9 @@ $count = DB::instance()->affectedRows();
 	__( "mailboxes" )
 ) ?></h3>
 
-<?php template( 'mailbox-description' ) ?>
+<?php template( 'mailbox-description', [
+	'mailbox' => null,
+] ) ?>
 
 <?php if( $mailboxes->valid() ): ?>
 	<ul>
@@ -52,7 +54,7 @@ $count = DB::instance()->affectedRows();
 			<li>
 				<code><?= HTML::a(
 					$mailbox->getMailboxPermalink(),
-					$mailbox->getMailboxAddress()
+					esc_html( $mailbox->getMailboxAddress() )
 				) ?></code>
 			</li>
 		<?php endforeach ?>
