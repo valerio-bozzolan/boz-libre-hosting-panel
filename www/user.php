@@ -48,8 +48,39 @@ if( $user_uid ) {
 }
 
 // save destination action
-if( is_action( 'user-save' ) ) {
+if( is_action( 'save-user' ) ) {
 
+	$email   = $_POST['email']   ?? null;
+	$uid     = $_POST['uid']     ?? null;
+	$name    = $_POST['name']    ?? null;
+	$surname = $_POST['surname'] ?? null;
+
+	if( $email && $uid && $name && $surname ) {
+		$email = (string) $email;
+
+		// data to be saved
+		$data = [];
+		$data['user_email']   = $email;
+		$data['user_name']    = $name;
+		$data['user_surname'] = $surname;
+
+		if( $user ) {
+			// update existing User
+			( new UserAPI() )
+				->whereUser( $user )
+				->update( $data );
+		} else {
+			// insert new User
+			$data['user_uid']      = $uid;
+			$data['user_active']   = 1;
+			$data['user_password'] = '!';
+			$data['user_role']     = 'user';
+			$data[] = new DBCol( 'user_registration_date', 'NOW()', '-' );
+
+			( new UserAPI() )
+				->insertRow( $data );
+		}
+	}
 }
 
 // add a Domain to the user
@@ -135,7 +166,8 @@ if( is_action( 'change-password' ) && $user ) {
 	( new UserAPI() )
 		->whereUser( $user )
 		->update( [
-			new DBCol( User::PASSWORD, $encrypted, 's' ),
+			User::IS_ACTIVE => 1,
+			User::PASSWORD  => $encrypted,
 		] );
 }
 

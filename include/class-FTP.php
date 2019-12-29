@@ -103,4 +103,46 @@ class FTP extends Queried {
 		return $url;
 	}
 
+	/**
+	 * Encrypt an FTP user password
+	 *
+	 * @param $password string Clear text password
+	 * @return          string One-way encrypted password
+	 */
+	public static function encryptPassword( $password ) {
+		global $HOSTING_CONFIG;
+
+		// the FTP password encryption mechanism can be customized
+		if( isset( $HOSTING_CONFIG->FTP_ENCRYPT_PWD ) ) {
+			return call_user_func( $HOSTING_CONFIG->FTP_ENCRYPT_PWD, $password );
+		}
+
+		// or then just a default behaviour
+
+		/**
+		 * The default behaviour is to adopt the crypt() encryption mechanism
+		 * with SHA512 and some random salt. It's strong enough nowadays.
+		 *
+		 * Read your FTP server documentation, whatever you are using.
+		 * We don't know how your infrastructure works, so we don't know
+	 	 * how you want your password encrypted in the database and what kind
+		 * of password encryption mechanisms your FTP server supports.
+		 *
+		 * In short if you are using PureFTPd this default configuration may work
+		 * because you may have PureFTPd configured as follow:
+		 *  ...
+		 *  MYSQLCrypt crypt
+		 *  ...
+		 *
+		 * You can read more here:
+		 *   https://download.pureftpd.org/pub/pure-ftpd/doc/README.MySQL
+		 *
+		 * Anyway you can use whatever FTP server that talks with a MySQL database
+		 * and so you should adopt the most stronger encryption mechanism available.
+		 */
+
+		$salt = bin2hex( openssl_random_pseudo_bytes( 3 ) );
+		return '{SHA512-CRYPT}' . crypt( $password, "$6$$salt" );
+	}
+
 }

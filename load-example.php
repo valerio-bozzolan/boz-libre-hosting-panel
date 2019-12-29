@@ -1,5 +1,5 @@
 <?php
-# Copyright (C) 2018 Valerio Bozzolan
+# Copyright (C) 2018, 2019 Valerio Bozzolan
 # Boz Libre Hosting Panel
 #
 # This program is free software: you can redistribute it and/or modify
@@ -47,6 +47,21 @@ define( 'ABSPATH', __DIR__ );
 
 // absolute web directory without trailing slash
 define( 'ROOT', '' );
+
+// other specific configuration about your hosting environments
+$HOSTING_CONFIG = new stdClass();
+
+// Mailbox password encryption custom mechanism (you can leave this commented for the default)
+# $HOSTING_CONFIG->MAILBOX_ENCRYPT_PWD = function ( $password ) {
+#	$salt = bin2hex( openssl_random_pseudo_bytes( 3 ) );
+#	return '{SHA512-CRYPT}' . crypt( $password, "$6$$salt" );
+# };
+
+// FTP password encryption custom mechanism (you can leave this commented for the default)
+# $HOSTING_CONFIG->FTP_ENCRYPT_PWD = function ( $password ) {
+#	$salt = bin2hex( openssl_random_pseudo_bytes( 3 ) );
+#	return '{SHA512-CRYPT}' . crypt( $password, "$6$$salt" );
+# };
 
 // path to the boz-php framework
 require '/usr/share/php/suckless-php/load.php';

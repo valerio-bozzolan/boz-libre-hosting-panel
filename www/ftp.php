@@ -23,8 +23,9 @@
 require '../load.php';
 
 // wanted informations
-$domain = null;
-$ftp    = null;
+$domain       = null;
+$ftp          = null;
+$ftp_password = null;
 
 // URL paramenters (maximum both domain and FTP login, minimum just domain)
 list( $domain_name, $ftp_login ) = url_parts( 2, 1 );
@@ -76,17 +77,22 @@ if( is_action( 'ftp-save' ) ) {
 	// save source only during creation
 	if( ! $ftp ) {
 
-		// sanitize
-		if( ! isset( $_POST[ 'ftp_login' ] ) ) {
+		// sanitize data
+		if( !isset( $_POST['ftp_login'] ) || !is_string( $_POST['ftp_login'] ) ) {
 			BadRequest::spawn( __( "missing parameter" ) );
 		}
-		$username = luser_input( $_POST[ 'ftp_login' ], 128 );
-		if( ! validate_mailbox_username( $username ) ) {
+
+		// generate the username (must start with domain name)
+		$username = generate_slug( $domain->getDomainName() ) . '_' . $_POST[ 'ftp_login' ];
+		$username = luser_input( $username, 128 );
+
+		// validate username
+		if( !validate_mailbox_username( $username ) ) {
 			BadRequest::spawn( __( "invalid mailbox name" ) );
 		}
 
 		// check existence
-		$ftp_exists = ( new FTPAPI )
+		$ftp_exists = ( new FTPAPI() )
 			->select( 1 )
 			->whereDomain( $domain )
 			->whereFTPLogin( $username )
@@ -97,10 +103,15 @@ if( is_action( 'ftp-save' ) ) {
 			BadRequest::spawn( __( "FTP account already existing" ) );
 		}
 
+		// generate a password and die
+		$ftp_password      = generate_password();
+		$ftp_password_safe = FTP::encryptPassword( $ftp_password );
+
 		// insert as new row
 		insert_row( 'ftp', [
-			new DBCol( 'domain_ID', $domain->getDomainID(), 'd' ),
-			new DBCol( 'ftp_login', $username,              's' ),
+			new DBCol( 'domain_ID',    $domain->getDomainID(), 'd' ),
+			new DBCol( 'ftp_login',    $username,              's' ),
+			new DBCol( 'ftp_password', $ftp_password_safe,         's' ),
 		] );
 
 		// POST/redirect/GET
@@ -144,8 +155,9 @@ Header::spawn( [
 
 // spawn the page content
 template( 'ftp', [
-	'domain' => $domain,
-	'ftp'    => $ftp,
+	'domain'   => $domain,
+	'ftp'      => $ftp,
+	'password' => $ftp_password,
 ] );
 
 // spawn the footer

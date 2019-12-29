@@ -126,9 +126,37 @@ class Mailbox extends Queried {
 	/**
 	 * Encrypt a password
 	 *
-	 * TODO: do not hardcode to my Dovecot configuration
+	 * @param string $password Clear text password
+	 * @return string          One-way encrypted password
 	 */
 	public static function encryptPassword( $password ) {
+		global $HOSTING_CONFIG;
+
+		// the Mailbox password encryption mechanism can be customized
+		if( isset( $HOSTING_CONFIG->MAILBOX_ENCRYPT_PWD ) ) {
+			return call_user_func( $HOSTING_CONFIG->MAILBOX_ENCRYPT_PWD, $password );
+		}
+
+		// or then just a default behaviour
+
+		/**
+		 * The default behaviour is to adopt the crypt() encryption mechanism
+		 * with SHA512 and some random salt. It's strong enough nowadays.
+		 *
+		 * Read your MTA/MDA documentation, whatever you are using.
+		 * We don't know how your infrastructure works, so we don't know
+	 	 * how you want your password encrypted in the database and what kind
+		 * of password encryption mechanisms your MTA/MDA supports.
+		 *
+		 * In short if you are using Postfix this default configuration may work
+		 * because you may have Postfix configured as follow:
+		 *
+		 * Anyway you can use whatever MTA/MDA that talks with a MySQL database
+		 * and so you should adopt the most stronger encryption mechanism available.
+		 *
+		 *   https://doc.dovecot.org/configuration_manual/authentication/password_schemes/
+		 */
+
 		$salt = bin2hex( openssl_random_pseudo_bytes( 3 ) );
 		return '{SHA512-CRYPT}' . crypt( $password, "$6$$salt" );
 	}
