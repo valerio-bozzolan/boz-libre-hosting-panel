@@ -39,13 +39,27 @@ defined( 'BOZ_PHP' ) or die;
 			'ftp'    => $ftp,
 		] ) ?>
 
+		<h3><?= __( "Actions" ) ?></h3>
+
 		<!-- delete form -->
 		<form method="post">
 			<?php form_action( 'ftp-delete' ) ?>
 			<?= HTML::input( 'hidden', 'ftp_login', $ftp->getFTPLogin() ) ?>
-			<button type="submit" class="btn btn-danger"><?= __( "Delete" ) ?></button>
+			<p><button type="submit" class="btn btn-danger"><?= __( "Delete" ) ?></button></p>
 		</form>
 		<!-- /delete form -->
+
+		<!-- change password form -->
+		<form method="post">
+			<?php form_action( 'ftp-password-reset' ) ?>
+			<?php if( $ftp_password ): ?>
+				<label for="password"><?= __( "Please copy your new password:" ) ?><br />
+				<input type="text" id="password" readonly<?= value( $ftp_password ) ?> />
+			<?php else: ?>
+				<p><button type="submit" class="btn btn-default"><?= __( "Generate new password" ) ?></button></p>
+			<?php endif ?>
+		</form>
+		<!-- /change password form -->
 
 	<?php else: ?>
 

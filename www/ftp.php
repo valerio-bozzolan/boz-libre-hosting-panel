@@ -103,7 +103,7 @@ if( is_action( 'ftp-save' ) ) {
 			BadRequest::spawn( __( "FTP account already existing" ) );
 		}
 
-		// generate a password and die
+		// generate a random password and die (probably the User will not see it because of the redirect)
 		$ftp_password      = generate_password();
 		$ftp_password_safe = FTP::encryptPassword( $ftp_password );
 
@@ -121,6 +121,21 @@ if( is_action( 'ftp-save' ) ) {
 			true
 		), 303 );
 	}
+}
+
+// change password action
+if( $ftp && is_action( 'ftp-password-reset' ) ) {
+
+	// generate a password and die
+	$ftp_password      = generate_password();
+	$ftp_password_safe = FTP::encryptPassword( $ftp_password );
+
+	// update its password
+	( new FTPAPI() )
+		->whereFTP( $ftp )
+		->update( [
+			'ftp_password' => $ftp_password_safe,
+		] );
 }
 
 // delete action
@@ -155,9 +170,9 @@ Header::spawn( [
 
 // spawn the page content
 template( 'ftp', [
-	'domain'   => $domain,
-	'ftp'      => $ftp,
-	'password' => $ftp_password,
+	'domain'       => $domain,
+	'ftp'          => $ftp,
+	'ftp_password' => $ftp_password,
 ] );
 
 // spawn the footer
