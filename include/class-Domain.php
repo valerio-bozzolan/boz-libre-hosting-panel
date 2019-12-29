@@ -35,6 +35,15 @@ trait DomainTrait {
 	private $domainMailboxCount = null;
 
 	/**
+	 * Count of the Domain's FTP accounts
+	 *
+	 * This is a kind of cache
+	 *
+	 * @var int
+	 */
+	private $domainFTPAccountCount = null;
+
+	/**
 	 * Get domain ID
 	 *
 	 * @return int
@@ -63,6 +72,28 @@ trait DomainTrait {
 	}
 
 	/**
+	 * Check if you can create a new Mailbox for this Domain
+	 *
+	 * The Domain must have Plan informations.
+	 *
+	 * @return boolean
+	 */
+	public function canCreateMailboxInDomain() {
+		return $this->getPlanMailboxes() > $this->getDomainMailboxCount()
+		       ||
+		       has_permission( 'edit-email-all' );
+	}
+
+	/**
+	 * Check if you can create a new FTP account for this Domain
+	 *
+	 * The Domain must have Plan informations.
+	 */
+	public function canCreateFTPAccountForDomain() {
+		return has_permission( 'edit-ftp-all' );
+	}
+
+	/**
 	 * Factory mailbox from this domain
 	 *
 	 * @return MailboxFullAPI
@@ -82,6 +113,8 @@ trait DomainTrait {
 
 	/**
 	 * Set a count of Domain's Mailboxes
+	 *
+	 * This method should not be used directly.
 	 *
 	 * @param $count int
 	 * @return self
@@ -115,23 +148,27 @@ trait DomainTrait {
 	}
 
 	/**
- 	 * Check if you can create a new Mailbox for this Domain
+	 * Get the number of FTP accounts of this Domain
 	 *
-	 * The Domain must have Plan informations.
+	 * This method has a layer of cache.
 	 *
-	 * @return boolean
+	 * @return int
 	 */
-	public function canCreateMailboxInDomain() {
-		return $this->getPlanMailboxes() > $this->getDomainMailboxCount() || has_permission( 'edit-email-all' );
-	}
+	public function getDomainFTPAccountCount() {
 
-	/**
-	 * Check if you can create a new FTP account for this Domain
-	 *
-	 * The Domain must have Plan informations.
-	 */
-	public function canCreateFTPAccountForDomain() {
-		return has_permission( 'edit-ftp-all' );
+		// check if we already know the count
+		if( !isset( $this->domainFTPAccountCount ) ) {
+
+			// count the number of mailboxes associated to this Domain
+			$count = $this->factoryFTP()
+				->select( 'COUNT(*) count' )
+				->queryValue( 'count' );
+
+			// save in cache
+			$this->domainFTPAccountCount = (int) $count;
+		}
+
+		return $this->domainFTPAccountCount;
 	}
 
 	/**
