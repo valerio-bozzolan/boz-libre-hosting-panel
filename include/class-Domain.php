@@ -26,6 +26,15 @@ trait DomainTrait {
 	use PlanTrait;
 
 	/**
+	 * Count of the Domain's Mailboxes
+	 *
+	 * This is a kind of cache
+	 *
+	 * @var int
+	 */
+	private $domainMailboxCount = null;
+
+	/**
 	 * Get domain ID
 	 *
 	 * @return int
@@ -69,6 +78,51 @@ trait DomainTrait {
 	 */
 	public function factoryMailforwardfrom() {
 		return ( new MailforwardfromAPI() )->whereDomain( $this );
+	}
+
+	/**
+	 * Set a count of Domain's Mailboxes
+	 *
+	 * @param $count int
+	 * @return self
+	 */
+	public function setDomainMailboxCount( $count ) {
+		$this->domainMailboxCount = $count;
+	}
+
+	/**
+	 * Get the number of Mailboxes of this Domain
+	 *
+	 * This method has a layer of cache.
+	 *
+	 * @return int
+	 */
+	public function getDomainMailboxCount() {
+
+		// check if we already know the count
+		if( !isset( $this->domainMailboxCount ) ) {
+
+			// count the number of mailboxes associated to this Domain
+			$count = $this->factoryMailbox()
+				->select( 'COUNT(*) count' )
+				->queryValue( 'count' );
+
+			// save in cache
+			$this->domainMailboxCount = (int) $count;
+		}
+
+		return $this->domainMailboxCount;
+	}
+
+	/**
+ 	 * Check if you can create a new mailbox for this Domain
+	 *
+	 * The Domain must have plan informations.
+	 *
+	 * @return boolean
+	 */
+	public function canCreateMailboxInDomain() {
+		return $this->getPlanMailboxes() > $this->getDomainMailboxCount() || has_permission( 'edit-email-all' );
 	}
 
 	/**

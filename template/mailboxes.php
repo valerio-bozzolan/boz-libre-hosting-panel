@@ -1,5 +1,5 @@
 <?php
-# Copyright (C) 2018 Valerio Bozzolan
+# Copyright (C) 2018, 2019 Valerio Bozzolan
 # Boz Libre Hosting Panel
 #
 # This program is free software: you can redistribute it and/or modify
@@ -36,6 +36,9 @@ $mailboxes = $domain->factoryMailbox()
 
 // total number of mailboxes
 $count = DB::instance()->affectedRows();
+
+// cache the value that can be useful
+$domain->setDomainMailboxCount( $count );
 ?>
 
 <!-- mail boxes -->
@@ -68,7 +71,7 @@ $count = DB::instance()->affectedRows();
 	__( "Mailboxes" )
 ) ) ?></p>
 
-<?php if( $plan->getPlanMailboxes() > $count || has_permission( 'edit-email-all' ) ): ?>
+<?php if( $domain->canCreateMailboxInDomain() ): ?>
 	<p><?php the_link( Mailbox::permalink( $domain->getDomainName() ), __( "Create" ) ) ?></p>
 <?php endif ?>
 

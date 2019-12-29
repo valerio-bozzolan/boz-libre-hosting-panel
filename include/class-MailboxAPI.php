@@ -33,7 +33,7 @@ trait MailboxAPITrait {
 	 */
 	public function whereMailbox( $mailbox ) {
 		return $this->whereDomain( $mailbox )
-		            ->whereMaiboxUsername( $mailbox->getMailboxUsername() );
+		            ->whereMailboxUsername( $mailbox->getMailboxUsername() );
 	}
 
 	/**
