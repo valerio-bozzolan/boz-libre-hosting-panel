@@ -60,6 +60,13 @@ $ftps = $domain->factoryFTP()
 		<p><?= __( "None yet.") ?></p>
 	<?php endif ?>
 
+	<p><?= esc_html( sprintf(
+		__( "Your Plan \"%s\" allows %s %s." ),
+		$plan->getPlanName(),
+		$plan->getPlanFTPUsers(),
+		__( "FTP users" )
+	) ) ?></p>
+
 	<?php if( $domain->canCreateFTPAccountForDomain() ): ?>
 		<p><?php the_link(
 			FTP::permalink( $domain->getDomainName() ),

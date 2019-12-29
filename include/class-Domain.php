@@ -88,9 +88,13 @@ trait DomainTrait {
 	 * Check if you can create a new FTP account for this Domain
 	 *
 	 * The Domain must have Plan informations.
+	 *
+	 * The Domain must have Plan informations.
 	 */
 	public function canCreateFTPAccountForDomain() {
-		return has_permission( 'edit-ftp-all' );
+		return $this->getPlanFTPUsers() > $this->getDomainFTPAccountCount()
+		       ||
+		       has_permission( 'edit-ftp-all' );
 	}
 
 	/**
