@@ -123,7 +123,7 @@ function url_parts( $max, $min = false ) {
 	}
 
 	// split the PATH_INFO parts
-	$parts = explode( _, $_SERVER[ 'PATH_INFO' ] );
+	$parts = explode( _, $_SERVER['PATH_INFO'] ?? '' );
 	array_shift( $parts );
 
 	// eventually spawn the "bad request"
