@@ -115,14 +115,23 @@ trait DomainTrait {
 	}
 
 	/**
- 	 * Check if you can create a new mailbox for this Domain
+ 	 * Check if you can create a new Mailbox for this Domain
 	 *
-	 * The Domain must have plan informations.
+	 * The Domain must have Plan informations.
 	 *
 	 * @return boolean
 	 */
 	public function canCreateMailboxInDomain() {
 		return $this->getPlanMailboxes() > $this->getDomainMailboxCount() || has_permission( 'edit-email-all' );
+	}
+
+	/**
+	 * Check if you can create a new FTP account for this Domain
+	 *
+	 * The Domain must have Plan informations.
+	 */
+	public function canCreateFTPAccountForDomain() {
+		return has_permission( 'edit-ftp-all' );
 	}
 
 	/**

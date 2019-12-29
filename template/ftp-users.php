@@ -60,7 +60,7 @@ $ftps = $domain->factoryFTP()
 		<p><?= __( "None yet.") ?></p>
 	<?php endif ?>
 
-	<?php if( has_permission( 'edit-ftp-all' ) ): ?>
+	<?php if( $domain->canCreateFTPAccountForDomain() ): ?>
 		<p><?php the_link(
 			FTP::permalink( $domain->getDomainName() ),
 			__( "Create" )
