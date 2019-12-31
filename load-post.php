@@ -62,7 +62,7 @@ define( 'GETTEXT_DEFAULT_ENCODE', CHARSET ); // UTF-8
 // common strings
 define_default( 'SITE_NAME', "Boz Libre Hosting Panel" );
 define_default( 'CONTACT_EMAIL', 'support@' . DOMAIN );
-define_default( 'REPO_URL', 'https://github.com/valerio-bozzolan/boz-libre-hosting-panel' );
+define_default( 'REPO_URL', 'https://gitpull.it/project/profile/15/' );
 
 // limit session duration to 5 minutes (60s * 100m)
 define_default( 'SESSION_DURATION', 6000 );
