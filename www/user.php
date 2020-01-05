@@ -47,7 +47,7 @@ if( $user_uid ) {
 	require_permission( 'edit-user-all' );
 }
 
-// save destination action
+// register save User action
 if( is_action( 'save-user' ) ) {
 
 	$email   = $_POST['email']   ?? null;
@@ -72,16 +72,20 @@ if( is_action( 'save-user' ) ) {
 		} else {
 			// insert new User
 			$data['user_uid']      = $uid;
-			$data['user_active']   = 1;
-			$data['user_password'] = '!';
-			$data['user_role']     = 'user';
+			$data['user_active']   = 0;      // disable login as default
+			$data['user_password'] = '!';    // assign an invalid password
+			$data['user_role']     = 'user'; // assign low privileges
 			$data[] = new DBCol( 'user_registration_date', 'NOW()', '-' );
 
 			( new UserAPI() )
 				->insertRow( $data );
 		}
+
+		// POST -> redirect -> GET (See Other)
+		http_redirect( User::permalink( $uid ), 303 );
 	}
 }
+// end register Save user action
 
 // add a Domain to the user
 if( is_action( 'add-domain' ) ){
@@ -152,9 +156,8 @@ if( is_action( 'add-domain' ) ){
 	}
 
 	query( 'COMMIT' );
-
-	// end add Domain to User
 }
+// end add Domain to User
 
 // register action to generate a new password
 $new_password = null;
@@ -169,6 +172,8 @@ if( is_action( 'change-password' ) && $user ) {
 			User::IS_ACTIVE => 1,
 			User::PASSWORD  => $encrypted,
 		] );
+
+	// do not refresh the page
 }
 
 // expose the User domains

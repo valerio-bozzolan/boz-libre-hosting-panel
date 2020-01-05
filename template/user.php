@@ -40,6 +40,14 @@ defined( 'BOZ_PHP' ) or die;
 		<input type="email" name="email"<?= $user ? value( $user->getUserEmail() ) : '' ?> class="form-control" />
 	</div>
 	<div class="form-group">
+		<label for="user-name"><?= esc_html( __( "Name" ) ) ?></label>
+		<input type="text" name="name" id="user-name"<?= $user ? value( $user->getUserName() ) : '' ?> class="form-control" />
+	</div>
+	<div class="form-group">
+		<label for="user-surname"><?= esc_html( __( "Surname" ) ) ?></label>
+		<input type="text" name="surname" id="user-surname"<?= $user ? value( $user->getUserSurname() ) : '' ?> class="form-control" />
+	</div>
+	<div class="form-group">
 		<label for="user-uid"><?= esc_html( __( "Login" ) ) ?></label>
 		<input type="text" name="uid"<?= $user ? value( $user->getUserUID() ) : '' ?> class="form-control" />
 	</div>
@@ -47,23 +55,8 @@ defined( 'BOZ_PHP' ) or die;
 </form>
 <!-- /name, surname -->
 
-<!-- password handler -->
-<section>
-	<form method="post">
-		<h3><?= esc_html( __( "Password" ) ) ?></h3>
-		<?php form_action( 'change-password' ) ?>
-		<button type="submit" class="btn btn-primary"><?= esc_html( __( "Change password" ) ) ?></button>
-	</form>
-
-	<?php if( $new_password ): ?>
-		<p><?= esc_html( __( "The new password is:" ) ) ?></p>
-		<input type="text" readonly<?= value( $new_password ) ?> />
-	<?php endif ?>
-</section>
-<!-- /password handler -->
-
 <!-- user domains -->
-<?php if( $user_domains ): ?>
+<?php if( $user_domains->valid() ): ?>
 <section>
 	<h3><?= esc_html( __( "Domains" ) ) ?></h3>
 	<ul>
@@ -79,7 +72,7 @@ defined( 'BOZ_PHP' ) or die;
 <!-- /user domains -->
 
 <!-- assign domain -->
-<?php if( has_permission( 'edit-user-all' ) ): ?>
+<?php if( $user && has_permission( 'edit-user-all' ) ): ?>
 <section>
 	<form method="post">
 		<h3><?= esc_html( __( "Add Domain" ) ) ?></h3>
@@ -96,3 +89,23 @@ defined( 'BOZ_PHP' ) or die;
 </section>
 <?php endif ?>
 <!-- /assign domain -->
+
+<!-- password handler -->
+<?php if( $user ): ?>
+	<section>
+		<form method="post">
+			<h3><?= esc_html( __( "Password" ) ) ?></h3>
+			<?php form_action( 'change-password' ) ?>
+
+			<p>
+				<?php if( $new_password ): ?>
+					<?= esc_html( __( "The new password is:" ) ) ?><br />
+					<input type="text" readonly<?= value( $new_password ) ?> />
+				<?php endif ?>
+
+				<button type="submit" class="btn btn-primary"><?= esc_html( __( "Password Reset" ) ) ?></button>
+			</p>
+		</form>
+	</section>
+<?php endif ?>
+<!-- /password handler -->
