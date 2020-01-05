@@ -148,14 +148,14 @@ class User extends Sessionuser {
 	/**
 	 * Get the User permalink
 	 *
-	 * @param  string  $user     User UID
-	 * @param  boolean $absolute
+	 * @param  string  $uid      User UID
+	 * @param  boolean $absolute Set to true for an absolute URL
 	 * @return string
 	 */
-	public static function permalink( $user = null, $absolute = false ) {
+	public static function permalink( $uid = null, $absolute = false ) {
 		$part = site_page( 'user.php', $absolute );
-		if( $user ) {
-			$part .= _ . $user;
+		if( $uid ) {
+			$part .= _ . $uid;
 		}
 		return $part;
 	}
