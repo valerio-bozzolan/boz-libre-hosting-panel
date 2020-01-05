@@ -69,6 +69,15 @@ trait PlanTrait {
 	}
 
 	/**
+	 * Get the number of Mailforwardings of this Plan
+	 *
+	 * @return int|null
+	 */
+	public function getPlanMailforwardings() {
+		return $this->get( 'plan_mailforwards' );
+	}
+
+	/**
 	 * Get the plan edit URl
 	 *
 	 * @param boolean $absolute True for an absolute URL

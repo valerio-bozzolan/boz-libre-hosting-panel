@@ -59,6 +59,13 @@ $mailforwardfroms = $domain->factoryMailforwardfrom()
 		<p><?= __( "None yet.") ?></p>
 	<?php endif ?>
 
+	<p><?= esc_html( sprintf(
+		__( "Your Plan \"%s\" allows %s %s." ),
+		$plan->getPlanName(),
+		$plan->getPlanMailForwardings(),
+		__( "Forwarding" )
+	) ) ?></p>
+
 	<p><?php the_link(
 		Mailforwardfrom::permalink( $domain->getDomainName() ),
 		__( "Create" )
