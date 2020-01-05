@@ -1,8 +1,10 @@
 # Boz's Libre Hosting Panel
 
-This projects was started to create another _keep it simple and stupid_ libre web hosting control panel suitable for providers of everyday shared hosting services.
+Welcome in an actively developed hosting panel designed for GNU/Linux operating systems. This is another _keep it simple and stupid_ libre web hosting control panel, that can be useful to serve everyday shared hosting services.
 
-The panel is designed to **respect the freedom** of the users. In order to do it, it works **without proprietary JavaScript**. To be honest, without **any line of JavaScript** in any form.
+This panel is designed to **respect the freedom** of the users. It works **without proprietary JavaScript**. To be honest, without **any line of JavaScript** in any form.
+
+This panel is designed to work without **any external dependency** not written by me. This allow fine-grained control over the software. It integrates with well-known and ultra-secure software packaged inside every GNU/Linux distribution in the world and used by millions of devices.
 
 I would like to thank Giorgio Maone for his project NoScript, for the moral incentive, and Richard Stallman, for _The JavaScript Trap_ paper.
 
@@ -53,20 +55,29 @@ Let me say that I love listening to the whishlist of my costumers. Here are the 
 	- [X] list
 	- [X] add
 	- [X] remove
-	- [ ] password reset
+	- [X] password reset
 - [ ] administration of own MariaDB databases
 - [ ] administration of User(s)
+	- [X] create
 	- [X] password reset
 	- [X] create a Domain for that User
 	- [ ] change login
 	- [ ] change e-mail
 - [X] plans
 	- [X] limit number of mailboxes per domain
-	- [ ] limit number of mail forwardings
+	- [X] limit number of mail forwardings
+
+## Report a bug
+
+https://gitpull.it/project/board/15/
+
+## Report a feature
+
+https://gitpull.it/project/board/15/
 
 ## License
 
-Copyright (C) 2018 [Valerio Bozzolan](https://boz.reyboz.it/) - _Boz Libre Hosting Panel_
+Copyright (C) 2018, 2019, 2020 [Valerio Bozzolan](https://boz.reyboz.it/) - _Boz Libre Hosting Panel_
 
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
