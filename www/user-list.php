@@ -68,6 +68,10 @@ $pager = new UserPager();
 	</tbody>
 </table>
 
+<?php if( has_permission( 'edit-user-all' ) ): ?>
+	<p><a class="btn btn-default" href="<?= ROOT ?>/user.php"><?= __( "Add" ) ?></a></p>
+<?php endif ?>
+
 <?php
 // spawn the footer
 Footer::spawn();
