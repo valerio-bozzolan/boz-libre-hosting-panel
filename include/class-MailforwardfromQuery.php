@@ -1,5 +1,5 @@
 <?php
-# Copyright (C) 2019 Valerio Bozzolan
+# Copyright (C) 2019, 2020 Valerio Bozzolan
 # Boz Libre Hosting Panel
 #
 # This program is free software: you can redistribute it and/or modify
@@ -15,10 +15,10 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-class_exists( 'MailforwardfromAPI', true );
-class_exists( 'DomainAPI',   true );
-
-class MailforwardfromAPI extends DomainAPI {
+/**
+ * Execute query againsts a Mailforwardfrom
+ */
+class MailforwardfromQuery extends DomainAPI {
 
 	/**
 	 * Construct

@@ -1,5 +1,5 @@
 <?php
-# Copyright (C) 2018, 2019 Valerio Bozzolan
+# Copyright (C) 2018, 2019, 2020 Valerio Bozzolan
 # Boz Libre Hosting Panel
 #
 # This program is free software: you can redistribute it and/or modify
@@ -31,7 +31,7 @@ list( $domain_name, $mailforwardfrom_username ) = url_parts( 2, 1 );
 
 // eventually retrieve mailforward from database
 if( $mailforwardfrom_username ) {
-	$mailforwardfrom = ( new MailforwardfromAPI )
+	$mailforwardfrom = ( new MailforwardfromQuery() )
 		->select( [
 			'domain.domain_ID',
 			'domain_name',
@@ -81,7 +81,7 @@ if( is_action( 'mailforward-save' ) ) {
 		}
 
 		// check existence
-		$mailforwardfrom_exists = ( new MailforwardfromAPI )
+		$mailforwardfrom_exists = ( new MailforwardfromQuery() )
 			->select( 1 )
 			->whereDomain( $domain )
 			->whereMailforwardfromUsername( $username )
