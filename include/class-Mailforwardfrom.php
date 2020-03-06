@@ -1,5 +1,5 @@
 <?php
-# Copyright (C) 2018, 2019 Valerio Bozzolan
+# Copyright (C) 2018, 2019, 2020 Valerio Bozzolan
 # Boz Libre Hosting Panel
 #
 # This program is free software: you can redistribute it and/or modify
@@ -15,6 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+/**
+ * Methods for a Mailforwardfrom class
+ */
 trait MailforwardfromTrait {
 	/**
 	 * Get the mailforward from ID
@@ -59,14 +62,34 @@ trait MailforwardfromTrait {
 			$absolute
 		);
 	}
+
+	/**
+	 * Normalize a Mailforwardfrom object after being retrieved from database
+	 */
+	protected function normalizeMailforwardfrom() {
+		$this->integers( 'mailforwardfrom_ID' );
+	}
 }
 
 /**
  * An e-mail forwarding
  */
-class Mailforwardfrom extends Domain {
-	use MailforwardfromTrait;
+class Mailforwardfrom extends Queried {
 
+	use MailforwardfromTrait;
+	use DomainTrait;
+
+	/**
+	 * Constructor
+	 */
+	public function __constructor() {
+		$this->normalizeMailforwardfrom();
+		$this->normalizeDomain();
+	}
+
+	/**
+	 * Database table name
+	 */
 	const T = 'mailforwardfrom';
 
 	/**
