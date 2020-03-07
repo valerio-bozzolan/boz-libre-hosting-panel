@@ -1,5 +1,5 @@
 <?php
-# Copyright (C) 2018 Valerio Bozzolan
+# Copyright (C) 2018, 2019, 2020 Valerio Bozzolan
 # Boz Libre Hosting Panel
 #
 # This program is free software: you can redistribute it and/or modify
@@ -33,7 +33,7 @@ defined( 'BOZ_PHP' ) or die;
 		<?= __( "Your request cannot be processed." ) ?>
 		<?php if( $message ): ?>
 			<br />
-			<?php printf( __( "Error: %s. "), $message ) ?>
+			<?= esc_html( sprintf( __( "Error: %s. "), $message ) ) ?>
 		<?php endif ?>
 	</p>
 	<p><?= __( "If you think that it's not your fault, contact us. Thanks!" ) ?></p>
