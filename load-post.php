@@ -48,6 +48,12 @@ define_default( 'BOOTSTRAP_DIR_URL', '/javascript/bootstrap' );
 // provided by the php-net-smtp package as default
 define_default( 'NET_SMTP', '/usr/share/php/Net/SMTP.php' );
 
+// base directory for your virtualhosts
+// e.g. you may have /var/www/example.com/index.html
+// do NOT end with a slash
+// TODO: support multiple hosts
+define_default( 'VIRTUALHOSTS_DIR', '/var/www' );
+
 // register JavaScript/CSS files
 register_js(  'jquery',     JQUERY_URL );
 register_js(  'bootstrap',  BOOTSTRAP_DIR_URL .  '/js/bootstrap.min.js'  );

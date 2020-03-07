@@ -203,8 +203,6 @@ function require_email( $email ) {
 /**
  * Require a safe filename or throw an exception
  *
- * It returns that filename untouched.
- *
  * This method is designed to prevend known filesystem exploitations
  * that may occurr if a database is compromised and with malicous
  * data inside domain names, etc.
@@ -212,13 +210,11 @@ function require_email( $email ) {
  * Just don't try to register a domain name with a slash in the name.
  *
  * @param  string $filename
- * @return string
  */
 function require_safe_filename( $filename ) {
-
 	$bads = [ '/', '\\', '..' ];
 	foreach( $bads as $bad ) {
-		if( strpos( $filename, '/' ) !== false ) {
+		if( strpos( $filename, $bad ) !== false ) {
 			throw new Exception( sprintf(
 				"found '%s' in the string '%s': it cannot be considered a safe file/directory name",
 				$bad,
@@ -226,6 +222,30 @@ function require_safe_filename( $filename ) {
 			) );
 		}
 	}
+}
 
-	return $filename;
+/**
+ * Check if a directory is under a subdirectory or throw
+ *
+ * @param string $sub_directory  Specific sub-directory or just '/'
+ */
+function validate_subdirectory( $sub_directory ) {
+
+	// validate each part of this pathname
+	// note that '' and '/' are allowed and also '///' because
+	// Unix already accepts it and resolve '/base////suffix'
+	// It does NOT accept stuff like '/../../'
+	$parts = explode( '/', $sub_directory );
+	foreach( $parts as $part ) {
+		try {
+			require_safe_filename( $part );
+		} catch( Exception $e ) {
+			// give a meaningful exception
+			throw new Exception( sprintf(
+				"unable to sanitize '%s': %s",
+				$sub_directory,
+				$e->getMessage()
+			) );
+		}
+	}
 }

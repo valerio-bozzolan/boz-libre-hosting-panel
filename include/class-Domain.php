@@ -62,6 +62,24 @@ trait DomainTrait {
 	}
 
 	/**
+	 * Get the sanitized relative directory name of this domain name
+	 *
+	 * Actually this should be valid for both the MTA and for the webserver.
+	 *
+	 * @return string
+	 */
+	public function getDomainDirname() {
+
+		$dir = $this->getDomainName();
+
+		// it was validated during creation time, but validate also now
+		// to prevent malicious actions over hacked databases
+		sanitize_subdirectory( $dir );
+
+		return $dir;
+	}
+
+	/**
 	 * Get the domain edit URl
 	 *
 	 * @param boolean $absolute True for an absolute URL
@@ -176,7 +194,9 @@ trait DomainTrait {
 	}
 
 	/**
-	 * Get the MTA directory containing Domain's mailboxes
+	 * Get the expected MTA directory containing Domain's mailboxes
+	 *
+	 * This pathname should be considered true for the MTA host.
 	 *
 	 * TODO: actually all the mailbox are on the same host.
 	 * Then, we should support multiple hosts.
@@ -184,13 +204,24 @@ trait DomainTrait {
 	 * @return string
 	 */
 	public function getDomainMailboxesPath() {
-
-		// require a valid filename or throw
-		$domain_name  = $this->getDomainName();
-		require_safe_filename( $domain_name  );
-
 		// mailboxes are stored under a $BASE/domain/username filesystem structure
-		return MAILBOX_BASE_PATH . __ . $domain_name;
+		return MAILBOX_BASE_PATH . __ . $this->getDomainDirname();
+	}
+
+	/**
+	 * Get the expected and sanitized base domain directory containing its directories
+	 *
+	 * This pathname should be considered true both for the webserver serving
+	 * that domain and for the related FTP server.
+	 *
+	 * TODO: actually all the domains are on the same host.
+	 * Then, we should support multiple hosts.
+	 *
+	 * @return string
+	 */
+	public function getDomainBasePath() {
+		// mailboxes are stored under a $BASE/domain/username filesystem structure
+		return VIRTUALHOSTS_DIR . __ . $this->getDomainDirname();
 	}
 
 	/**

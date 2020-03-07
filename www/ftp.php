@@ -1,5 +1,5 @@
 <?php
-# Copyright (C) 2019 Valerio Bozzolan
+# Copyright (C) 2019, 2020 Valerio Bozzolan
 # Boz Libre Hosting Panel
 #
 # This program is free software: you can redistribute it and/or modify
@@ -37,6 +37,7 @@ if( $ftp_login ) {
 			'domain.domain_ID',
 			'domain_name',
 			'ftp_login',
+			'ftp_directory',
 		] )
 		->joinFTPDomain()
 		->whereDomainName( $domain_name )
@@ -74,21 +75,21 @@ if( ! $ftp ) {
 // save destination action
 if( is_action( 'ftp-save' ) ) {
 
-	// save source only during creation
-	if( ! $ftp ) {
+	$data = [];
 
-		// sanitize data
+	// during creation require FTP login
+	if( !$ftp ) {
 		if( !isset( $_POST['ftp_login'] ) || !is_string( $_POST['ftp_login'] ) ) {
 			BadRequest::spawn( __( "missing parameter" ) );
 		}
 
-		// generate the username (must start with domain name)
-		$username = generate_slug( $domain->getDomainName() ) . '_' . $_POST[ 'ftp_login' ];
+		// generate the username - MUST start with domain name
+		$username = generate_slug( $domain->getDomainName() ) . '_' . $_POST['ftp_login'];
 		$username = luser_input( $username, 128 );
 
 		// validate username
 		if( !validate_mailbox_username( $username ) ) {
-			BadRequest::spawn( __( "invalid mailbox name" ) );
+			BadRequest::spawn( __( "invalid username" ) );
 		}
 
 		// check existence
@@ -103,24 +104,52 @@ if( is_action( 'ftp-save' ) ) {
 			BadRequest::spawn( __( "FTP account already existing" ) );
 		}
 
-		// generate a random password and die (probably the User will not see it because of the redirect)
-		$ftp_password      = generate_password();
-		$ftp_password_safe = FTP::encryptPassword( $ftp_password );
-
-		// insert as new row
-		insert_row( 'ftp', [
-			new DBCol( 'domain_ID',    $domain->getDomainID(), 'd' ),
-			new DBCol( 'ftp_login',    $username,              's' ),
-			new DBCol( 'ftp_password', $ftp_password_safe,         's' ),
-		] );
-
-		// POST/redirect/GET
-		http_redirect( FTP::permalink(
-			$domain->getDomainName(),
-			$username,
-			true
-		), 303 );
+		// save these fields
+		$data['domain_ID'] = $domain->getDomainID();
+		$data['ftp_login'] = $username;
+	} else {
+		$username = $ftp->getFTPLogin();
 	}
+
+	// no FTP directory no party
+	$ftp_directory = $_POST['ftp_directory'] ?? null;
+
+	// validate the FTP directory and save or die
+	try {
+		validate_subdirectory( $ftp_directory );
+	} catch( Exception $e ) {
+		error_log( $e->getMessage() );
+		BadRequest::spawn( sprintf(
+			__( "invalid Sub-Directory: %s" ),
+			$e->getMessage()
+		) );
+	}
+
+	// at this point the directory is safe
+	$data['ftp_directory'] = $ftp_directory ?? null;
+
+	// during creation generate a random password
+	if( !$ftp ) {
+		$ftp_password = generate_password();
+		$data['ftp_password'] = FTP::encryptPassword( $ftp_password );
+	}
+
+	// insert or update
+	if( $ftp ) {
+		( new FTPAPI() )
+			->whereFTP( $ftp )
+			->update( $data );
+	} else {
+		( new FTPAPI() )
+			->insertRow( $data );
+	}
+
+	// POST/redirect/GET
+	http_redirect( FTP::permalink(
+		$domain->getDomainName(),
+		$username,
+		true
+	), 303 );
 }
 
 // change password action

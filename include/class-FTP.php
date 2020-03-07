@@ -1,5 +1,5 @@
 <?php
-# Copyright (C) 2019 Valerio Bozzolan
+# Copyright (C) 2019, 2020 Valerio Bozzolan
 # Boz Libre Hosting Panel
 #
 # This program is free software: you can redistribute it and/or modify
@@ -41,6 +41,43 @@ trait FTPTrait {
 	 */
 	public function isFTPActive() {
 		return $this->get( 'ftp_active' );
+	}
+
+	/**
+	 * Get the sanitized raw directory
+	 *
+	 * This value is sanitized before saving but it can be a malicious string
+	 * if the database is overtaken so it's sanitized again.
+	 *
+	 * @return string
+	 */
+	public function getFTPRawDirectory() {
+
+		$path = $this->get( 'ftp_directory' );
+
+		// even if it was sanitized during creation, double-sanitize
+		// to protect against hacked databases
+		validate_subdirectory( $path );
+
+		return $path;
+	}
+
+	/**
+	 * Get the sanitized absolute FTP directory pathname
+	 *
+	 * @return string
+	 */
+	public function getFTPAbsoluteDirectory() {
+
+		// get the sanitized domain base path
+		$absolute_base = $this->getDomainBasePath();
+
+		// get the sanitized FTP raw directory
+		$relative_path = $this->getFTPRawDirectory();
+
+		// at this point the absolute realpath of the subdirectory is verified
+		// to do not contain '/../' or other crap
+		return $absolute_base . __ . $relative_path;
 	}
 
 	/**
@@ -144,5 +181,4 @@ class FTP extends Queried {
 		$salt = bin2hex( openssl_random_pseudo_bytes( 3 ) );
 		return '{SHA512-CRYPT}' . crypt( $password, "$6$$salt" );
 	}
-
 }
