@@ -1,5 +1,5 @@
 <?php
-# Copyright (C) 2018, 2019 Valerio Bozzolan
+# Copyright (C) 2018, 2019, 2020 Valerio Bozzolan
 # Reyboz another self-hosting panel project
 #
 # This program is free software: you can redistribute it and/or modify
@@ -198,4 +198,34 @@ function require_email( $email ) {
 		BadRequest::spawn( __( "fail e-mail validation" ) );
 	}
 	return $email;
+}
+
+/**
+ * Require a safe filename or throw an exception
+ *
+ * It returns that filename untouched.
+ *
+ * This method is designed to prevend known filesystem exploitations
+ * that may occurr if a database is compromised and with malicous
+ * data inside domain names, etc.
+ *
+ * Just don't try to register a domain name with a slash in the name.
+ *
+ * @param  string $filename
+ * @return string
+ */
+function require_safe_filename( $filename ) {
+
+	$bads = [ '/', '\\', '..' ];
+	foreach( $bads as $bad ) {
+		if( strpos( $filename, '/' ) !== false ) {
+			throw new Exception( sprintf(
+				"found '%s' in the string '%s': it cannot be considered a safe file/directory name",
+				$bad,
+				$filename
+			) );
+		}
+	}
+
+	return $filename;
 }

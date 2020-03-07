@@ -86,6 +86,26 @@ trait MailboxTrait {
 		$this->booleans( 'mailbox_receive' );
 	}
 
+	/**
+	 * Get the mailbox filesystem pathname
+	 *
+	 * TODO: actually all the mailbox are on the same host.
+	 * Then, we should support multiple hosts.
+	 *
+	 * @return string
+	 */
+	public function getMailboxPath() {
+
+		$domain_name  = $this->getDomainName();
+		$mailbox_user = $this->getMailboxUsername();
+
+		// require a valid filename or throw
+		require_safe_filename( $domain_name  );
+		require_safe_filename( $mailbox_user );
+
+		// mailboxes are stored under a $BASE/domain/username filesystem structure
+		return MAILBOX_BASE_PATH . __ . $domain_name . __ . $mailbox_user;
+	}
 }
 
 /**
