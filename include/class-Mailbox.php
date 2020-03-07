@@ -1,5 +1,5 @@
 <?php
-# Copyright (C) 2018, 2019 Valerio Bozzolan
+# Copyright (C) 2018, 2019, 2020 Valerio Bozzolan
 # Boz Libre Hosting Panel
 #
 # This program is free software: you can redistribute it and/or modify
@@ -87,7 +87,7 @@ trait MailboxTrait {
 	}
 
 	/**
-	 * Get the mailbox filesystem pathname
+	 * Get the mailbox filesystem pathname in the MTA host
 	 *
 	 * TODO: actually all the mailbox are on the same host.
 	 * Then, we should support multiple hosts.
@@ -96,15 +96,12 @@ trait MailboxTrait {
 	 */
 	public function getMailboxPath() {
 
-		$domain_name  = $this->getDomainName();
-		$mailbox_user = $this->getMailboxUsername();
-
 		// require a valid filename or throw
-		require_safe_filename( $domain_name  );
+		$mailbox_user = $this->getMailboxUsername();
 		require_safe_filename( $mailbox_user );
 
 		// mailboxes are stored under a $BASE/domain/username filesystem structure
-		return MAILBOX_BASE_PATH . __ . $domain_name . __ . $mailbox_user;
+		return $this->getDomainMailboxesPath() . __ . $mailbox_user;
 	}
 }
 
