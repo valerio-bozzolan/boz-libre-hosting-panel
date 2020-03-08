@@ -76,8 +76,8 @@ trait FTPTrait {
 		$relative_path = $this->getFTPRawDirectory();
 
 		// at this point the absolute realpath of the subdirectory is verified
-		// to do not contain '/../' or other crap
-		return $absolute_base . __ . $relative_path;
+		// to do not contain '/../' or other crap and can be appended
+		return append_dir( $absolute_base, $relative_path, __ );
 	}
 
 	/**
