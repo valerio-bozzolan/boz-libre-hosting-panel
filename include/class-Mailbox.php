@@ -98,7 +98,7 @@ trait MailboxTrait {
 
 		// require a valid filename or throw
 		$mailbox_user = $this->getMailboxUsername();
-		require_safe_filename( $mailbox_user );
+		require_safe_dirname( $mailbox_user );
 
 		// mailboxes are stored under a $BASE/domain/username filesystem structure
 		return $this->getDomainMailboxesPath() . __ . $mailbox_user;

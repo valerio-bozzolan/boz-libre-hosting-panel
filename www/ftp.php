@@ -112,7 +112,7 @@ if( is_action( 'ftp-save' ) ) {
 	}
 
 	// no FTP directory no party
-	$ftp_directory = $_POST['ftp_directory'] ?? null;
+	$ftp_directory = $_POST['ftp_directory'] ?? '';
 
 	// validate the FTP directory and save or die
 	try {

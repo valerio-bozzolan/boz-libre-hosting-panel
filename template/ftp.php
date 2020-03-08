@@ -58,10 +58,8 @@ defined( 'BOZ_PHP' ) or die;
 
 		<p>
 			<label for="ftp-directory"><?= __( "Sub-Directory:") ?></label><br />
-			<input type="text" id="ftp-directory" name="ftp_directory" placeholder="/"<?php
-				if( $ftp ) {
-					echo value( $ftp->getFTPRawDirectory() );
-				}
+			<input type="text" id="ftp-directory" name="ftp_directory" required="required"<?php
+				echo value( $ftp ? $ftp->getFTPRawDirectory() : '/' );
 			?> />
 		</p>
 		<p class="tip"><?= __( "Tip:" ) ?>

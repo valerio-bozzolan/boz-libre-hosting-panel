@@ -201,51 +201,59 @@ function require_email( $email ) {
 }
 
 /**
- * Require a safe filename or throw an exception
+ * Require a strictly safe file/directory name or throw an exception
  *
  * This method is designed to prevend known filesystem exploitations
- * that may occurr if a database is compromised and with malicous
- * data inside domain names, etc.
+ * that may also occurr if a database is compromised and with malicous
+ * data inside domain names, etc. This also removes a wide rang of valid
+ * characters in Unix but this way we reduce every possible risk in other
+ * operating systems.
  *
- * Just don't try to register a domain name with a slash in the name.
+ * Note that an empty directory is NOT a valid directory name so '///'
+ * is not valid even if it's a safe pathname resolution in Unix-like systems.
+ * This is because I don't like it. No other reasons.
  *
- * @param  string $filename
+ * @param string $dirname
  */
-function require_safe_filename( $filename ) {
-	$bads = [ '/', '\\', '..' ];
-	foreach( $bads as $bad ) {
-		if( strpos( $filename, $bad ) !== false ) {
-			throw new Exception( sprintf(
-				"found '%s' in the string '%s': it cannot be considered a safe file/directory name",
-				$bad,
-				$filename
-			) );
-		}
+function require_safe_dirname( $dirname ) {
+	if( !$dirname || $dirname === '.' || $dirname === '..' || !preg_match( '/^[a-zA-Z0-9-.]+$/', $dirname ) ) {
+		throw new Exception( sprintf(
+			"the directory name '%s' is weird for me",
+			$dirname
+		) );
 	}
 }
 
 /**
- * Check if a directory is under a subdirectory or throw
+ * Check if a pathname can be considered a valid sub-directory of something else
  *
- * @param string $sub_directory  Specific sub-directory or just '/'
+ * The pathname is valid if it starts with a slash.
+ * The pathname will be normalized after the validation.
+ *
+ * @param string $pathname Pathname to be validated like '/my-site/www'
  */
-function validate_subdirectory( $sub_directory ) {
+function validate_subdirectory( & $pathname ) {
 
-	// validate each part of this pathname
-	// note that '' and '/' are allowed and also '///' because
-	// Unix already accepts it and resolve '/base////suffix'
-	// It does NOT accept stuff like '/../../'
-	$parts = explode( '/', $sub_directory );
-	foreach( $parts as $part ) {
-		try {
-			require_safe_filename( $part );
-		} catch( Exception $e ) {
-			// give a meaningful exception
-			throw new Exception( sprintf(
-				"unable to sanitize '%s': %s",
-				$sub_directory,
-				$e->getMessage()
-			) );
+	// assure that the string starts with just a slash and does not end with slashes
+	$pathname = trim( $pathname, '/' );
+
+	// validate each directory (if any)
+	$directories = [];
+	if( $pathname ) {
+		$directories = explode( '/', $pathname );
+		foreach( $directories as $directory ) {
+			try {
+				require_safe_dirname( $directory );
+			} catch( Exception $e ) {
+				throw new Exception( sprintf(
+					"apologies but I do not like the pathname '%s': %s",
+					$pathname,
+					$e->getMessage()
+				) );
+			}
 		}
 	}
+
+	// merge all the directories
+	$pathname = '/' . implode( '/', $directories );
 }

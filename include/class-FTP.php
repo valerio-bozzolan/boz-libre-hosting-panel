@@ -49,11 +49,17 @@ trait FTPTrait {
 	 * This value is sanitized before saving but it can be a malicious string
 	 * if the database is overtaken so it's sanitized again.
 	 *
+	 * It always start with a filesystem directory separator.
+	 *
 	 * @return string
 	 */
 	public function getFTPRawDirectory() {
 
+		// return a default '/' if empty
 		$path = $this->get( 'ftp_directory' );
+		if( !$path ) {
+			return '/';
+		}
 
 		// even if it was sanitized during creation, double-sanitize
 		// to protect against hacked databases
@@ -75,9 +81,9 @@ trait FTPTrait {
 		// get the sanitized FTP raw directory
 		$relative_path = $this->getFTPRawDirectory();
 
-		// at this point the absolute realpath of the subdirectory is verified
-		// to do not contain '/../' or other crap and can be appended
-		return append_dir( $absolute_base, $relative_path, __ );
+		// at this point the absolute realpath does not end with a slash
+		// at this point the relative path always start with a slash
+		return $absolute_base . __ . $relative_path;
 	}
 
 	/**
