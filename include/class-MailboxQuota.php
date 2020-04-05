@@ -54,7 +54,7 @@ trait MailboxQuotaTrait {
 	/**
 	 * Normalize a MailboxQuota object after being retrieved from database
 	 */
-	protected static function normalizeMailboxQuota() {
+	protected function normalizeMailboxQuota() {
 		$this->integers(  'mailboxquota_bytes' );
 		$this->datetimes( 'mailboxquota_date' );
 	}
@@ -65,6 +65,8 @@ trait MailboxQuotaTrait {
  * Rappresentation of a Mailbox quota size
  */
 class MailboxQuota extends Queried {
+
+	use MailboxQuotaTrait;
 
 	/**
 	 * Table name

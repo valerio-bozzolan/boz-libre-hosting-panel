@@ -1,6 +1,6 @@
 <?php
-# Copyright (C) 2018, 2019 Valerio Bozzolan
-# Boz Libre Hosting Panel
+# Copyright (C) 2018, 2019, 2020 Valerio Bozzolan
+# KISS Libre Hosting Panel
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as
@@ -25,63 +25,6 @@ trait MailboxQuotaAPITrait {
 
 	use MailboxAPITrait;
 
-	/**
-	 * Limit to a specific mailbox
-	 *
-	 * @param  object $mailbox MailboxQuota
-	 * @return self
-	 */
-	public function whereMailboxQuota( $mailbox ) {
-		return $this->whereDomain( $mailbox )
-		            ->whereMaiboxUsername( $mailbox->getMailboxQuotaUsername() );
-	}
-
-	/**
-	 * Filter a specific MailboxQuota username
-	 *
-	 * @param  string $username MailboxQuota username (without domain name)
-	 * @return self
-	 */
-	public function whereMailboxQuotaUsername( $username ) {
-		return $this->whereStr( 'mailbox_username', $username );
-	}
-
-	/**
-	 * Where the MailboxQuota is Active (or not)
-	 *
-	 * @param  boolean $active If you want the active, or the inactive
-	 * @return self
-	 */
-	public function whereMailboxQuotaIsActive( $active = true ) {
-		return $this->whereInt( 'mailbox_active', $active );
-	}
-
-	/**
-	 * Join mailboxes and domain (once)
-	 *
-	 * @return self
-	 */
-	public function joinMailboxQuotaDomain() {
-		if( empty( $this->joinedMailboxQuotaDomain ) ) {
-			$this->from( 'domain' );
-			$this->equals( 'domain.domain_ID', 'mailbox.domain_ID' );
-
-			$this->joinedMailboxQuotaDomain = true;
-		}
-		return $this;
-	}
-
-	/**
-	 * Check if I can edit this mailbox
-	 *
-	 * Actually it just checks if you can edit the whole domain.
-	 *
-	 * @return boolean
-	 */
-	public function whereMailboxQuotaIsEditable() {
-		return $this->whereDomainIsEditable();
-	}
-
 }
 
 /**
@@ -92,16 +35,9 @@ class MailboxQuotaAPI extends Query {
 	use MailboxQuotaAPITrait;
 
 	/**
-	 * Univoque Domain ID column name
-	 *
-	 * Used by DomainAPITrait
+	 * Univoque column name to the Mailbox ID
 	 */
-	const DOMAIN_ID = 'mailbox.domain_ID';
-
-	/**
-	 * Univoque Plan ID column name
-	 */
-	const PLAN_ID = 'domain.plan_ID';
+	protected $MAILBOX_ID = 'mailboxquota.mailbox_ID';
 
 	/**
 	 * Constructor

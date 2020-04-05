@@ -1,5 +1,5 @@
 <?php
-# Copyright (C) 2018, 2019 Valerio Bozzolan
+# Copyright (C) 2018, 2019, 2020 Valerio Bozzolan
 # Boz Libre Hosting Panel
 #
 # This program is free software: you can redistribute it and/or modify
@@ -32,8 +32,17 @@ trait MailboxAPITrait {
 	 * @return self
 	 */
 	public function whereMailbox( $mailbox ) {
-		return $this->whereDomain( $mailbox )
-		            ->whereMailboxUsername( $mailbox->getMailboxUsername() );
+		return $this->whereMailboxID( $mailbox->getMailboxID() );
+	}
+
+	/**
+	 * Limit to a specific Mailbox ID
+	 *
+	 * @param  int  $id Mailbox ID
+	 * @return self
+	 */
+	public function whereMailboxID( $id ) {
+		return $this->whereInt( $this->MAILBOX_ID, $id );
 	}
 
 	/**
@@ -101,7 +110,12 @@ class MailboxAPI extends Query {
 	/**
 	 * Univoque Plan ID column name
 	 */
-	const PLAN_ID = 'domain.plan_ID';
+	protected $PLAN_ID = 'domain.plan_ID';
+
+	/**
+	 * Univoque column name to the Mailbox ID
+	 */
+	protected $MAILBOX_ID = 'mailbox.mailbox_ID';
 
 	/**
 	 * Constructor
