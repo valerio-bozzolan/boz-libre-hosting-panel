@@ -186,7 +186,8 @@ CREATE TABLE `aw34w3_mailboxquota` (
   `mailboxquota_date` datetime NOT NULL,
   `mailboxquota_bytes` int(10) unsigned NOT NULL,
   KEY `mailbox_ID` (`mailbox_ID`),
-  KEY `mailboxquota_date` (`mailboxquota_date`)
+  KEY `mailboxquota_date` (`mailboxquota_date`),
+  CONSTRAINT `aw34w3_mailboxquota_ibfk_1` FOREIGN KEY (`mailbox_ID`) REFERENCES `aw34w3_mailbox` (`mailbox_ID`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -400,4 +401,4 @@ CREATE TABLE `aw34w3_user` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-04-05 10:28:42
+-- Dump completed on 2020-04-05 10:44:44

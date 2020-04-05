@@ -23,6 +23,15 @@ trait MailboxTrait {
 	use DomainTrait;
 
 	/**
+	 * Get the Mailbox ID
+	 *
+	 * @return int
+	 */
+	public function getMailboxID() {
+		return $this->get( 'mailbox_ID' );
+	}
+
+	/**
 	 * Get the mailbox username
 	 *
 	 * @return string
@@ -83,6 +92,7 @@ trait MailboxTrait {
 	 */
 	protected function normalizeMailbox() {
 		$this->normalizeDomain();
+		$this->integers( 'mailbox_ID'      );
 		$this->booleans( 'mailbox_receive' );
 	}
 

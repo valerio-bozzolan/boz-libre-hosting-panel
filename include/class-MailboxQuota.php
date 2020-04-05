@@ -67,6 +67,11 @@ trait MailboxQuotaTrait {
 class MailboxQuota extends Queried {
 
 	/**
+	 * Table name
+	 */
+	const T = 'mailboxquota';
+
+	/**
 	 * Constructor
 	 */
 	public function __construct() {
