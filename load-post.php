@@ -15,6 +15,23 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+/**
+ * This is your versioned configuration file
+ *
+ * It does not contains secrets.
+ *
+ * This file is required after loading your
+ * unversioned configuration file:
+ *
+ *   load.php
+ */
+
+// database version
+//
+// you can increase your database version if you added some patches in:
+//   documentation/database/patches
+define( 'DATABASE_VERSION', 0 );
+
 // include path
 define_default( 'INCLUDE_PATH',  ABSPATH . __ . 'include' );
 
