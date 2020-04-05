@@ -146,6 +146,7 @@ template( 'mailbox', [
 	'mailbox'          => $mailbox,
 	'mailbox_password' => $mailbox_password,
 	'domain'           => $domain,
+	'plan'             => $plan,
 ] );
 
 // spawn the footer

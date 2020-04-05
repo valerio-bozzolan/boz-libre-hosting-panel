@@ -25,6 +25,32 @@ trait MailboxQuotaAPITrait {
 
 	use MailboxAPITrait;
 
+	/**
+	 * Select the MAX Mailbox quota date
+	 *
+	 * @return self
+	 */
+	public function selectMaxMailboxQuotaDate() {
+		return $this->select( 'MAX( mailboxquota_date ) AS max_mailboxquota_date' )
+		            ->groupBy(     'mailboxquota_date' );
+	}
+
+	/**
+	 * Assure that this is only the more updated Mailbox quota
+	 *
+	 * @return self
+	 */
+	public function whereMailboxQuotaIsLast() {
+
+		// subquery with a maximum constraint
+		$max = ( new MailboxQuotaAPI( null, false ) )
+			->fromCustom( DB::instance()->getTable( 'mailboxquota', 'mailboxquota_sub' ) )
+			->equals( 'mailboxquota.mailbox_ID', 'mailboxquota_sub.mailbox_ID' )
+			->selectMaxMailboxQuotaDate()
+			->getQuery();
+
+		return $this->where( sprintf( 'mailboxquota_date = (%s)', $max ) );
+	}
 }
 
 /**
@@ -41,14 +67,23 @@ class MailboxQuotaAPI extends Query {
 
 	/**
 	 * Constructor
+	 *
+	 * @param object $db   Database
+	 * @param mixed  $from Set to false to avoid to use the default FROM
 	 */
-	public function __construct( $db = null ) {
+	public function __construct( $db = null, $from = true ) {
 
 		// set database and class name
 		parent::__construct( $db, MailboxQuota::class );
 
-		// set database table
-		$this->from( MailboxQuota::T );
+		/**
+		 * Set database table (sometime the standard alias it's not useful)
+		 *
+		 * See MailboxQuotaAPI class.
+		 */
+		if( $from ) {
+			$this->from( MailboxQuota::T );
+		}
 	}
 
 }
