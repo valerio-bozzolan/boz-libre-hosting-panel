@@ -1,5 +1,5 @@
 <?php
-# Copyright (C) 2018 Valerio Bozzolan
+# Copyright (C) 2018, 2019, 2020 Valerio Bozzolan
 # Boz Libre Hosting Panel
 #
 # This program is free software: you can redistribute it and/or modify
@@ -66,7 +66,7 @@ define( 'GETTEXT_DIRECTORY', 'l10n' );
 define( 'GETTEXT_DEFAULT_ENCODE', CHARSET ); // UTF-8
 
 // common strings
-define_default( 'SITE_NAME', "Boz Libre Hosting Panel" );
+define_default( 'SITE_NAME', "KISS Libre Hosting Panel" );
 define_default( 'CONTACT_EMAIL', 'support@' . DOMAIN );
 define_default( 'REPO_URL', 'https://gitpull.it/project/profile/15/' );
 
