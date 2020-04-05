@@ -54,6 +54,9 @@ define_default( 'NET_SMTP', '/usr/share/php/Net/SMTP.php' );
 // TODO: support multiple hosts
 define_default( 'VIRTUALHOSTS_DIR', '/var/www' );
 
+// default currency simbol
+define_default( 'DEFAULT_CURRENCY_SYMBOL', '€' );
+
 // register JavaScript/CSS files
 register_js(  'jquery',     JQUERY_URL );
 register_js(  'bootstrap',  BOOTSTRAP_DIR_URL .  '/js/bootstrap.min.js'  );

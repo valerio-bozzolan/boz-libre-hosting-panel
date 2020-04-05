@@ -1,6 +1,6 @@
 <?php
-# Copyright (C) 2018, 2019 Valerio Bozzolan
-# Boz Libre Hosting Panel
+# Copyright (C) 2018, 2019, 2020 Valerio Bozzolan
+# KISS Libre Hosting Panel
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as
@@ -41,6 +41,15 @@ trait PlanTrait {
 		return $this->get( 'plan_name' );
 	}
 
+	/*
+	 * Get the plan UID
+	 *
+	 * @return string
+	 */
+	public function getPlanUID() {
+		return $this->get( 'plan_uid' );
+	}
+
 	/**
 	 * Get the number of FTP users of this Plan
 	 *
@@ -78,6 +87,15 @@ trait PlanTrait {
 	}
 
 	/**
+	 * Get the Plan yearly price
+	 *
+	 * @return float
+	 */
+	public function getPlanYearlyPrice() {
+		return $this->get( 'plan_yearlyprice' );
+	}
+
+	/**
 	 * Get the plan edit URl
 	 *
 	 * @param boolean $absolute True for an absolute URL
@@ -97,6 +115,9 @@ trait PlanTrait {
 			'plan_databases',
 			'plan_mailboxes',
 			'plan_mailforwards'
+		);
+		$this->floats(
+			'plan_yearlyprice'
 		);
 	}
 
@@ -125,12 +146,26 @@ class Plan extends Queried {
 	 * Get the plan permalink
 	 *
 	 * @param string  $plan_name Plan name
-	 * @param boolean $absolute    True for an absolute URL
+	 * @param boolean $absolute  True for an absolute URL
 	 */
 	public static function permalink( $plan_name = null, $absolute = false ) {
 		$url = 'plan.php';
 		if( $plan_name ) {
-			$url .= _ . $plan_name;
+			$url .= "/$plan_name";
+		}
+		return site_page( $url, $absolute );
+	}
+
+	/**
+	 * Get the Domain's Plan permalink
+	 *
+	 * @param string  $plan_name Plan name
+	 * @param boolean $absolute  True for an absolute URL
+	 */
+	public static function domainPermalink( $domain_name = null, $absolute = false ) {
+		$url = 'domain-plan.php';
+		if( $domain_name ) {
+			$url .= "/$domain_name";
 		}
 		return site_page( $url, $absolute );
 	}

@@ -1,6 +1,6 @@
 <?php
-# Copyright (C) 2018 Valerio Bozzolan
-# Boz Libre Hosting Panel
+# Copyright (C) 2019, 2020 Valerio Bozzolan
+# KISS Libre Hosting Panel
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as
@@ -16,33 +16,44 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 /*
- * This is the template for the website domain dashboard page
+ * This is the template to see/change the Domain Plan
  *
  * Called from:
  * 	domain.php
  *
  * Available variables:
- * 	$domain object Domain
- *  $plan   object Plan
+ * 	$domain Domain object
+ *      $plan   Plan object
  */
 
 // unuseful when load directly
 defined( 'BOZ_PHP' ) or die;
+?>
+	<h3><?php printf(
+		__( "Your %s" ),
+		__( "Plan" )
+	) ?></h3>
 
-// pass the same arguments to the sub-templates
-$args = [
-	'domain' => $domain,
-	'plan'   => $plan,
-];
+	<?php if( $plan->getPlanID() ): ?>
 
-// spawn the mailboxes list
-template( 'mailboxes', $args );
+		<!-- has plan -->
 
-// spawn the mail forwardings list
-template( 'mailforwards', $args );
+		<?= the_link(
+			$domain->getDomainPlanPermalink(),
+			$plan->getPlanName()
+		) ?>
 
-// spawn the ftp list
-template( 'ftp-users', $args );
+		<!-- end has plan -->
 
-// show some links to the plan
-template( 'domain-plan-section', $args );
+	<?php else: ?>
+
+		<!-- does not have plan -->
+
+		<?php the_link(
+			$domain->getDomainPlanPermalink(),
+			__( "Assign" )
+		) ?>
+
+		<!-- end does not have plan -->
+
+	<?php endif ?>

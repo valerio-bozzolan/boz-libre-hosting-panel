@@ -1,5 +1,5 @@
 <?php
-# Copyright (C) 2018, 2019 Valerio Bozzolan
+# Copyright (C) 2018, 2019, 2020 Valerio Bozzolan
 # Boz Libre Hosting Panel
 #
 # This program is free software: you can redistribute it and/or modify
@@ -23,21 +23,21 @@ trait PlanAPITrait {
 	/**
 	 * Limit to a specific Plan by its UID
 	 *
-	 * @param $plan_name string
+	 * @param  string $uid Plan UID
 	 * @return self
 	 */
 	public function wherePlanUID( $uid ) {
-		return $this->whereStr( 'plan_uid', $plan_uid );
+		return $this->whereStr( 'plan_uid', $uid );
 	}
 
 	/**
 	 * Constructor from a plan ID
 	 *
-	 * @param $plan_ID int
+	 * @param  int $id Plan ID
 	 * @return self
 	 */
-	public function wherePlanID( $plan_ID ) {
-		return $this->whereInt( static::PLAN_ID, $plan_ID );
+	public function wherePlanID( $id ) {
+		return $this->whereInt( $this->PLAN_ID, $id );
 	}
 
 	/**
@@ -67,7 +67,7 @@ trait PlanAPITrait {
 	 * @return self
 	 */
 	public function joinPlan( $type = 'INNER' ) {
-		return $this->joinOn( $type, 'plan', static::PLAN_ID, 'plan.plan_ID' );
+		return $this->joinOn( $type, 'plan', $this->PLAN_ID, 'plan.plan_ID' );
 	}
 
 }
@@ -82,7 +82,7 @@ class PlanAPI extends Query {
 	/**
 	 * Plan ID column name
 	 */
-	const PLAN_ID = 'plan.plan_ID';
+	protected $PLAN_ID = 'plan.plan_ID';
 
 	/**
 	 * Constructor

@@ -142,7 +142,7 @@ class DomainAPI extends Query {
 	/**
 	 * Univoque Plan ID column name
 	 */
-	const PLAN_ID = 'domain.plan_ID';
+	protected $PLAN_ID = 'domain.plan_ID';
 
 	/**
 	 * Constructor

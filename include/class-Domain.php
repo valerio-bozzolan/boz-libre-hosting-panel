@@ -80,13 +80,23 @@ trait DomainTrait {
 	}
 
 	/**
-	 * Get the domain edit URl
+	 * Get the domain edit URL
 	 *
 	 * @param boolean $absolute True for an absolute URL
 	 * @return string
 	 */
 	public function getDomainPermalink( $absolute = false ) {
-		return Domain::permalink( $this->get( 'domain_name' ), $absolute );
+		return Domain::permalink( $this->getDomainName(), $absolute );
+	}
+
+	/**
+	 * Get the permalink to the edit plan page
+	 *
+	 * @param  boolean $absolute True for an absolute URL
+	 * @return string
+	 */
+	public function getDomainPlanPermalink( $absolute = false ) {
+		return Plan::domainPermalink( $this->getDomainName(), $absolute );
 	}
 
 	/**
