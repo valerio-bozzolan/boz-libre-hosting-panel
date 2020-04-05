@@ -1,8 +1,8 @@
-# Boz's Libre Hosting Panel
+# KISS Libre Hosting Panel
 
-Welcome in an actively developed hosting panel designed for GNU/Linux operating systems. This is another _keep it simple and stupid_ libre web hosting control panel, that can be useful to serve everyday shared hosting services.
+Welcome in an actively developed keep-it-simple-and-stupid hosting panel designed for GNU/Linux operating systems. This software can be useful to serve everyday shared hosting services.
 
-This panel is designed to **respect the freedom** of the users. It works **without proprietary JavaScript**. To be honest, without **any line of JavaScript** in any form.
+This panel is designed to **respect the freedom** of its users. It works **without proprietary JavaScript**. To be honest, without **any line of JavaScript** in any form.
 
 This panel is designed to work without **any external dependency** not written by me. This allow fine-grained control over the software. It integrates with well-known and ultra-secure software packaged inside every GNU/Linux distribution in the world and used by millions of devices.
 
@@ -26,7 +26,7 @@ Papers:
 * RFC 7489 - Domain-based Message Authentication, Reporting, and Conformance (DMARC)
 
 Software involved:
-* Debian GNU/Linux stable
+* Debian GNU/Linux stable (currently buster)
 * MariaDB / MySQL
 * Postfix
 * Dovecot
@@ -67,6 +67,17 @@ Let me say that I love listening to the whishlist of my costumers. Here are the 
 	- [X] limit number of mailboxes per domain
 	- [X] limit number of mail forwardings
 
+## Why PHP7
+
+This project is writted in PHP7 because:
+
+* Node.js is not an hypertext preprocessor
+* Python is not an hypertext preprocessor
+* Ruby is not an hypertext preprocessor
+* Java is not an hypertext preprocessor. Well, Java JSP is an hypertext preprocessor but it's footprint is heavy as hell
+
+This PHP7 application is stateless. Does not have sessions. It's well-designed. It scales. It has a minimal memory footprint. If you do not like it, you are free to implement such project with your favorite programming language, with your 200MB of dependencies and crap.
+
 ## Report a bug
 
 https://gitpull.it/project/board/15/
@@ -77,7 +88,7 @@ https://gitpull.it/project/board/15/
 
 ## License
 
-Copyright (C) 2018, 2019, 2020 [Valerio Bozzolan](https://boz.reyboz.it/) - _Boz Libre Hosting Panel_
+Copyright (C) 2018, 2019, 2020 [Valerio Bozzolan](https://boz.reyboz.it/) - _KISS Libre Hosting Panel_
 
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
