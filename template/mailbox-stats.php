@@ -29,26 +29,23 @@
 // avoid to be load directly
 defined( 'BOZ_PHP' ) or die;
 
-// calculate the quota
-$quota = ( new MailboxSizeAPI() )
-	->select( 'mailboxsize_bytes' )
-	->whereMailbox( $mailbox )
-	->whereMailboxSizeIsLast()
-	->queryRow();
 ?>
 
 	<h3><?= esc_html( __( "Stats" ) ) ?></h3>
 
-	<?php if( $quota ): ?>
+	<?php if( $mailbox->getMailboxLastSizeBytes() !== null ): ?>
 
 		<table class="table table-bordered table-responsive">
 			<tr>
 				<th><?= esc_html( __( "Size" ) ) ?></th>
-				<td><?= $quota->getMailboxSizeHumanSize() ?></td>
+				<td><?= human_filesize( $mailbox->getMailboxLastSizeBytes() ) ?></td>
 			</tr>
 		<table>
 
-		<!-- TODO: show Plan Max Size -->
+		<!--
+			TODO: show Plan max size
+			https://gitpull.it/T285
+		-->
 
 	<?php else: ?>
 

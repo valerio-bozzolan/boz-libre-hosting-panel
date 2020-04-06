@@ -30,7 +30,7 @@
 //
 // you can increase your database version if you added some patches in:
 //   documentation/database/patches
-define( 'DATABASE_VERSION', 1 );
+define( 'DATABASE_VERSION', 2 );
 
 // include path
 define_default( 'INCLUDE_PATH',  ABSPATH . __ . 'include' );

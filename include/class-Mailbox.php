@@ -88,11 +88,21 @@ trait MailboxTrait {
 	}
 
 	/**
+	 * Get the last size in bytes
+	 *
+	 * @return int
+	 */
+	public function getMailboxLastSizeBytes() {
+		return $this->get( 'mailbox_lastsizebytes' );
+	}
+
+	/**
 	 * Normalize a Mailbox after being fetched from database
 	 */
 	protected function normalizeMailbox() {
 		$this->normalizeDomain();
-		$this->integers( 'mailbox_ID'      );
+		$this->integers( 'mailbox_ID',
+		                 'mailbox_lastsizebytes' );
 		$this->booleans( 'mailbox_receive' );
 	}
 

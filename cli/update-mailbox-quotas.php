@@ -21,6 +21,7 @@ require __DIR__ . '/../load.php';
 /**
  * Script to update Mailbox quotas
  *
+ * See https://gitpull.it/T101
  */
 
 // get every active domain
@@ -71,19 +72,26 @@ foreach( $domains as $domain ) {
 		$expected_path = MAILBOX_BASE_PATH . __ . $domain_name . __ . $mailbox_username;
 		if( file_exists( $expected_path ) ) {
 			$bytes_raw = exec( sprintf(
-				"du --summarize -- %s | cut -f1",
+				'du --summarize -- %s | cut -f1',
 				escapeshellarg( $expected_path )
 			) );
 
 			$bytes = (int) $bytes_raw;
 		}
 
-		// store the value
+		// store the value in the history
 		( new MailboxSizeAPI() )
 			->insertRow( [
 				'mailbox_ID'        => $mailbox->getMailboxID(),
 				'mailboxsize_bytes' => $bytes,
 				new DBCol( 'mailboxsize_date', 'NOW()', '-' ),
+			] );
+
+		// update the denormalized latest Mailbox data
+		( new MailboxAPI() )
+			->whereMailbox( $mailbox )
+			->update( [
+				'mailbox_lastsizebytes' => $bytes,
 			] );
 	}
 
