@@ -52,9 +52,6 @@ $patch_directory = "$documentation_path/patches";
 // execute a random query just to check if we have a database connection
 query( 'SELECT 1' );
 
-// get the database prefix
-$database_prefix = DB::instance()->getPrefix();
-
 // try to check if the database exists
 $database_exists = true;
 try {
