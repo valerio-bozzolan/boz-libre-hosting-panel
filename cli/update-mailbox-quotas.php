@@ -70,7 +70,7 @@ foreach( $domains as $domain ) {
 		$bytes = 0;
 		$expected_path = MAILBOX_BASE_PATH . __ . $domain_name . __ . $mailbox_username;
 		if( file_exists( $expected_path ) ) {
-			$bytes_raw = system( sprintf(
+			$bytes_raw = exec( sprintf(
 				"du --summarize -- %s | cut -f1",
 				escapeshellarg( $expected_path )
 			) );
@@ -81,7 +81,7 @@ foreach( $domains as $domain ) {
 		// store the value
 		( new MailboxSizeAPI() )
 			->insertRow( [
-				'mailbox_ID'         => $mailbox->getMailboxID(),
+				'mailbox_ID'        => $mailbox->getMailboxID(),
 				'mailboxsize_bytes' => $bytes,
 				new DBCol( 'mailboxsize_date', 'NOW()', '-' ),
 			] );
