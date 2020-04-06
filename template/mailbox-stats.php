@@ -40,7 +40,7 @@ defined( 'BOZ_PHP' ) or die;
 				<th><?= esc_html( __( "Size" ) ) ?></th>
 				<td><?= human_filesize( $mailbox->getMailboxLastSizeBytes() ) ?></td>
 			</tr>
-		<table>
+		</table>
 
 		<!--
 			TODO: show Plan max size
