@@ -88,26 +88,30 @@ while( $current_database_version < DATABASE_VERSION ) {
 
 	$current_database_version++;
 
+	// note that the patch name can have a name such as 0001-foo.sql
 	$patch_name = sprintf(
-		'patch-%04d.sql',
+		'patch-%04d-*.sql',
 		$current_database_version
 	);
 
 	// path to the expected patch
 	$patch_path = "$patch_directory/$patch_name";
 
-	echo "looking for patch $patch_path\n";
-
 	// check if there is a database patch to be applied
-	if( file_exists( $patch_path ) ) {
-		execute_queries_from_file( $patch_path );
-	} else {
+	echo "looking for patch $patch_path\n";
+	$found = false;
+	foreach( glob( $patch_path ) as $filename ) {
+		execute_queries_from_file( $filename );
+		$found = true;
+	}
+
+	// actually the unexistence of a patch is good
+	if( !$found ) {
 		echo "\t skipped unexisting patch\n";
 	}
 
-	echo "\t increment database version to $current_database_version\n";
-
 	// update the database version
+	echo "\t increment database version to $current_database_version\n";
 	set_option( 'database_version', $current_database_version );
 }
 
