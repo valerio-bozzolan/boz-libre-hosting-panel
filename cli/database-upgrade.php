@@ -77,7 +77,7 @@ if( !$database_exists ) {
 }
 
 // get the current database version
-$current_database_version = get_option( 'database_version', 1 );
+$current_database_version = get_option( 'database_version', 0 );
 
 // notify about the current status
 printf( "current database version: %d\n", $current_database_version );
