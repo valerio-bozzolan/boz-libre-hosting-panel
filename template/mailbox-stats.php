@@ -30,10 +30,10 @@
 defined( 'BOZ_PHP' ) or die;
 
 // calculate the quota
-$quota = ( new MailboxQuotaAPI() )
-	->select( 'mailboxquota_bytes' )
+$quota = ( new MailboxSizeAPI() )
+	->select( 'mailboxsize_bytes' )
 	->whereMailbox( $mailbox )
-	->whereMailboxQuotaIsLast()
+	->whereMailboxSizeIsLast()
 	->queryRow();
 ?>
 
@@ -44,7 +44,7 @@ $quota = ( new MailboxQuotaAPI() )
 		<table class="table table-bordered table-responsive">
 			<tr>
 				<th><?= esc_html( __( "Size" ) ) ?></th>
-				<td><?= $quota->getMailboxQuotaHumanSize() ?></td>
+				<td><?= $quota->getMailboxSizeHumanSize() ?></td>
 			</tr>
 		<table>
 

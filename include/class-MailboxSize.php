@@ -1,6 +1,6 @@
 <?php
-# Copyright (C) 2018, 2019 Valerio Bozzolan
-# Boz Libre Hosting Panel
+# Copyright (C) 2018, 2019, 2020 Valerio Bozzolan
+# KISS Libre Hosting Panel
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as
@@ -19,17 +19,17 @@
 class_exists( 'Mailbox' );
 
 /**
- * Methods for a MailboxQuota class
+ * Methods for a MailboxSize class
  */
-trait MailboxQuotaTrait {
+trait MailboxSizeTrait {
 
 	/**
 	 * Get the Mailbox quota date
 	 *
 	 * @return DateTime
 	 */
-	public function getMailboxQuotaDate() {
-		return $this->get( 'mailboxquota_date' );
+	public function getMailboxSizeDate() {
+		return $this->get( 'mailboxsize_date' );
 	}
 
 	/**
@@ -37,8 +37,8 @@ trait MailboxQuotaTrait {
 	 *
 	 * @return int
 	 */
-	public function getMailboxQuotaBytes() {
-		return $this->get( 'mailboxquota_bytes' );
+	public function getMailboxSizeBytes() {
+		return $this->get( 'mailboxsize_bytes' );
 	}
 
 	/**
@@ -46,17 +46,17 @@ trait MailboxQuotaTrait {
 	 *
 	 * @return string
 	 */
-	public function getMailboxQuotaHumanSize() {
-		$size = $this->getMailboxQuotaBytes();
+	public function getMailboxSizeHumanSize() {
+		$size = $this->getMailboxSizeBytes();
 		return human_filesize( $size );
 	}
 
 	/**
-	 * Normalize a MailboxQuota object after being retrieved from database
+	 * Normalize a MailboxSize object after being retrieved from database
 	 */
-	protected function normalizeMailboxQuota() {
-		$this->integers(  'mailboxquota_bytes' );
-		$this->datetimes( 'mailboxquota_date' );
+	protected function normalizeMailboxSize() {
+		$this->integers(  'mailboxsize_bytes' );
+		$this->datetimes( 'mailboxsize_date' );
 	}
 
 }
@@ -64,20 +64,20 @@ trait MailboxQuotaTrait {
 /**
  * Rappresentation of a Mailbox quota size
  */
-class MailboxQuota extends Queried {
+class MailboxSize extends Queried {
 
-	use MailboxQuotaTrait;
+	use MailboxSizeTrait;
 
 	/**
 	 * Table name
 	 */
-	const T = 'mailboxquota';
+	const T = 'mailboxsize';
 
 	/**
 	 * Constructor
 	 */
 	public function __construct() {
-		$this->normalizeMailboxQuota();
+		$this->normalizeMailboxSize();
 	}
 
 }

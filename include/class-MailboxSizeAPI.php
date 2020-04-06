@@ -19,9 +19,9 @@
 class_exists( 'MailboxAPI' );
 
 /**
- * Methods for a MailboxQuotaAPI class
+ * Methods for a MailboxSizeAPI class
  */
-trait MailboxQuotaAPITrait {
+trait MailboxSizeAPITrait {
 
 	use MailboxAPITrait;
 
@@ -30,9 +30,9 @@ trait MailboxQuotaAPITrait {
 	 *
 	 * @return self
 	 */
-	public function selectMaxMailboxQuotaDate() {
-		return $this->select( 'MAX( mailboxquota_date ) AS max_mailboxquota_date' )
-		            ->groupBy(     'mailboxquota_date' );
+	public function selectMaxMailboxSizeDate() {
+		return $this->select( 'MAX( mailboxsize_date ) AS max_mailboxsize_date' )
+		            ->groupBy(     'mailboxsize_date' );
 	}
 
 	/**
@@ -40,30 +40,30 @@ trait MailboxQuotaAPITrait {
 	 *
 	 * @return self
 	 */
-	public function whereMailboxQuotaIsLast() {
+	public function whereMailboxSizeIsLast() {
 
 		// subquery with a maximum constraint
-		$max = ( new MailboxQuotaAPI( null, false ) )
-			->fromCustom( DB::instance()->getTable( 'mailboxquota', 'mailboxquota_sub' ) )
-			->equals( 'mailboxquota.mailbox_ID', 'mailboxquota_sub.mailbox_ID' )
-			->selectMaxMailboxQuotaDate()
+		$max = ( new MailboxSizeAPI( null, false ) )
+			->fromCustom( DB::instance()->getTable( 'mailboxsize', 'mailboxsize_sub' ) )
+			->equals( 'mailboxsize.mailbox_ID', 'mailboxsize_sub.mailbox_ID' )
+			->selectMaxMailboxSizeDate()
 			->getQuery();
 
-		return $this->where( sprintf( 'mailboxquota_date = (%s)', $max ) );
+		return $this->where( sprintf( 'mailboxsize_date = (%s)', $max ) );
 	}
 }
 
 /**
- * MailboxQuota API
+ * MailboxSize API
  */
-class MailboxQuotaAPI extends Query {
+class MailboxSizeAPI extends Query {
 
-	use MailboxQuotaAPITrait;
+	use MailboxSizeAPITrait;
 
 	/**
 	 * Univoque column name to the Mailbox ID
 	 */
-	protected $MAILBOX_ID = 'mailboxquota.mailbox_ID';
+	protected $MAILBOX_ID = 'mailboxsize.mailbox_ID';
 
 	/**
 	 * Constructor
@@ -74,15 +74,15 @@ class MailboxQuotaAPI extends Query {
 	public function __construct( $db = null, $from = true ) {
 
 		// set database and class name
-		parent::__construct( $db, MailboxQuota::class );
+		parent::__construct( $db, MailboxSize::class );
 
 		/**
 		 * Set database table (sometime the standard alias it's not useful)
 		 *
-		 * See MailboxQuotaAPI class.
+		 * See MailboxSizeAPI class.
 		 */
 		if( $from ) {
-			$this->from( MailboxQuota::T );
+			$this->from( MailboxSize::T );
 		}
 	}
 

@@ -1,7 +1,7 @@
 #!/usr/bin/php
 <?php
-# Copyright (C) 2019 Valerio Bozzolan
-# Boz Libre Hosting Panel
+# Copyright (C) 2019, 2020 Valerio Bozzolan
+# KISS Libre Hosting Panel
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as
@@ -66,8 +66,8 @@ foreach( $domains as $domain ) {
 			continue;
 		}
 
+		// calculate the quota size
 		$bytes = 0;
-
 		$expected_path = MAILBOX_BASE_PATH . __ . $domain_name . __ . $mailbox_username;
 		if( file_exists( $expected_path ) ) {
 			$bytes_raw = system( sprintf(
@@ -78,11 +78,12 @@ foreach( $domains as $domain ) {
 			$bytes = (int) $bytes_raw;
 		}
 
-		( new MailboxQuotaAPI() )
+		// store the value
+		( new MailboxSizeAPI() )
 			->insertRow( [
 				'mailbox_ID'         => $mailbox->getMailboxID(),
-				'mailboxquota_bytes' => $bytes,
-				new DBCol( 'mailboxquota_date', 'NOW()', '-' ),
+				'mailboxsize_bytes' => $bytes,
+				new DBCol( 'mailboxsize_date', 'NOW()', '-' ),
 			] );
 	}
 
