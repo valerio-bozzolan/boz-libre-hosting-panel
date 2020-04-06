@@ -32,7 +32,7 @@ trait MailboxSizeAPITrait {
 	 */
 	public function selectMaxMailboxSizeDate() {
 		return $this->select( 'MAX( mailboxsize_date ) AS max_mailboxsize_date' )
-		            ->groupBy(     'mailboxsize_date' );
+		            ->groupBy( 'mailbox_ID' );
 	}
 
 	/**
