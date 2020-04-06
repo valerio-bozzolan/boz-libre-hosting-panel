@@ -45,18 +45,15 @@ defined( 'BOZ_PHP' ) or die;
 	] ) ?>
 	<!-- end stats -->
 
-	<!-- resources -->
+	<!-- start documentation -->
 	<?php if( $mailbox ): ?>
-		<h3><?= __( "Resources" ) ?></h3>
-		<ul>
-			<li>
-				<a href="https://mail.reyboz.it?email=<?= urlencode( $mailbox->getMailboxAddress() ) ?>" target="_blank" />
-					<?= __( "How to setup your IMAP/SMTP client" ) ?>
-				</a>
-			</li>
-		</ul>
+
+		<?php template( 'mailbox-documentation', [
+			'mailbox' => $mailbox,
+		] ) ?>
+
 	<?php endif ?>
-	<!-- /resources -->
+	<!-- end documentation -->
 
 	<?php if( $mailbox ): ?>
 		<h3><?= __( "Actions" ) ?></h3>
