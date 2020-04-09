@@ -39,10 +39,12 @@ defined( 'BOZ_PHP' ) or die;
 	<!-- end description -->
 
 	<!-- start stats -->
-	<?php template( 'mailbox-stats', [
-		'mailbox' => $mailbox,
-		'plan'    => $plan,
-	] ) ?>
+	<?php if( $mailbox ): ?>
+		<?php template( 'mailbox-stats', [
+			'mailbox' => $mailbox,
+			'plan'    => $plan,
+		] ) ?>
+	<?php endif ?>
 	<!-- end stats -->
 
 	<!-- start documentation -->
