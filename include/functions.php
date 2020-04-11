@@ -18,6 +18,8 @@
 /**
  * Require a certain page from the template directory
  *
+ * It will eventually echo something.
+ *
  * @param $name string page name (to be sanitized)
  * @param $args mixed arguments to be passed to the page scope
  */
@@ -27,12 +29,14 @@ function template( $template_name, $template_args = [] ) {
 }
 
 /**
- * Get the returned text from a template
+ * Get the template output
+ *
+ * It will echo nothing.
  *
  * @param $name string page name (to be sanitized)
  * @param $args mixed arguments to be passed to the page scope
  * @see template()
- * @return string
+ * @return string The template output
  */
 function template_content( $name, $args = [] ) {
 	ob_start();
