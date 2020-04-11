@@ -72,7 +72,7 @@ foreach( $domains as $domain ) {
 		$expected_path = MAILBOX_BASE_PATH . __ . $domain_name . __ . $mailbox_username;
 		if( file_exists( $expected_path ) ) {
 			$bytes_raw = exec( sprintf(
-				'du --summarize -- %s | cut -f1',
+				'du --summarize --bytes -- %s | cut -f1',
 				escapeshellarg( $expected_path )
 			) );
 
