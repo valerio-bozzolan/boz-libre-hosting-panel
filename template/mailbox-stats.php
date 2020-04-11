@@ -38,7 +38,7 @@ if( $plan ) {
 	);
 
 	if( $remaining_quota_percentage ) {
-		$remaining_quota_percentage -= 100;
+		$remaining_quota_percentage = 100 - $remaining_quota_percentage;
 	}
 }
 ?>
