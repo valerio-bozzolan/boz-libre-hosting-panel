@@ -185,11 +185,12 @@ class Plan extends Queried {
 	 *
 	 * It's always between 0 and 100, or NULL if cannot be calculated.
 	 *
-	 * @param $current int  Current amount
-	 * @param $max     int  Maximum amount
+	 * @param $current  int   Current amount
+	 * @param $max      int   Maximum amount
+	 * @param $overflow bool  Set to TRUE to allow to go over 100%
 	 * @return         mixed Percentage or NULL
 	 */
-	public static function percentage( $current, $max ) {
+	public static function percentage( $current, $max, $overflow = false ) {
 
 		// no args no party
 		if( !$current || !$max ) {
@@ -201,10 +202,11 @@ class Plan extends Queried {
 			return 0;
 		}
 
+		// calculate the percentage
 		$percentage = $current * 100 / $max;
 
-		// cannot be too much
-		if( $percentage > 100 ) {
+		// you may don't want to go over 100%
+		if( $percentage > 100 && !$overflow ) {
 			return 100;
 		}
 

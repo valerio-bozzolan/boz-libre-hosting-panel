@@ -18,19 +18,53 @@
 
 require __DIR__ . '/../load.php';
 
+// parse some command line options
+$options = getopt( 'h', [
+	'help',
+	'print',
+	'no-save',
+] );
+
+// check if we have to show the help message
+$SHOW_HELP = isset( $options['h'] ) || isset( $options['help'] );
+
+// check if we have to alert the sysadmin (as deafult, no)
+$PRINT = isset( $options['print'] );
+
+// check if we have to save
+$SAVE = !isset( $options['no-save'] );
+
+// eventually print an help
+if( $SHOW_HELP ) {
+	echo "Usage: \n";
+	echo "  {$argv[0]} [OPTIONS]\n\n";
+	echo "OPTIONS:\n";
+	echo "  --print                Print the overquota e-mail addresses\n\n";
+	echo "  --no-save              Do not save any mailbox quota.\n";
+	echo "                         Maybe because you just want to alert the sysadmin.\n";
+	echo "                         As default the quotas will be saved in the database.\n\n";
+	echo "  -h --help              Show this help and quit\n";
+	exit( 0 );
+}
+
+// remember the overquota addresses
+$overquota = [];
+
 /**
  * Script to update Mailbox quotas
  *
  * See https://gitpull.it/T101
  */
 
-// get every active domain
+// query every active Domain plus their Plan (if any)
 $domains = ( new DomainAPI() )
 	->select( [
 		'domain.domain_ID',
 		'domain_name',
+		'plan_mailboxquota',
 	] )
 	->whereDomainIsActive()
+	->joinPlan( 'LEFT' )
 	->queryGenerator();
 
 // for each active domain
@@ -54,7 +88,10 @@ foreach( $domains as $domain ) {
 		->whereMailboxIsActive()
 		->queryGenerator();
 
-	query( 'START TRANSACTION' );
+	// eventually start a transaction for the Domain quotas
+	if( $SAVE ) {
+		query( 'START TRANSACTION' );
+	}
 
 	// for each mailboxes
 	foreach( $mailboxes as $mailbox ) {
@@ -79,22 +116,64 @@ foreach( $domains as $domain ) {
 			$bytes = (int) $bytes_raw;
 		}
 
-		// store the value in the history
-		( new MailboxSizeAPI() )
-			->insertRow( [
-				'mailbox_ID'        => $mailbox->getMailboxID(),
-				'mailboxsize_bytes' => $bytes,
-				new DBCol( 'mailboxsize_date', 'NOW()', '-' ),
-			] );
+		// check if the Mailbox is overquota
+		if( $domain->getPlanMailboxQuota() && $bytes > $domain->getPlanMailboxQuota() ) {
 
-		// update the denormalized latest Mailbox data
-		( new MailboxAPI() )
-			->whereMailbox( $mailbox )
-			->update( [
-				'mailbox_lastsizebytes' => $bytes,
-			] );
+			// eventually create a message for the sysadmin
+			if( $PRINT ) {
+
+				// allow to customize this message
+				$msg = template_content( 'single-mailbox-overquota', [
+					'mailbox' => $mailbox,
+					'domain'  => $domain,
+					'plan'    => $domain,
+					'size'    => $bytes,
+				] );
+
+				// store these short and unique messages with their size to allow sort
+				$overquota[ $msg ] = $bytes;
+			}
+		}
+
+		// check if we have to save the current quota somewhere
+		if( $SAVE ) {
+
+			// store the value in the history
+			( new MailboxSizeAPI() )
+				->insertRow( [
+					'mailbox_ID'        => $mailbox->getMailboxID(),
+					'mailboxsize_bytes' => $bytes,
+					new DBCol( 'mailboxsize_date', 'NOW()', '-' ),
+				] );
+
+			// update the denormalized latest Mailbox data
+			( new MailboxAPI() )
+				->whereMailbox( $mailbox )
+				->update( [
+					'mailbox_lastsizebytes' => $bytes,
+				] );
+
+		}
 	}
 
+	// eventually commit the Domain quotas
+	if( $SAVE ) {
+		query( 'COMMIT' );
+	}
+}
 
-	query( 'COMMIT' );
+if( $PRINT ) {
+
+	// sort the overquota messages by their size
+	uasort( $overquota, function( $a, $b ) {
+	    return $b - $a;
+	} );
+
+	// now just take the messages
+	$overquota = array_keys( $overquota );
+
+	// allow to customize the way the email is sent
+	template( 'mailbox-overquotas', [
+		'problematic_list' => $overquota,
+	] );
 }
