@@ -1,0 +1,223 @@
+# http://www.postfix.org/postconf.5.html
+# See /usr/share/postfix/main.cf.dist for a commented, more complete version
+
+#####################################################################
+# This Postfix configuration was provided from the KISS Hosting Panel
+#
+# Project homepage:
+#   https://gitpull.it/project/profile/15/
+#
+# Happy hacking!
+#
+# -- Valerio Bozzolan - Thu 10 Apr 2016 03:34:07 AM CEST
+####################################################################
+
+# The domain name that locally-posted mail appears to come from, and that
+# locally posted mail is delivered to. The default, $myhostname, is adequate
+# for small sites.
+# If you run a domain with multiple machines, you should
+#  (1) change this to $mydomain and
+#  (2) set up a domain-wide alias database that aliases each user to
+#      user@that.users.mailhost. 
+myorigin = /etc/mailname
+
+# The internet hostname of this mail system.
+# The default is to use the fully-qualified domain name (FQDN) from gethostname(),
+# or to use the non-FQDN result from gethostname() and append ".$mydomain".
+# $myhostname is used as a default value for many other configuration parameters. 
+myhostname = {$YOUR_HOSTNAME}
+
+# The internet hostname of this mail system.
+# The default is to use the fully-qualified domain name (FQDN) from gethostname(),
+# or to use the non-FQDN result from gethostname() and append ".$mydomain".
+# $myhostname is used as a default value for many other configuration parameters. 
+mydomain = {$YOUR_DOMAIN}
+
+# The list of domains that are delivered via the $local_transport mail delivery
+# transport.
+# By default this is the Postfix local(8) delivery agent which looks up all
+# recipients in /etc/passwd and /etc/aliases.
+# The SMTP server validates recipient addresses with $local_recipient_maps and rejects non-existent recipients.
+# See also the local domain class in the ADDRESS_CLASS_README file.
+# The default mydestination value specifies names for the local machine only.
+# On a mail domain gateway, you should also include $mydomain.
+# The $local_transport delivery method is also selected for mail addressed to user@[the.net.work.address]
+# of the mail system (the IP addresses specified with the inet_interfaces and proxy_interfaces parameters). 
+mydestination = localhost
+mynetworks =
+	127.0.0.0/8
+	[::ffff:127.0.0.0]/104
+	[::1]/128
+	localhost
+	{$YOUR_PUBLIC_IP_ADDRESSES}
+
+# appending .domain is the MUA's job.
+append_dot_mydomain = no
+
+# Uncomment the next line to generate "delayed mail" warnings
+#delay_warning_time = 4h
+
+# TLS parameters for the server
+smtpd_tls_security_level = may
+smtpd_tls_cert_file = /etc/letsencrypt/live/{$YOUR_DOMAIN}/fullchain.pem
+smtpd_tls_key_file  = /etc/letsencrypt/live/{$YOUR_DOMAIN}/privkey.pem
+smtpd_tls_session_cache_database = btree:${data_directory}/smtpd_scache
+
+# TLS parameters for the client
+smtp_tls_security_level = may
+smtp_tls_session_cache_database = btree:${data_directory}/smtp_scache
+smtp_tls_note_starttls_offer = yes
+
+# allow info+asd@example.org
+recipient_delimiter = +
+
+# only alias, disable NIS (not used)
+alias_maps = hash:/etc/aliases
+
+# Optional pathname of a mailbox file relative to a local(8) user's home directory.
+# Specify a pathname ending in "/" for qmail-style delivery. 
+home_mailbox = Maildir/
+
+#
+# Optional restrictions that the Postfix SMTP server applies in the context of a
+# client RCPT TO command, after smtpd_relay_restrictions.
+# See SMTPD_ACCESS_README, section "Delayed evaluation of SMTP
+# access restriction lists" for a discussion of evaluation context and time.
+#
+#   reject_non_fqdn_sender:
+#      Reject the request when the MAIL FROM address specifies
+#      a domain that is not in fully-qualified domain form as
+#      required by the RFC.
+#
+#   reject_sender_login_mismatch:
+#      Reject the request when $smtpd_sender_login_maps specifies an owner for
+#      the MAIL FROM address, but the client is not (SASL) logged in as that MAIL FROM address owner;
+#      or when the client is (SASL) logged in, but the client login name doesn't
+#      own the MAIL FROM address according to $smtpd_sender_login_maps.
+smtpd_sender_restrictions =
+	reject_non_fqdn_sender
+	reject_sender_login_mismatch
+
+#
+# Optional restrictions that the Postfix SMTP server applies in the context of a client
+# RCPT TO command, after smtpd_relay_restrictions.
+# See SMTPD_ACCESS_README, section "Delayed evaluation of SMTP access restriction lists"
+# for a discussion of evaluation context and time.
+#
+#   permit_sasl_authenticated:
+#      Permit the request when the client is successfully authenticated via the
+#      RFC 4954 (AUTH) protocol.
+#
+#   reject_unauth_destination:
+#      Reject the request unless one of the following is true:
+#         Postfix is mail forwarder: the resolved RCPT TO domain matches $relay_domains
+#           or a subdomain thereof, and contains no sender-specified routing (user@elsewhere@domain),
+#         Postfix is the final destination: the resolved RCPT TO domain matches $mydestination,
+#           $inet_interfaces, $proxy_interfaces, $virtual_alias_domains, or $virtual_mailbox_domains,
+#           and contains no sender-specified routing (user@elsewhere@domain). 
+smtpd_recipient_restrictions =
+	permit_sasl_authenticated
+	reject_unauth_destination
+
+#
+# Optional lookup table with the SASL login names that own the sender (MAIL FROM) addresses.
+# Specify zero or more "type:name" lookup tables, separated by whitespace or comma.
+# Tables will be searched in the specified order until a match is found.
+# With lookups from indexed files such as DB or DBM, or from networked tables such as NIS, LDAP or SQL,
+# the following search operations are done with a sender address of user@domain:
+# 1) user@domain
+#    This table lookup is always done and has the highest precedence.
+# 2) user
+#    This table lookup is done only when the domain part of the sender address matches $myorigin,
+#    $mydestination, $inet_interfaces or $proxy_interfaces.
+# 3) @domain
+#    This table lookup is done last and has the lowest precedence.
+#
+# In all cases the result of table lookup must be either "not found" or a list of SASL login
+# names separated by comma and/or whitespace.
+smtpd_sender_login_maps = mysql:/etc/postfix/mysql/mysql-email2email.cf
+                          mysql:/etc/postfix/mysql/mysql-aliases-email2email.cf
+
+#
+# Optional lookup tables that alias specific mail addresses or domains to other local or remote address.
+# The table format and lookups are documented in virtual(5).
+# For an overview of Postfix address manipulations see the ADDRESS_REWRITING_README document.
+# Note: these lookups are recursive. 
+virtual_alias_maps = mysql:/etc/postfix/mysql/mysql-aliases.cf
+                     mysql:/etc/postfix/mysql/mysql-email2email.cf
+
+#
+# Postfix is final destination for the specified list of domains;
+# mail is delivered via the $virtual_transport mail delivery transport.
+#
+# By default this is the Postfix virtual(8) delivery agent.
+# The SMTP server validates recipient addresses with $virtual_mailbox_maps and rejects mail for non-existent recipients.
+# See also the virtual mailbox domain class in the ADDRESS_CLASS_README file. 
+virtual_mailbox_domains = mysql:/etc/postfix/mysql/mysql-domains.cf
+
+# Optional lookup tables with all valid addresses in the domains that
+# match $virtual_mailbox_domains. In a lookup table, specify a left-hand
+# side of "@domain.tld" to match any user in the specified domain that
+# does not have a specific "user@domain.tld" entry.
+# The remainder of this text is specific to the virtual(8) delivery agent.
+# It does not apply when mail is delivered with a different mail delivery program.
+# The virtual(8) delivery agent uses this table to look up the per-recipient mailbox or maildir pathname.
+# If the lookup result ends in a slash ("/"), maildir-style delivery is carried out,
+# otherwise the path is assumed to specify a UNIX-style mailbox file.
+# Note that $virtual_mailbox_base is unconditionally prepended to this path. 
+virtual_mailbox_maps = mysql:/etc/postfix/mysql/mysql-users.cf
+
+# vmail user information (you have to create it)
+virtual_uid_maps     = static:5000
+virtual_gid_maps     = static:5000
+virtual_mailbox_base = /home/vmail
+
+# The lookup tables that the proxymap(8) server is allowed
+# to access for the read-only service. 
+proxy_read_maps = $local_recipient_maps $mydestination $virtual_alias_maps $virtual_alias_domains $virtual_mailbox_maps $virtual_mailbox_domains $relay_recipient_maps $relay_domains $canonical_maps $sender_canonical_maps $recipient_canonical_maps $relocated_maps $transport_maps $mynetworks
+
+#
+# SASL authentication
+#
+smtpd_sasl_type = dovecot
+smtpd_sasl_path=private/auth
+smtpd_sasl_local_domain = $myhostname
+smtpd_sasl_auth_enable = yes
+
+##
+# List of users who are authorized to submit mail with the
+# sendmail(1) command (and with the privileged postdrop(1) helper command).
+# By default, all users are allowed to submit mail. Otherwise, the real
+# UID of the process is looked up in the system password file,
+# and access is granted only if the corresponding login name is on the access list.
+# The username "unknown" is used for processes whose real UID is not found in the password file.
+# To deny mail submission access to all users specify an empty list.
+# Specify "!pattern" to exclude a user name from the list.
+authorized_submit_users = !www-data, static:all
+
+##
+# OTHER STUFF
+##
+
+# default is 1000 recipients
+smtpd_recipient_limit = 100
+
+#aumento email size massima accettata a 20 Mb (default=10Mb) 
+message_size_limit = 20480000
+
+# The maximal size of any local(8) individual mailbox or maildir file,
+# or zero (no limit).
+# In fact, this limits the size of any file that is written to upon local delivery,
+# including files written by external commands that are executed by the local(8) delivery agent.
+# This limit must not be smaller than the message size limit.
+#mailbox_size_limit = 0
+
+##
+# TUNING
+##
+
+# this is an unused feature, disabled to increase performance
+biff = no
+
+# this is an unused feature, disabled to increase performance
+readme_directory = no

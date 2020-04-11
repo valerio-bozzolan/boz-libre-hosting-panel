@@ -1,0 +1,21 @@
+#####################################################################
+# This Postfix configuration was provided from the KISS Hosting Panel
+#
+# Project homepage:
+#   https://gitpull.it/project/profile/15/
+#
+# Happy hacking!
+#
+# -- Valerio Bozzolan - Thu 10 Apr 2016 03:34:07 AM CEST
+#####################################################################
+
+#
+# This configuration file is read by 'smtpd_sender_login_maps'.
+# Read 'main.cf' for further information.
+#
+# Note: the `mail_accounts_simple` table is a MySQL view.
+user     = {$YOUR_POSTFIX_READONLY_MYSQL_USERNAME}
+password = $YOUR_POSTFIX_READONLY_MYSQL_PASSWORD}
+dbname   = {$YOUR_DATABASE_NAME}
+query    = SELECT `email` FROM `{$YOUR_DATABASE_PREFIX}mailbox_simple` WHERE `username` = '%u' AND `domain` = '%d'
+hosts    = 127.0.0.1

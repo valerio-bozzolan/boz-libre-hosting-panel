@@ -1,0 +1,19 @@
+#####################################################################
+# This Postfix configuration was provided from the KISS Hosting Panel
+#
+# Project homepage:
+#   https://gitpull.it/project/profile/15/
+#
+# Happy hacking!
+#
+# -- Valerio Bozzolan - Thu 10 Apr 2016 03:34:07 AM CEST
+#####################################################################
+
+#
+# This configuration file is read by 'virtual_mailbox_domains'.
+# Read 'main.cf' for further information.
+user     = {$YOUR_POSTFIX_READONLY_MYSQL_USERNAME}
+password = {$YOUR_POSTFIX_READONLY_MYSQL_PASSWORD}
+dbname   = {$YOUR_DATABASE_NAME}
+query    = SELECT `domain_name` AS virtual FROM `{$YOUR_DATABASE_PREFIX}domain` WHERE `domain_name` = '%s' AND `domain_active` = 1
+hosts    = 127.0.0.1

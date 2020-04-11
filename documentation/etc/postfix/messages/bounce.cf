@@ -1,0 +1,16 @@
+# The failure template is used for undeliverable mail.
+
+failure_template = <<EOF
+Charset: us-ascii
+From: MAILER-DAEMON (Mail Delivery System)
+Subject: Messaggio non consegnato e rispedito al mittente
+Postmaster-Subject: Postmaster Copy: Undelivered Mail
+Questo e' un messaggio automatico dal server di posta $myhostname.
+
+Ci dispiace segnalare che non e' stato possibile recapitare un messaggio
+ad uno o piu' destinatari. Si legga piu' in basso l'errore e vedere
+in allegato il messaggio in questione.
+
+Se desideri ricevere assistenza puoi contattare il postmaster (postmaster@$myhostname),
+riportando questo errore:
+EOF
