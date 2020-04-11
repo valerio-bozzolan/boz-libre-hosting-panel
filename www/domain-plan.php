@@ -42,6 +42,7 @@ if( !$domain ) {
 			'plan_mailforwards',
 			'plan_databases',
 			'plan_ftpusers',
+			'plan_mailboxquota',
 			'plan_yearlyprice',
 		] )
 		->whereDomainName( $domain_name )

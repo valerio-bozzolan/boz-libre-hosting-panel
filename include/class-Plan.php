@@ -96,6 +96,15 @@ trait PlanTrait {
 	}
 
 	/**
+	 * Get the Plan mailbox quota in bytes
+	 *
+	 * @return int
+	 */
+	public function getPlanMailboxQuota() {
+		return $this->get( 'plan_mailboxquota' );
+	}
+
+	/**
 	 * Get the plan edit URl
 	 *
 	 * @param boolean $absolute True for an absolute URL
@@ -114,7 +123,8 @@ trait PlanTrait {
 			'plan_ftpusers',
 			'plan_databases',
 			'plan_mailboxes',
-			'plan_mailforwards'
+			'plan_mailforwards',
+			'plan_mailboxquota',
 		);
 		$this->floats(
 			'plan_yearlyprice'
@@ -170,4 +180,34 @@ class Plan extends Queried {
 		return site_page( $url, $absolute );
 	}
 
+	/**
+	 * Get a percentage from two values
+	 *
+	 * It's always between 0 and 100, or NULL if cannot be calculated.
+	 *
+	 * @param $current int  Current amount
+	 * @param $max     int  Maximum amount
+	 * @return         mixed Percentage or NULL
+	 */
+	public static function percentage( $current, $max ) {
+
+		// no args no party
+		if( !$current || !$max ) {
+			return null;
+		}
+
+		// cannot be negative
+		if( $current < 0 ) {
+			return 0;
+		}
+
+		$percentage = $current * 100 / $max;
+
+		// cannot be too much
+		if( $percentage > 100 ) {
+			return 100;
+		}
+
+		return (int) $percentage;
+	}
 }

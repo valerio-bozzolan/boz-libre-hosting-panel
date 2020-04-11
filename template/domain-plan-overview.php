@@ -57,6 +57,14 @@ defined( 'BOZ_PHP' ) or die;
 				<th><?= esc_html( __( "FTP Users" ) ) ?></th>
 				<td><?= $plan->getPlanFTPUsers() ?></td>
 			</tr>
+
+			<?php if( $plan->getPlanMailboxQuota() ): ?>
+			<tr>
+				<th><?= __( "Max Mailbox Size" ) ?></th>
+				<td><?= human_filesize( $plan->getPlanMailboxQuota() ) ?></td>
+			</tr>
+			<?php endif ?>
+
 			<tr>
 				<th><?= esc_html( __( "Yearly Price" ) ) ?></th>
 				<td><?= $plan->getPlanYearlyPrice() ?> <?= DEFAULT_CURRENCY_SYMBOL ?></td>

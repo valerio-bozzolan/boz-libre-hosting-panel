@@ -29,23 +29,54 @@
 // avoid to be load directly
 defined( 'BOZ_PHP' ) or die;
 
+// calculate the remaining Mailbox quota percentage
+$remaining_quota_percentage = null;
+if( $plan ) {
+	$remaining_quota_percentage = Plan::percentage(
+		$mailbox->getMailboxLastSizeBytes(),
+		$plan->getPlanMailboxQuota()
+	);
+
+	if( $remaining_quota_percentage ) {
+		$remaining_quota_percentage -= 100;
+	}
+}
 ?>
 
 	<h3><?= esc_html( __( "Stats" ) ) ?></h3>
 
 	<?php if( $mailbox->getMailboxLastSizeBytes() !== null ): ?>
 
+		<!-- start stats table -->
 		<table class="table table-bordered table-responsive">
+
+			<!-- start actual size -->
 			<tr>
-				<th><?= esc_html( __( "Size" ) ) ?></th>
+				<th><?= esc_html( __( "Current Size" ) ) ?></th>
 				<td><?= human_filesize( $mailbox->getMailboxLastSizeBytes() ) ?></td>
 			</tr>
-		</table>
+			<!-- end actual size -->
 
-		<!--
-			TODO: show Plan max size
-			https://gitpull.it/T285
-		-->
+			<!-- start max size allowed -->
+			<?php if( $plan && $plan->getPlanMailboxQuota() ): ?>
+			<tr>
+				<th><?= esc_html( __( "Allowed Size" ) ) ?></th>
+				<td><?= human_filesize( $mailbox->getPlanMailboxQuota() ) ?></td>
+			</tr>
+			<?php endif ?>
+			<!-- endmax size allowed -->
+
+			<!-- start quota ratio -->
+			<?php if( $remaining_quota_percentage !== null ): ?>
+			<tr>
+				<th><?= esc_html( __( "Free" ) ) ?></th>
+				<td><?= $remaining_quota_percentage ?> %</td>
+			</tr>
+			<?php endif ?>
+			<!-- end quota ratio -->
+
+		</table>
+		<!-- end stats table -->
 
 	<?php else: ?>
 
