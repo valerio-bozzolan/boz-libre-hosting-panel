@@ -12,8 +12,14 @@
 #
 # This configuration file is read by 'virtual_mailbox_domains'.
 # Read 'main.cf' for further information.
+#
+# IMPORTANT: make sure that in your `mta` table you have at least one row
+#   and that its ID specified here is the same.
+#
+# Note: The mta_ID is useful if in the future you want to handle
+#   multiple mailservers with a single shared authentication database.
 user     = {$YOUR_POSTFIX_READONLY_MYSQL_USERNAME}
 password = {$YOUR_POSTFIX_READONLY_MYSQL_PASSWORD}
 dbname   = {$YOUR_DATABASE_NAME}
-query    = SELECT `domain_name` AS virtual FROM `{$YOUR_DATABASE_PREFIX}domain` WHERE `domain_name` = '%s' AND `domain_active` = 1
+query    = SELECT `domain_name` AS virtual FROM `{$YOUR_DATABASE_PREFIX}domain` WHERE `domain_name` = '%s' AND `domain_active` = 1 AND `mta_ID` = {$YOUR_DEFAULT_MTA_ID}
 hosts    = 127.0.0.1
