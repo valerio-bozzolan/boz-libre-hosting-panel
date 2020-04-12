@@ -31,12 +31,12 @@ class ASCIILineChart {
 	/**
 	 * Minimum value to be plotted
 	 */
-	private $min = null;
+	private $ymin = null;
 
 	/**
 	 * Maximum value to be plotted
 	 */
-	private $max = null;
+	private $ymax = null;
 
 	/**
 	 * Constructor
@@ -57,13 +57,13 @@ class ASCIILineChart {
 
 		// check if this is the new max
 		// note that every number is greater than NULL)
-		if( $value > $this->max ) {
-			$this->max = $value;
+		if( $value > $this->ymax ) {
+			$this->ymax = $value;
 		}
 
 		// check if this is the new min
-		if( $this->min === null || $value < $this->min ) {
-			$this->min = $value;
+		if( $this->ymin === null || $value < $this->ymin ) {
+			$this->ymin = $value;
 		}
 	}
 
@@ -93,11 +93,19 @@ class ASCIILineChart {
 	 */
 	public function render( $args = [] ) {
 
+		// no data no party
+		if( !$this->data ) {
+			return null;
+		}
+
 		// how many number of characters
 		$height = $args['height'] ?? 12;
 
 		// how many labels for the y axis
 		$y_nlabels = $args['ynlabels'] ?? 5;
+
+		// callback that will generate each x-label
+		$xlabel_format = $args['xlabel-format'] ?? null;
 
 		// callback that will generate each y-label
 		$ylabel_format = $args['ylabel-format'] ?? null;
@@ -109,7 +117,7 @@ class ASCIILineChart {
 		$column_separator = $args['column-separator'] ?? '|';
 
 		// charater used to separate each y-labels
-		$row_separator = $args['row-separator'] ?? '-';
+		$row_separator = $args['row-separator'] ?? '—';
 
 		// character used to separate the footer
 		$footer_separator = $args['footer-separator'] ?? $row_separator;
@@ -121,12 +129,23 @@ class ASCIILineChart {
 			};
 		}
 
-		// shortcuts
-		$min = $this->min;
-		$max = $this->max;
+		// as default, the y label is just an integer value, with some left padding
+		if( !$xlabel_format ) {
+			$xlabel_format = function( $v ) {
+				return $v->format( 'Y-m-d' );
+			};
+		}
 
-		// how much amount between min and max
-		$range = $max - $min;
+		// shortcuts for the y axis min and max values
+		$ymin = $this->ymin;
+		$ymax = $this->ymax;
+
+		// shortcuts for the x axis min and max values
+		$xmin = $this->data[0][0];
+		$xmax = $this->data[ count( $this->data ) - 1 ][0];
+
+		// how much amount between miny and max
+		$range = $ymax - $ymin;
 
 		// array of columns, from left to right
 		// every column has a char from bottom to top
@@ -138,16 +157,16 @@ class ASCIILineChart {
 		/**
 		 * Y-HEADING labels
 	 	 */
-		$heading = [];
+		$yheading = [];
 		for( $i = 0; $i < $height; $i = $i + $ystep ) {
-			$heading[ (int) $i ] = $ylabel_format( $min + $i );
+			$yheading[ (int) $i ] = $ylabel_format( $ymin + $i );
 		}
 
 		// uniform all the rows of the Y-heading
-		self::padColumn( $heading, $height, $row_separator );
+		$yheading_len = self::padColumn( $yheading, $height, $row_separator );
 
 		// register the y-heading
-		$columns[] = $heading;
+		$columns[] = $yheading;
 
 		/**
 		 * VERTICAL DIVISION
@@ -163,9 +182,9 @@ class ASCIILineChart {
 			list( $date, $value ) = $element;
 
 			$data_column = [];
-			$value_relative = $value - $min;
+			$value_relative = $value - $ymin;
 
-			$value_position = (int) ( ( $value - $min ) / ( $range ) * ( $height - 1 ) );
+			$value_position = (int) ( ( $value - $ymin ) / ( $range ) * ( $height - 1 ) );
 			$data_column[ $value_position ] = $dot;
 
 			// uniform all the rows
@@ -175,16 +194,33 @@ class ASCIILineChart {
 			$columns[] = $data_column;
 		}
 
-		$chart = '';
-
-		// print the whole chart
 		$n_columns = count( $columns );
-		for( $row = $height - 1; $row >= 0; $row-- ) {
+
+		// total chart height plus the footer etc.
+		$comprensive_height = count( $columns[0] );
+
+		// build the data chart
+		$chart = '';
+		for( $row = $comprensive_height - 1; $row >= 0; $row-- ) {
 			for( $column = 0; $column < $n_columns; $column++ ) {
 				$chart .= $columns[ $column ][ $row ];
 			}
 			$chart .= "\n";
 		}
+
+		// build the chart footer separator
+		for( $i = 0; $i < $n_columns; $i++ ) {
+			$column_length = mb_strlen( $columns[$i][0] );
+			$chart .= str_repeat( $footer_separator, $column_length );
+		}
+		$chart .= "\n";
+
+		// print x labels
+		$chart .= str_repeat( ' ', $yheading_len + 1 );
+		$chart .= "|\n";
+		$chart .= str_repeat( ' ', $yheading_len + 1 );
+		$chart .= $xlabel_format( $xmin );
+		$chart .= "\n";
 
 		return $chart;
 	}
@@ -195,13 +231,14 @@ class ASCIILineChart {
 	 * @param $rows array  Array of characters
 	 * @param $n    int    Number of the elements that should be present
 	 * @param $pad  string Character used for the padding
+	 * @return      int    Length of the column in bytes
 	 */
 	public static function padColumn( & $rows, $n, $pad = ' ' ) {
 		// check the maximum length of this column
 		$size = 0;
 		foreach( $rows as $row ) {
 			if( $row ) {
-				$size = max( $size, strlen( $row ) );
+				$size = max( $size, mb_strlen( $row ) );
 			}
 		}
 
@@ -216,10 +253,12 @@ class ASCIILineChart {
 			$actual_size = mb_strlen( $rows[$i] );
 			$diff = $size - $actual_size;
 
-			if( $size ) {
+			if( $diff ) {
 				$padding = str_repeat( $pad, $diff );
 				$rows[ $i ] = $padding . $rows[ $i ];
 			}
 		}
+
+		return $size;
 	}
 }
