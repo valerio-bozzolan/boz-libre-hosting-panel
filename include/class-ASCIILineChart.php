@@ -142,9 +142,9 @@ class ASCIILineChart {
 			};
 		}
 
-		// shortcuts for the y axis min and max values
-		$ymin = $this->ymin;
+		// shortcuts for the y axis max and min values
 		$ymax = $this->ymax;
+		$ymin = $this->ymin;
 
 		// shortcuts for the x axis min and max values
 		// note that data[0] is the first element, and data[0][0] is its x
@@ -152,18 +152,17 @@ class ASCIILineChart {
 		$xmin = $this->data[0][0];
 		$xmax = $this->data[ $data_n - 1 ][0];
 
-		// how much amount between miny and max
-		$yrange = $ymax - $ymin;
-
-		// if there is no much difference between min and max y values
-		// make sure that we have some labels on the y axis
-		if( $yrange < $height ) {
-			$yrange = $height;
-		}
-
 		// array of columns, from left to right
 		// every column has a char from bottom to top
 		$columns = [];
+
+		// how much amount between miny and max
+		$yrange = $ymax - $ymin;
+
+		// avoid division by zero
+		if( $yrange <= 0 ) {
+			$yrange = 1;
+		}
 
 		// how much is the weight of a single y character
 		$ystep = $yrange / $height;
