@@ -23,8 +23,6 @@ class_exists( 'MailboxAPI' );
  */
 trait MailboxSizeAPITrait {
 
-	use MailboxAPITrait;
-
 	/**
 	 * Select the MAX Mailbox quota date
 	 *
@@ -33,6 +31,35 @@ trait MailboxSizeAPITrait {
 	public function selectMaxMailboxSizeDate() {
 		return $this->select( 'MAX( mailboxsize_date ) AS max_mailboxsize_date' )
 		            ->groupBy( 'mailbox_ID' );
+	}
+
+	/**
+	 * Limit to a specific date interval
+	 *
+	 * @param $one DateTime
+	 * @param $two DateTime
+	 * @return     self
+	 */
+	public function whereMailboxSizeBetweenDates( $one, $two ) {
+		$from = $one->format( 'Y-m-d H:i:s' );
+		$to   = $two->format( 'Y-m-d H:i:s' );
+		return $this->where( sprintf(
+			"mailboxsize_date BETWEEN '%s' AND '%s'",
+			$from,
+			$to
+		)  );
+	}
+
+	/**
+	 * Limit to the last 12 months
+	 *
+	 * @return self
+	 */
+	public function whereMailboxSizeInLatestYear() {
+		$now  = new DateTime();
+		$past = new DateTime();
+		$past->sub( new DateInterval( 'P1Y' ) );
+		return $this->whereMailboxSizeBetweenDates( $past, $now );
 	}
 
 	/**
@@ -59,6 +86,7 @@ trait MailboxSizeAPITrait {
 class MailboxSizeAPI extends Query {
 
 	use MailboxSizeAPITrait;
+	use MailboxAPITrait;
 
 	/**
 	 * Univoque column name to the Mailbox ID

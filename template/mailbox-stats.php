@@ -78,6 +78,12 @@ if( $plan ) {
 		</table>
 		<!-- end stats table -->
 
+
+		<?php template( 'mailbox-stats-size-chart', [
+			'mailbox' => $mailbox,
+		] ) ?>
+
+
 	<?php else: ?>
 
 		<?= esc_html( __( "No stats available" ) ) ?>
