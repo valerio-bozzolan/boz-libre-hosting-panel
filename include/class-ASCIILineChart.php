@@ -110,8 +110,14 @@ class ASCIILineChart {
 		// callback that will generate each y-label
 		$ylabel_format = $args['ylabel-format'] ?? null;
 
+		// label for the x axis
+		$xaxis_label = $args['xlabel'] ?? 'Time';
+
+		// label for the x axis
+		$yaxis_label = $args['ylabel'] ?? null;
+
 		// character to be used to plot a piece of chart
-		$dot = $args['dot'] ?? '·';
+		$dot = $args['dot'] ?? '+';
 
 		// charater used to separate the y-labels from the data
 		$column_separator = $args['column-separator'] ?? '|';
@@ -132,7 +138,7 @@ class ASCIILineChart {
 		// as default, the y label is just an integer value, with some left padding
 		if( !$xlabel_format ) {
 			$xlabel_format = function( $v ) {
-				return $v->format( 'Y-m-d' );
+				return $v->format( 'Y-m-d (H:i)' );
 			};
 		}
 
@@ -141,8 +147,10 @@ class ASCIILineChart {
 		$ymax = $this->ymax;
 
 		// shortcuts for the x axis min and max values
+		// note that data[0] is the first element, and data[0][0] is its x
+		$data_n = count( $this->data );
 		$xmin = $this->data[0][0];
-		$xmax = $this->data[ count( $this->data ) - 1 ][0];
+		$xmax = $this->data[ $data_n - 1 ][0];
 
 		// how much amount between miny and max
 		$range = $ymax - $ymin;
@@ -162,65 +170,91 @@ class ASCIILineChart {
 			$yheading[ (int) $i ] = $ylabel_format( $ymin + $i );
 		}
 
-		// uniform all the rows of the Y-heading
+		// uniform all the rows of the Y-heading and get the lenght in chars
 		$yheading_len = self::padColumn( $yheading, $height, $row_separator );
 
 		// register the y-heading
 		$columns[] = $yheading;
 
 		/**
-		 * VERTICAL DIVISION
+		 * Y VERTICAL DIVISION
 		 */
 		$vertical_row = [];
 		for( $i = 0; $i < $height; $i++ ) {
-			$vertical_row[$i] = $column_separator;
+			$vertical_row[ $i ] = $column_separator;
 		}
 		$columns[] = $vertical_row;
+		$yheading_len++;
 
 		// plot the data columns
 		foreach( $this->data as $element ) {
 			list( $date, $value ) = $element;
 
-			$data_column = [];
-			$value_relative = $value - $ymin;
+			// correlate the data to the y axis
+			$value_position = ( $value - $ymin ) / ( $range ) * ( $height - 1 );
+			$value_position = (int) $value_position;
 
-			$value_position = (int) ( ( $value - $ymin ) / ( $range ) * ( $height - 1 ) );
+			// plot this element
+			$data_column = [];
 			$data_column[ $value_position ] = $dot;
 
-			// uniform all the rows
+			// uniform all the rows of this column
 			self::padColumn( $data_column, $height );
 
 			// register this data column
 			$columns[] = $data_column;
 		}
 
-		$n_columns = count( $columns );
+		// current chart dimensions in chars (plus the y-labels)
+		$width  = $data_n + $yheading_len;
+		$height = count( $columns[0] );
 
-		// total chart height plus the footer etc.
-		$comprensive_height = count( $columns[0] );
 
-		// build the data chart
+		// the whole chart
 		$chart = '';
-		for( $row = $comprensive_height - 1; $row >= 0; $row-- ) {
+
+		/**
+		 * Y axis label (if any) and arrow
+		 */
+		$yaxis_margin = str_repeat( ' ', $yheading_len - 1 );
+		if( $yaxis_label ) {
+			$chart .= $yaxis_margin . $yaxis_label . "\n";
+		}
+		$chart .= $yaxis_margin . '↑' . "\n";
+
+		// build the data chart (from top to bottom)
+		$n_columns = count( $columns );
+		for( $row = $height - 1; $row >= 0; $row-- ) {
 			for( $column = 0; $column < $n_columns; $column++ ) {
 				$chart .= $columns[ $column ][ $row ];
 			}
 			$chart .= "\n";
 		}
 
-		// build the chart footer separator
-		for( $i = 0; $i < $n_columns; $i++ ) {
-			$column_length = mb_strlen( $columns[$i][0] );
-			$chart .= str_repeat( $footer_separator, $column_length );
-		}
-		$chart .= "\n";
+		/**
+		 * Footer ( y => x )
+		 */
+		$footer = [];
 
-		// print x labels
-		$chart .= str_repeat( ' ', $yheading_len + 1 );
-		$chart .= "|\n";
-		$chart .= str_repeat( ' ', $yheading_len + 1 );
-		$chart .= $xlabel_format( $xmin );
-		$chart .= "\n";
+		// footer line separator and x axis label
+		$footer_line = $yaxis_margin . $column_separator . str_repeat( $row_separator, $width ) . '→ ' . $xaxis_label;
+		self::intoMatrix( $footer, 0, 0, $footer_line );
+
+		// x-min label
+		self::intoMatrixMultiline( $footer, 1, $yheading_len - 1, [
+			'|',
+			'|',
+			$xlabel_format( $xmin ),
+		] );
+
+		// x-max label
+		self::intoMatrixMultiline( $footer, 1, $width - 1, [
+			'|',
+			$xlabel_format( $xmax ),
+		] );
+
+		// print the footer
+		$chart .= self::matrix2text( $footer );
 
 		return $chart;
 	}
@@ -260,5 +294,101 @@ class ASCIILineChart {
 		}
 
 		return $size;
+	}
+
+	/**
+	 * Put a string in a matrix of characters
+	 *
+	 * @param array  $matrix Matrix of chars (y => x)
+	 * @param int    $y      Starting y coordinate (y starts from top)
+	 * @param int    $x      Starting x coordinate (x starts from left)
+	 * @param string $s      Multi-byte string to be put in the char matrix
+	 */
+	private static function intoMatrix( &$matrix, $y, $x, $s ) {
+
+		// split the string in bytes (chars)
+		$parts = self::split( $s );
+		$len = count( $parts );
+
+		// the horizontal line must exists
+		if( !isset( $matrix[ $y ] ) ) {
+			$matrix[ $y ] = [];
+		}
+
+		// append each char
+		for( $i = 0; $i < $len; $i++ ) {
+			$matrix[ $y ][ $x ] = $parts[ $i ];
+			$x++;
+		}
+	}
+
+	/**
+	 * Put some strings in a matrix of characters
+	 *
+	 * @param array  $matrix Matrix of chars (y => x)
+	 * @param int    $y      Starting y coordinate (y starts from top)
+	 * @param int    $x      Starting x coordinate (x starts from left)
+	 * @param array  $lines  Multi-byte strings to be put in the char matrix
+	 */
+	private static function intoMatrixMultiline( &$matrix, $y, $x, $lines ) {
+		foreach( $lines as $line ) {
+			self::intoMatrix( $matrix, $y, $x, $line );
+			$y++;
+		}
+	}
+
+	/**
+	 * From a matrix of characters, return some text
+	 *
+	 * @param  array $matrix Matrix of chars (y => x)
+	 * @return string
+	 */
+	private static function matrix2text( $matrix ) {
+
+		$txt = '';
+
+		// latest array key (y length)
+		end( $matrix );
+		$y_max = key( $matrix );
+
+		// print each line
+		for( $y = 0; $y <= $y_max; $y++ ) {
+
+			$line = $matrix[ $y ];
+
+			// latest array key of this line (x length)
+			end( $line );
+			$x_max = key( $line );
+
+			// print each char of this line (if it exists)
+			for( $x = 0; $x <= $x_max; $x++ ) {
+				$txt .= $line[ $x ] ?? ' ';
+			}
+
+			$txt .= "\n";
+		}
+
+		return $txt;
+
+	}
+
+	/**
+	 * Split a multibyte string
+	 *
+	 * See https://stackoverflow.com/a/2556348/3451846
+	 *
+	 * @param $s string
+	 * @return array
+	 */
+	private static function split( $s ) {
+
+		$parts = [];
+
+		$n = mb_strlen( $s );
+		for( $i = 0; $i < $n; $i++ ) {
+			$parts[] = mb_substr( $s, $i, 1 );
+		}
+
+		return $parts;
 	}
 }
