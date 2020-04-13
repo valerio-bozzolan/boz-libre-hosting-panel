@@ -98,11 +98,11 @@ class ASCIILineChart {
 			return null;
 		}
 
-		// how many number of characters
-		$height = $args['height'] ?? 12;
+		// how many characters of height for the vertical y axis
+		$height = $args['height'] ?? 13;
 
-		// how many labels for the y axis
-		$y_nlabels = $args['ynlabels'] ?? 5;
+		// how much space should be empty between each line
+		$y_line_height = $args['y-line-height'] ?? 2;
 
 		// callback that will generate each x-label
 		$xlabel_format = $args['xlabel-format'] ?? null;
@@ -117,7 +117,7 @@ class ASCIILineChart {
 		$yaxis_label = $args['ylabel'] ?? null;
 
 		// character to be used to plot a piece of chart
-		$dot = $args['dot'] ?? '+';
+		$dot = $args['dot'] ?? '·';
 
 		// charater used to separate the y-labels from the data
 		$column_separator = $args['column-separator'] ?? '|';
@@ -153,25 +153,33 @@ class ASCIILineChart {
 		$xmax = $this->data[ $data_n - 1 ][0];
 
 		// how much amount between miny and max
-		$range = $ymax - $ymin;
+		$yrange = $ymax - $ymin;
+
+		// if there is no much difference between min and max y values
+		// make sure that we have some labels on the y axis
+		if( $yrange < $height ) {
+			$yrange = $height;
+		}
 
 		// array of columns, from left to right
 		// every column has a char from bottom to top
 		$columns = [];
 
 		// how much is the weight of a single y character
-		$ystep = $range / $y_nlabels;
+		$ystep = $yrange / $height;
 
 		/**
 		 * Y-HEADING labels
 	 	 */
 		$yheading = [];
-		for( $i = 0; $i < $height; $i = $i + $ystep ) {
-			$yheading[ (int) $i ] = $ylabel_format( $ymin + $i );
+		for( $i = 0; $i < $height; $i++ ) {
+			if( $i % $y_line_height === 0 ) {
+				$yheading[ $i ] = $ylabel_format( $ymin + $i * $ystep );
+			}
 		}
 
 		// uniform all the rows of the Y-heading and get the lenght in chars
-		$yheading_len = self::padColumn( $yheading, $height, $row_separator );
+		$yheading_len = self::padColumn( $yheading, $height );
 
 		// register the y-heading
 		$columns[] = $yheading;
@@ -191,7 +199,7 @@ class ASCIILineChart {
 			list( $date, $value ) = $element;
 
 			// correlate the data to the y axis
-			$value_position = ( $value - $ymin ) / ( $range ) * ( $height - 1 );
+			$value_position = ( $value - $ymin ) / $yrange * ( $height - 1 );
 			$value_position = (int) $value_position;
 
 			// plot this element
@@ -209,7 +217,6 @@ class ASCIILineChart {
 		$width  = $data_n + $yheading_len;
 		$height = count( $columns[0] );
 
-
 		// the whole chart
 		$chart = '';
 
@@ -218,9 +225,10 @@ class ASCIILineChart {
 		 */
 		$yaxis_margin = str_repeat( ' ', $yheading_len - 1 );
 		if( $yaxis_label ) {
-			$chart .= $yaxis_margin . $yaxis_label . "\n";
+			$chart .= $yaxis_margin . $yaxis_label . "\n\n";
 		}
-		$chart .= $yaxis_margin . '↑' . "\n";
+		$chart .= $yaxis_margin . '^' . "\n";
+		$chart .= $yaxis_margin . $column_separator . "\n";
 
 		// build the data chart (from top to bottom)
 		$n_columns = count( $columns );
@@ -237,11 +245,12 @@ class ASCIILineChart {
 		$footer = [];
 
 		// footer line separator and x axis label
-		$footer_line = $yaxis_margin . $column_separator . str_repeat( $row_separator, $width ) . '→ ' . $xaxis_label;
+		$footer_line = $yaxis_margin . '+' . str_repeat( $row_separator, $data_n + 1 ) . '> ' . $xaxis_label;
 		self::intoMatrix( $footer, 0, 0, $footer_line );
 
 		// x-min label
 		self::intoMatrixMultiline( $footer, 1, $yheading_len - 1, [
+			'|',
 			'|',
 			'|',
 			$xlabel_format( $xmin ),
@@ -268,6 +277,7 @@ class ASCIILineChart {
 	 * @return      int    Length of the column in bytes
 	 */
 	public static function padColumn( & $rows, $n, $pad = ' ' ) {
+
 		// check the maximum length of this column
 		$size = 0;
 		foreach( $rows as $row ) {
