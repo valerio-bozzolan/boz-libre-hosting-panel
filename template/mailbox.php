@@ -57,6 +57,14 @@ defined( 'BOZ_PHP' ) or die;
 	<?php endif ?>
 	<!-- end documentation -->
 
+	<!-- notes -->
+	<?php if( $mailbox ): ?>
+		<?php template( 'mailbox-notes', [
+			'mailbox' => $mailbox,
+		] ) ?>
+	<?php endif ?>
+	<!-- /notes -->
+
 	<?php if( $mailbox ): ?>
 		<h3><?= __( "Actions" ) ?></h3>
 		<form method="post">

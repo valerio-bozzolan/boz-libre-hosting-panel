@@ -90,6 +90,25 @@ if( $mailbox && is_action( 'mailbox-password-reset' ) ) {
 	$mailbox_password = $mailbox->updateMailboxPassword();
 }
 
+/**
+ * Eventually save the notes
+ */
+if( $mailbox && is_action( 'save-mailbox-notes' ) ) {
+
+	// read the description
+	$description = $_POST['mailbox_description'] ?? null;
+
+	// save the description
+	( new MailboxAPI() )
+		->whereMailbox( $mailbox )
+		->update( [
+			'mailbox_description' => $description,
+		] );
+
+	// POST -> redirect -> GET
+	http_redirect( $mailbox->getMailboxPermalink() );
+}
+
 /*
  * Create the mailbox
  */
@@ -111,6 +130,7 @@ if( !$mailbox && is_action( 'mailbox-create' ) && isset( $_POST[ 'mailbox_userna
 		$mailbox_password = generate_password();
 		$mailbox_password_safe = Mailbox::encryptPassword( $mailbox_password );
 
+		// really create the mailbox
 		insert_row( 'mailbox', [
 			new DBCol( 'mailbox_username', $_POST[ 'mailbox_username' ], 's' ),
 			new DBCol( 'domain_ID',        $domain->getDomainID(),       'd' ),
@@ -118,19 +138,8 @@ if( !$mailbox && is_action( 'mailbox-create' ) && isset( $_POST[ 'mailbox_userna
 		] );
 	}
 
-	$mailbox = ( new MailboxFullAPI() )
-		->select( [
-			'domain.domain_ID',
-			'domain_name',
-			'mailbox_username',
-		] )
-		->whereDomainName( $domain_name )
-		->whereStr( 'mailbox_username', $_POST[ 'mailbox_username' ] )
-		->queryRow();
-
-	if( $mailbox ) {
-		http_redirect( $mailbox->getMailboxPermalink( true ) );
-	}
+	// POST -> redirect -> GET
+	http_redirect( $mailbox->getMailboxPermalink( true ) );
 }
 
 // spawn header
