@@ -187,4 +187,14 @@ class FTP extends Queried {
 		$salt = bin2hex( openssl_random_pseudo_bytes( 3 ) );
 		return '{SHA512-CRYPT}' . crypt( $password, "$6$$salt" );
 	}
+
+	/**
+	 * Normalize the FTP username
+	 *
+	 * @param string $username
+	 */
+	public function normalizeUsername( $username ) {
+		return luser_input( $username, 64 );
+	}
+
 }

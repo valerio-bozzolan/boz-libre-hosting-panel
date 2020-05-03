@@ -79,13 +79,15 @@ if( is_action( 'ftp-save' ) ) {
 
 	// during creation require FTP login
 	if( !$ftp ) {
+
+		// require all the submitted data
 		if( !isset( $_POST['ftp_login'] ) || !is_string( $_POST['ftp_login'] ) ) {
-			BadRequest::spawn( __( "missing parameter" ) );
+			BadRequest::spawn();
 		}
 
 		// generate the username - MUST start with domain name
 		$username = generate_slug( $domain->getDomainName() ) . '_' . $_POST['ftp_login'];
-		$username = luser_input( $username, 128 );
+		$username = FTP::normalizeUsername( $username, 128 );
 
 		// validate username
 		if( !validate_mailbox_username( $username ) ) {
@@ -167,7 +169,7 @@ if( $ftp && is_action( 'ftp-password-reset' ) ) {
 		] );
 }
 
-// delete action
+// you can delete only if it exists
 if( $ftp ) {
 
 	// action fired when deleting a whole mailforward
@@ -180,7 +182,6 @@ if( $ftp ) {
 
 		// POST/redirect/GET
 		http_redirect( $domain->getDomainPermalink( true ), 303 );
-
 	}
 
 }
