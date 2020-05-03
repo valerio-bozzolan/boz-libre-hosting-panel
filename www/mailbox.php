@@ -1,6 +1,6 @@
 <?php
-# Copyright (C) 2018, 2019 Valerio Bozzolan
-# Boz Libre Hosting Panel
+# Copyright (C) 2018, 2019, 2020 Valerio Bozzolan
+# KISS Libre Hosting Panel
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as
@@ -25,11 +25,13 @@ require '../load.php';
 // wanted domain and mailbox username
 list( $domain_name, $mailbox_username ) = url_parts( 2, 1 );
 
+// some useful information
 $domain   = null;
 $mailbox  = null;
 $plan     = null;
 $mailbox_password = null;
 
+// check if the page is about a specific Mailbox
 if( $mailbox_username ) {
 
 	// retrieve the mailbox and its domain and its Plan
@@ -43,10 +45,10 @@ if( $mailbox_username ) {
 	// 404?
 	$mailbox or PageNotFound::spawn();
 
-	// the mailbox has the domain stuff
+	// the mailbox object has the domain stuff - recycle it
 	$domain = $mailbox;
 
-	// the mailbox has the Plan stuff
+	// the mailbox object has the Plan stuff - recycle it
 	$plan   = $mailbox;
 } else {
 
@@ -60,6 +62,7 @@ if( $mailbox_username ) {
 	// 404?
 	$domain or PageNotFound::spawn();
 
+	// the domain object has the Plan stuff - recycle it
 	$plan = $domain;
 }
 
@@ -92,19 +95,18 @@ if( $mailbox && is_action( 'mailbox-password-reset' ) ) {
  */
 if( !$mailbox && is_action( 'mailbox-create' ) && isset( $_POST[ 'mailbox_username' ] ) ) {
 
+	// assure that the username is not too long
 	$_POST[ 'mailbox_username' ] = luser_input( $_POST[ 'mailbox_username' ], 64 );
 
-	$mailbox = ( new MailboxFullAPI() )
-		->select( [
-			'domain.domain_ID',
-			'domain_name',
-			'mailbox_username',
-		] )
+	// check if the mailbox already exist
+	$mailbox_exists = ( new MailboxFullAPI() )
+		->select( 1 )
 		->whereDomainName( $domain_name )
-		->whereStr( 'mailbox_username', $_POST[ 'mailbox_username' ] )
+		->whereMailboxUsername( $_POST[ 'mailbox_username' ] )
 		->queryRow();
 
-	if( !$mailbox ) {
+	// check if we can create the mailbox
+	if( !$mailbox_exists ) {
 		// assign a damn temporary password
 		$mailbox_password = generate_password();
 		$mailbox_password_safe = Mailbox::encryptPassword( $mailbox_password );

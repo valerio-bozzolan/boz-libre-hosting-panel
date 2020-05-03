@@ -53,6 +53,15 @@ trait MailboxTrait {
 	}
 
 	/**
+	 * Get the mailbox description (if any)
+	 *
+	 * @return string
+	 */
+	public function getMailboxDescription() {
+		return $this->get( 'mailbox_description' );
+	}
+
+	/**
 	 * Get the mailbox permalink
 	 *
 	 * @return string
