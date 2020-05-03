@@ -1,0 +1,1 @@
+ALTER TABLE {$prefix}ftp MODIFY COLUMN ftp_login VARCHAR(64) NOT NULL;
