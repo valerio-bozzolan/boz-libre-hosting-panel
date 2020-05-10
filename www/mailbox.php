@@ -112,16 +112,16 @@ if( $mailbox && is_action( 'save-mailbox-notes' ) ) {
 /*
  * Create the mailbox
  */
-if( !$mailbox && is_action( 'mailbox-create' ) && isset( $_POST[ 'mailbox_username' ] ) ) {
+if( !$mailbox && is_action( 'mailbox-create' ) && isset( $_POST['mailbox_username'] ) ) {
 
 	// assure that the username is not too long
-	$_POST[ 'mailbox_username' ] = luser_input( $_POST[ 'mailbox_username' ], 64 );
+	$_POST['mailbox_username'] = luser_input( $_POST['mailbox_username'], 64 );
 
 	// check if the mailbox already exist
 	$mailbox_exists = ( new MailboxFullAPI() )
 		->select( 1 )
 		->whereDomainName( $domain_name )
-		->whereMailboxUsername( $_POST[ 'mailbox_username' ] )
+		->whereMailboxUsername( $_POST['mailbox_username'] )
 		->queryRow();
 
 	// check if we can create the mailbox
@@ -132,14 +132,17 @@ if( !$mailbox && is_action( 'mailbox-create' ) && isset( $_POST[ 'mailbox_userna
 
 		// really create the mailbox
 		insert_row( 'mailbox', [
-			new DBCol( 'mailbox_username', $_POST[ 'mailbox_username' ], 's' ),
+			new DBCol( 'mailbox_username', $_POST['mailbox_username'], 's' ),
 			new DBCol( 'domain_ID',        $domain->getDomainID(),       'd' ),
 			new DBCol( 'mailbox_password', $mailbox_password_safe,       's' ),
 		] );
 	}
 
 	// POST -> redirect -> GET
-	http_redirect( $mailbox->getMailboxPermalink( true ) );
+	http_redirect( Mailbox::permalink(
+		$domain->getDomainName(),
+		$_POST['mailbox_username']
+	) );
 }
 
 // spawn header
