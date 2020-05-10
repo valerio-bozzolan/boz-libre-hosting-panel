@@ -44,6 +44,7 @@ $domain = ( new DomainAPI() )
 		'plan_yearlyprice',
 	] )
 	->whereDomainName( $domain_name )
+	->whereDomainIsVisible()
 	->joinPlan( 'LEFT' )
 	->queryRow();
 

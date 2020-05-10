@@ -1,6 +1,6 @@
 <?php
-# Copyright (C) 2018, 2019 Valerio Bozzolan
-# Boz Libre Hosting Panel
+# Copyright (C) 2018, 2019, 2020 Valerio Bozzolan
+# KISS Libre Hosting Panel
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as
@@ -31,10 +31,19 @@ trait DomainAPITrait {
 	 * @return self
 	 */
 	public function whereDomainIsEditable() {
-		if( ! has_permission( 'edit-domain-all' ) ) {
+		if( !has_permission( 'edit-domain-all' ) ) {
 			$this->whereDomainUser();
 		}
 		return $this;
+	}
+
+	/**
+	 * Where the domains are visible by me
+	 *
+	 * @return self
+	 */
+	public function whereDomainIsVisible() {
+		return $this->whereDomainIsEditable();
 	}
 
 	/**
