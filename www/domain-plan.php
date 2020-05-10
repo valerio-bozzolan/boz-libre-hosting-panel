@@ -30,29 +30,26 @@ $plan   = null;
 list( $domain_name ) = url_parts( 1 );
 
 // eventually retrieve domain from database
+$domain = ( new DomainAPI() )
+	->select( [
+		'domain.domain_ID',
+		'domain_name',
+		'plan.plan_ID',
+		'plan_name',
+		'plan_mailboxes',
+		'plan_mailforwards',
+		'plan_databases',
+		'plan_ftpusers',
+		'plan_mailboxquota',
+		'plan_yearlyprice',
+	] )
+	->whereDomainName( $domain_name )
+	->joinPlan( 'LEFT' )
+	->queryRow();
+
+// no domain no party
 if( !$domain ) {
-	$domain = ( new DomainAPI() )
-		->select( [
-			'domain.domain_ID',
-			'domain_name',
-
-			'plan.plan_ID',
-			'plan_name',
-			'plan_mailboxes',
-			'plan_mailforwards',
-			'plan_databases',
-			'plan_ftpusers',
-			'plan_mailboxquota',
-			'plan_yearlyprice',
-		] )
-		->whereDomainName( $domain_name )
-		->joinPlan( 'LEFT' )
-		->queryRow();
-
-	// no domain no party
-	if( !$domain ) {
-		PageNotFound::spawn();
-	}
+	PageNotFound::spawn();
 }
 
 // save destination action
@@ -90,8 +87,8 @@ if( is_action( 'domain-plan-save' ) ) {
 
 // spawn header
 Header::spawn( [
-	'uid'          => false,
-	'title'        => __( "Domain Plan" ),
+	'uid'        => false,
+	'title'      => __( "Domain Plan" ),
 	'breadcrumb' => [
 		new MenuEntry( null, $domain->getDomainPermalink(), $domain->getDomainName() ),
 	],
