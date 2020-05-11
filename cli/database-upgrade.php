@@ -138,5 +138,12 @@ function execute_queries_from_file( $file ) {
 	$queries = str_replace( '{$prefix}', $database_prefix,  $queries );
 
 	// execute the patch queries (it will die in case of error)
-	multiquery( $queries );
+	try {
+		multiquery( $queries );
+	} catch( Exception $e ) {
+		echo "\n";
+		printf( "ERROR:\n%s\n\n", $e->getMessage() );
+		printf( "DEBUG QUERIES:\n%s\n", $queries );
+		exit( 1 );
+	}
 }
