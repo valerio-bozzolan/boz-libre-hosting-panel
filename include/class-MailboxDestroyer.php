@@ -1,6 +1,6 @@
 <?php
 # Copyright (C) 2018, 2019, 2020 Valerio Bozzolan
-# Boz Libre Hosting Panel
+# KISS Libre Hosting Panel
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as
@@ -48,11 +48,30 @@ class MailboxDestroyer {
 		// valid and sanitized mailbox pathname
 		$path = $mailbox->getMailboxPath();
 
+		// start trying to delete the mailbox from the database
+
+		query( 'START TRANSACTION' );
+
+		// delete all log-related stuff
+		// TODO: enable when the T338 will be implemented
+//		( new QueryLog() )
+//			->whereMailbox( $mailbox )
+//			->delete();
+
+		// finally delete the mailbox
+		( new MailboxAPI() )
+			->whereMailbox( $mailbox )
+			->delete();
+
+		query( 'COMMIT' );
+
+		// then - if exists - delete the mailbox from the database
+
 		// delete the phisical e-mails
 		if( file_exists( $path ) ) {
 
 			/**
-			 * Now it's the time to completely remove a mailbox
+			 * Now it's the time to completely remove a mailbox from the filesystem
 			 *
 			 * I've invested some time in documenting this method,
 			 * so don't be STUPID and don't RUN across your room
@@ -96,10 +115,6 @@ class MailboxDestroyer {
 			}
 		}
 
-		// last but not the least - delete from database
-		( new MailboxAPI() )
-			->whereMailbox( $mailbox )
-			->delete();
 	}
 
 }
