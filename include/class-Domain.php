@@ -74,7 +74,7 @@ trait DomainTrait {
 
 		// it was validated during creation time, but validate also now
 		// to prevent malicious actions over hacked databases
-		sanitize_subdirectory( $dir );
+		require_safe_dirname( $dir );
 
 		return $dir;
 	}
