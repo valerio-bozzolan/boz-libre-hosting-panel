@@ -75,12 +75,24 @@ if( is_action( 'domain-plan-save' ) ) {
 		BadRequest::spawn( __( "Missing Plan" ) );
 	}
 
+	query( 'START TRANSACTION' );
+
 	// finally update the Plan
 	( new DomainAPI() )
 		->whereDomain( $domain )
 		->update( [
 			'plan_ID' => $new_plan->getPlanID(),
 		] );
+
+	// register this event
+	APILog::insert( [
+		'family' => 'domain',
+		'action' => 'plan.change',
+		'domain' => $domain,
+		'plan'   => $new_plan,
+	] );
+
+	query( 'COMMIT' );
 
 	// POST -> REDIRECT -> GET
 	http_redirect( $domain->getDomainPlanPermalink() );
