@@ -114,4 +114,14 @@ class Mailforwardfrom extends Queried {
 		}
 		return $part;
 	}
+
+	/**
+	 * Force to get a Mailforwardfrom ID, whatever is passed
+	 *
+	 * @param  mixed $mailforward Mailforwardfrom object or its ID
+	 * @return int
+	 */
+	public static function getID( $mailforward ) {
+		return is_object( $mailforward ) ? $mailforward->getMailforwardfromID() : (int)$mailforward;
+	}
 }
