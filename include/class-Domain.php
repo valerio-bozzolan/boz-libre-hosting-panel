@@ -62,6 +62,20 @@ trait DomainTrait {
 	}
 
 	/**
+	 * Get a printable Domain firm
+	 *
+	 * It may be a link if you are allowed to edit this Domain.
+	 *
+	 * @return string
+	 */
+	public function getDomainFirm() {
+		return HTML::a(
+			$this->getDomainPermalink(),
+			esc_html( $this->getDomainName() )
+		);
+	}
+
+	/**
 	 * Get the sanitized relative directory name of this domain name
 	 *
 	 * Actually this should be valid for both the MTA and for the webserver.
@@ -291,4 +305,13 @@ class Domain extends Queried {
 		return site_page( $url, $absolute );
 	}
 
+	/**
+	 * Force to get a Domain ID, whatever is passed
+	 *
+	 * @param  mixed $domain Domain object or Domain ID
+	 * @return int
+	 */
+	public static function getID( $domain ) {
+		return is_object( $domain ) ? $domain->getDomainID() : (int)$domain;
+	}
 }
