@@ -112,6 +112,7 @@ if( $mailbox && is_action( 'save-mailbox-notes' ) ) {
 		'family'  => 'mailbox',
 		'action'  => 'description.change',
 		'mailbox' => $mailbox,
+		'domain'  => $domain,
 	] );
 
 	query( 'COMMIT' );
@@ -154,6 +155,7 @@ if( !$mailbox && is_action( 'mailbox-create' ) && isset( $_POST['mailbox_usernam
 		APILog::insert( [
 			'family'  => 'mailbox',
 			'action'  => 'create',
+			'domain'  => $domain,
 			'mailbox' => last_inserted_ID(),
 		] );
 
