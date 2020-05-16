@@ -86,3 +86,18 @@ defined( 'BOZ_PHP' ) or die;
 		</form>
 	<?php endif ?>
 	<!-- /actions -->
+
+	<?php if( $mailbox ): ?>
+	<section>
+		<h3><?= __( "Last Activity" ) ?></h3>
+
+		<?php
+			// print the last activities
+			ActivityPanel::spawn( [
+				'query' => [
+					'mailbox' => $mailbox,
+				],
+			] )
+		?>
+	</section>
+	<?php endif ?>
