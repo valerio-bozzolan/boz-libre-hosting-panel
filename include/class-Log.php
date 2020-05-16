@@ -18,6 +18,7 @@
 // make sure that this class is loaded at startup
 class_exists( User::class );
 class_exists( Domain::class );
+class_exists( Mailbox::class );
 
 trait LogTrait {
 
@@ -68,6 +69,8 @@ trait LogTrait {
 		switch( $family ) {
 			case 'domain':
 				return self::domainMessage( $action, $this, $args );
+			case 'mailbox':
+				return self::mailboxMessage( $action, $this, $args );
 		}
 
 		return self::unknownAction( $family, $action );
@@ -102,6 +105,7 @@ class Log extends Queried {
 	use LogTrait;
 	use UserTrait;
 	use DomainTrait;
+	use MailboxTrait;
 
 	public function __construct() {
 		$this->normalizeLog();
@@ -135,7 +139,7 @@ class Log extends Queried {
 		// create the Actor firm from the passed User object or from the Log
 		$actor_firm = $actor instanceof User
 			? $actor->getUserFirm()
-		        : $log->getLogActorFirm();
+		        : $actor->getLogActorFirm();
 
 		switch( $action ) {
 
@@ -149,7 +153,59 @@ class Log extends Queried {
 				);
 		}
 
+		// default dummy message
 		return self::unknownAction( 'domain', $action );
+	}
+
+	/**
+	 * Generate a Mailbox-related message
+	 *
+	 * @param  string $action The related action name
+	 * @param  object $log
+	 * @param  array  $args Arguments
+	 * @return string Message
+	 */
+	public static function mailboxMessage( $action, $log, $args ) {
+
+		/**
+		 * You can pass some objects to build the message:
+		 *
+		 * A complete 'actor'   User object
+		 * A complete 'domain'  Domain object
+		 * A complete 'mailbox' Mailbox object
+		 */
+		$actor   = $args['actor']   ?? $log;
+		$domain  = $args['domain']  ?? $log;
+		$mailbox = $args['mailbox'] ?? $log;
+
+		// create the Actor firm from the passed User object or from the Log
+		$actor_firm = $actor instanceof User
+			? $actor->getUserFirm()
+		        : $actor->getLogActorFirm();
+
+		$mailbox_firm = $mailbox->getMailboxFirm();
+
+		// trigger the right action message
+		switch( $action ) {
+
+			// the mailbox was created
+			case 'create':
+				return sprintf(
+					__( "%s created the mailbox %s" ),
+					$actor_firm,
+					$mailbox_firm
+				);
+
+			case 'description.change':
+				return sprintf(
+					__( "%s edited description of %s" ),
+					$actor_firm,
+					$mailbox_firm
+				);
+		}
+
+		// default dummy message
+		return self::unknownAction( 'mailbox', $action );
 	}
 
 	private static function unknownAction( $family, $action ) {

@@ -73,6 +73,13 @@ trait MailboxTrait {
 		);
 	}
 
+	public function getMailboxFirm() {
+		return HTML::a(
+			$this->getMailboxPermalink(),
+			esc_html( $this->getMailboxAddress() )
+		);
+	}
+
 	/**
 	 * Update this mailbox password
 	 *
