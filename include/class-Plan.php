@@ -212,4 +212,14 @@ class Plan extends Queried {
 
 		return (int) $percentage;
 	}
+
+	/**
+	 * Force to get a Plan ID, whatever is passed
+	 *
+	 * @param  mixed $plan Plan object or Plan ID
+	 * @return int
+	 */
+	public static function getID( $plan ) {
+		return is_object( $plan ) ? $plan->getPlanID() : (int)$plan;
+	}
 }
