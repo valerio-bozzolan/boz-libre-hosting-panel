@@ -1,5 +1,5 @@
 <?php
-# Copyright (C) 2019 Valerio Bozzolan
+# Copyright (C) 2019, 2020 Valerio Bozzolan
 # Boz Libre Hosting Panel
 #
 # This program is free software: you can redistribute it and/or modify
@@ -109,13 +109,23 @@ trait UserTrait {
 	}
 
 	/**
-	 * Get the domain edit URl
+	 * Get the domain edit URL
 	 *
 	 * @param boolean $absolute True for an absolute URL
 	 * @return string
 	 */
 	public function getUserPermalink( $absolute = false ) {
 		return User::permalink( $this->getUserUID(), $absolute );
+	}
+
+	/**
+	 * Get the user firm
+	 *
+	 * If you can edit that user, it's a link
+	 * @return string
+	 */
+	public function getUserFirm() {
+		return User::firm( $this->getUserUID() );
 	}
 }
 
@@ -158,5 +168,38 @@ class User extends Sessionuser {
 			$part .= _ . $uid;
 		}
 		return $part;
+	}
+
+	/**
+	 * Force to get an User ID, whatever is passed
+	 *
+	 * @param  mixed $user User object or User ID
+	 * @return int
+	 */
+	public static function getID( $user ) {
+		return is_object( $user ) ? $user->getUserID() : (int)$user;
+	}
+
+	/**
+	 * Build an user firm
+	 *
+	 * If you have enough permissions
+	 *
+	 * @return string
+	 */
+	public static function firm( $user_uid ) {
+
+		$firm = esc_html( $user_uid );
+
+		// create a link
+		if( has_permission( 'edit-user-all' ) ) {
+			$firm = HTML::a(
+				self::permalink( $user_uid ),
+				$firm
+			);
+		}
+
+		return $firm;
+
 	}
 }
