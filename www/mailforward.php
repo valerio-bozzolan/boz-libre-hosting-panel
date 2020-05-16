@@ -1,6 +1,6 @@
 <?php
 # Copyright (C) 2018, 2019, 2020 Valerio Bozzolan
-# Boz Libre Hosting Panel
+# KISS Libre Hosting Panel
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as
@@ -92,11 +92,22 @@ if( is_action( 'mailforward-save' ) ) {
 			BadRequest::spawn( __( "e-mail forwarding already existing" ) );
 		}
 
+		query( 'START TRANSACTION' );
+
 		// insert as new row
 		insert_row( 'mailforwardfrom', [
 			new DBCol( 'domain_ID',                $domain->getDomainID(), 'd' ),
 			new DBCol( 'mailforwardfrom_username', $username,              's' ),
 		] );
+
+		// remember this action in the registry
+		APILog::insert( [
+			'family'          => 'mailforward',
+			'action'          => 'create',
+			'mailforwardfrom' => last_inserted_ID(),
+		] );
+
+		query( 'COMMIT' );
 
 		// POST/redirect/GET
 		http_redirect( Mailforwardfrom::permalink(
