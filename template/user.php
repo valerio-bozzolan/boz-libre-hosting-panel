@@ -1,6 +1,6 @@
 <?php
-# Copyright (C) 2019 Valerio Bozzolan
-# Boz Libre Hosting Panel
+# Copyright (C) 2020 Valerio Bozzolan
+# KISS Libre Hosting Panel
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as
@@ -109,3 +109,22 @@ defined( 'BOZ_PHP' ) or die;
 	</section>
 <?php endif ?>
 <!-- /password handler -->
+
+<!-- user last log actions -->
+<?php if( $user ): ?>
+
+	<section>
+		<h3><?= __( "Last Activity" ) ?></h3>
+
+		<?php
+			// print the last activities
+			ActivityPanel::spawn( [
+				'query' => [
+					'actor' => $user,
+				],
+			] )
+		?>
+	</section>
+
+<?php endif ?>
+<!-- end user last log actions -->
