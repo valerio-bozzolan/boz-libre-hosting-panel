@@ -46,7 +46,7 @@ trait MailboxTrait {
 	 * @return string E-mail
 	 */
 	public function getMailboxAddress() {
-		return sprintf( "%s@%s",
+		return Mailbox::address(
 			$this->get( 'mailbox_username' ),
 			$this->get( 'domain_name' )
 		);
@@ -68,15 +68,20 @@ trait MailboxTrait {
 	 */
 	public function getMailboxPermalink( $absolute = false ) {
 		return Mailbox::permalink(
-			$this->get( 'domain_name' ),
+			$this->get( 'domain_name'      ),
 			$this->get( 'mailbox_username' )
 		);
 	}
 
+	/**
+	 * Get a printable Mailbox firm
+	 *
+	 * @return string
+	 */
 	public function getMailboxFirm() {
-		return HTML::a(
-			$this->getMailboxPermalink(),
-			esc_html( $this->getMailboxAddress() )
+		return Mailbox::firm(
+			$this->get( 'domain_name'      ),
+			$this->get( 'mailbox_username' )
 		);
 	}
 
@@ -233,5 +238,30 @@ class Mailbox extends Queried {
 	 */
 	public static function getID( $mailbox ) {
 		return is_object( $mailbox ) ? $mailbox->getMailboxID() : (int)$mailbox;
+	}
+
+	/**
+	 * Get the Mailbox address
+	 *
+	 * @param string $domain_name Domain name
+	 * @param string $mailbox_username Mailbox username without domain name
+	 * @return string
+	 */
+	public static function address( $domain_name, $mailbox_username ) {
+		return $domain_name . '@' . $mailbox_username;
+	}
+
+	/**
+	 * Get a printable Mailbox firm
+	 *
+	 * @param string $domain_name Domain name
+	 * @param string $mailbox_username Mailbox username without domain name
+	 * @return string
+	 */
+	public static function firm( $domain_name, $mailbox_username ) {
+		return HTML::a(
+			self::permalink( $domain_name, $mailbox_username ),
+			esc_html( self::address( $domain_name, $mailbox_username ) )
+		);
 	}
 }
