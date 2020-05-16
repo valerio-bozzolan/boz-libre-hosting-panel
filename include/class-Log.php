@@ -183,7 +183,10 @@ class Log extends Queried {
 			? $actor->getUserFirm()
 		        : $actor->getLogActorFirm();
 
-		$mailbox_firm = $mailbox->getMailboxFirm();
+		$mailbox_firm = Mailbox::firm(
+			$mailbox->getMailboxUsername(),
+			$domain->getDomainName()
+		);
 
 		// trigger the right action message
 		switch( $action ) {
