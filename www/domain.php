@@ -1,5 +1,5 @@
 <?php
-# Copyright (C) 2018, 2019 Valerio Bozzolan
+# Copyright (C) 2018, 2019, 2020 Valerio Bozzolan
 # Boz Libre Hosting Panel
 #
 # This program is free software: you can redistribute it and/or modify
@@ -57,12 +57,26 @@ if( $domain_name ) {
 			http_redirect( $existing->getDomainPermalink() );
 		}
 
+		query( 'START TRANSACTION' );
+
 		// insert this new domain
 		insert_row( Domain::T, [
 			new DBCol( 'domain_name',   $domain_name, 's' ),
 			new DBCol( 'domain_active', 1,            'd' ),
 			new DBCol( 'domain_born',  'NOW()',       '-' ),
 		] );
+
+		// this Domain ID
+		$domain_ID = last_inserted_ID();
+
+		// add this event in the log
+		APILog::insert( [
+			'family' => 'domain',
+			'action' => 'create',
+			'domain' => $domain_ID,
+		] );
+
+		query( 'COMMIT' );
 
 		// go to the new domain
 		http_redirect( Domain::permalink( $domain_name, true ) );
