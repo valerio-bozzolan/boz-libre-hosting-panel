@@ -1,6 +1,6 @@
 <?php
-# Copyright (C) 2018 Valerio Bozzolan
-# Boz Libre Hosting Panel
+# Copyright (C) 2018, 2019, 2020 Valerio Bozzolan
+# KISS Libre Hosting Panel
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as
@@ -46,3 +46,6 @@ template( 'ftp-users', $args );
 
 // show some links to the plan
 template( 'domain-plan-section', $args );
+
+// show Domain activity
+template( 'domain-activity', $args );
