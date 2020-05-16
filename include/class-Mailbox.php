@@ -111,6 +111,7 @@ trait MailboxTrait {
 	        APILog::insert( [
 	                'family'  => 'mailbox',
 	                'action'  => 'newpassword',
+			'domain'  => $this,
 	                'mailbox' => $this,
 	        ] );
 
