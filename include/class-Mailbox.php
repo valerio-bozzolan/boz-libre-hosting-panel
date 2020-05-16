@@ -207,4 +207,13 @@ class Mailbox extends Queried {
 		return '{SHA512-CRYPT}' . crypt( $password, "$6$$salt" );
 	}
 
+	/**
+	 * Force to get a Mailbox ID, whatever is passed
+	 *
+	 * @param  mixed $mailbox Mailbox object or Mailbox ID
+	 * @return int
+	 */
+	public static function getID( $mailbox ) {
+		return is_object( $mailbox ) ? $mailbox->getMailboxID() : (int)$mailbox;
+	}
 }
