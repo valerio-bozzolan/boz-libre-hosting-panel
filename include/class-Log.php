@@ -77,15 +77,24 @@ trait LogTrait {
 	}
 
 	/**
-	 * Get the log message alongside the date
+	 * Get the log message alongside the date and the actor name
 	 *
 	 * @param  array $args Arguments
 	 * @return self
 	 */
-	public function getLogMessageWithDate( $args ) {
+	public function getLogMessageWithDateAndUser( $args ) {
+
+		$actor = $args['actor'] ?? $this;
+
+		// create the Actor firm from the passed User object or from the Log
+		$actor_firm = $actor instanceof User
+			? $actor->getUserFirm()
+		        : $actor->getLogActorFirm();
+
 		return sprintf(
-			"%s - %s",
+			"%s - %s %s",
 			$this->getLogDate()->format( __( "Y-m-d H:i" ) ),
+			$actor_firm,
 			$this->getLogMessage( $args )
 		);
 	}
@@ -132,22 +141,15 @@ class Log extends Queried {
 		 * A complete 'actor' User object
 		 * A complete 'domain' Domain object
 		 */
-		$actor  = $args['actor']  ?? $log;
 		$domain = $args['domain'] ?? $log;
 		$plan   = $args['plan']   ?? $log;
-
-		// create the Actor firm from the passed User object or from the Log
-		$actor_firm = $actor instanceof User
-			? $actor->getUserFirm()
-		        : $actor->getLogActorFirm();
 
 		switch( $action ) {
 
 			// an administrator has changed the Plan for a Domain
 			case 'plan.change':
 				return sprintf(
-					__( "%s changed the Plan for %s to %s" ),
-					$actor_firm,
+					__( "changed the Plan for %s to %s" ),
 					$domain->getDomainFirm(),
 					esc_html( $plan->getPlanName() )
 				);
@@ -178,11 +180,6 @@ class Log extends Queried {
 		$domain  = $args['domain']  ?? $log;
 		$mailbox = $args['mailbox'] ?? $log;
 
-		// create the Actor firm from the passed User object or from the Log
-		$actor_firm = $actor instanceof User
-			? $actor->getUserFirm()
-		        : $actor->getLogActorFirm();
-
 		$mailbox_firm = Mailbox::firm(
 			$mailbox->getMailboxUsername(),
 			$domain->getDomainName()
@@ -194,15 +191,13 @@ class Log extends Queried {
 			// the mailbox was created
 			case 'create':
 				return sprintf(
-					__( "%s created the mailbox %s" ),
-					$actor_firm,
+					__( "created the mailbox %s" ),
 					$mailbox_firm
 				);
 
 			case 'description.change':
 				return sprintf(
-					__( "%s edited description of %s" ),
-					$actor_firm,
+					__( "edited description of %s" ),
 					$mailbox_firm
 				);
 		}
