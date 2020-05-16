@@ -70,7 +70,11 @@ trait LogTrait {
 				return self::domainMessage( $action, $this, $args );
 		}
 
-		return 'misterious action';
+		return esc_html( sprintf(
+			__( "misterious action about %s (%s)" ),
+			$family,
+			$action
+		) );
 	}
 
 	/**
