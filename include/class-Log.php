@@ -73,6 +73,20 @@ trait LogTrait {
 		return 'misterious action';
 	}
 
+	/**
+	 * Get the log message alongside the date
+	 *
+	 * @param  array $args Arguments
+	 * @return self
+	 */
+	public function getLogMessageWithDate( $args ) {
+		return sprintf(
+			"%s - %s",
+			$this->getLogDate()->format( __( "Y-m-d H:i" ) ),
+			$this->getLogMessage( $args )
+		);
+	}
+
 	protected function normalizeLog() {
 		$this->datetimes( 'log_timestamp' );
 	}
@@ -128,8 +142,7 @@ class Log extends Queried {
 			// an administrator has changed the Plan for a Domain
 			case 'plan.change':
 				return sprintf(
-					"%s - %s changed the Plan for %s to %s",
-					$log->getLogDate()->format( __( "Y-m-d H:i" ) ),
+					__( "%s changed the Plan for %s to %s" ),
 					$actor_firm,
 					$domain->getDomainFirm(),
 					esc_html( $plan->getPlanName() )

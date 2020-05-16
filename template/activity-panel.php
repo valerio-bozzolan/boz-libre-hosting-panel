@@ -30,7 +30,7 @@
 <ul>
 <?php foreach( $query->queryGenerator() as $log ): ?>
 
-	<li><?= $log->getLogMessage( $message_args ) ?></li>
+	<li><?= $log->getLogMessageWithDate( $message_args ) ?></li>
 
 <?php endforeach ?>
 </ul>
