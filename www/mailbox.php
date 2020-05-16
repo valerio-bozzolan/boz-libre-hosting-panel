@@ -98,12 +98,23 @@ if( $mailbox && is_action( 'save-mailbox-notes' ) ) {
 	// read the description
 	$description = $_POST['mailbox_description'] ?? null;
 
+	query( 'START TRANSACTION' );
+
 	// save the description
 	( new MailboxAPI() )
 		->whereMailbox( $mailbox )
 		->update( [
 			'mailbox_description' => $description,
 		] );
+
+	// remember this action in the registry
+	APILog::insert( [
+		'family'  => 'mailbox',
+		'action'  => 'description.change',
+		'mailbox' => $mailbox,
+	] );
+
+	query( 'COMMIT' );
 
 	// POST -> redirect -> GET
 	http_redirect( $mailbox->getMailboxPermalink() );
@@ -130,12 +141,23 @@ if( !$mailbox && is_action( 'mailbox-create' ) && isset( $_POST['mailbox_usernam
 		$mailbox_password = generate_password();
 		$mailbox_password_safe = Mailbox::encryptPassword( $mailbox_password );
 
+		query( 'START TRANSACTION' );
+
 		// really create the mailbox
 		insert_row( 'mailbox', [
 			new DBCol( 'mailbox_username', $_POST['mailbox_username'], 's' ),
 			new DBCol( 'domain_ID',        $domain->getDomainID(),       'd' ),
 			new DBCol( 'mailbox_password', $mailbox_password_safe,       's' ),
 		] );
+
+		// register this event in the registry
+		APILog::insert( [
+			'family'  => 'mailbox',
+			'action'  => 'create',
+			'mailbox' => last_inserted_ID(),
+		] );
+
+		query( 'COMMIT' );
 	}
 
 	// POST -> redirect -> GET

@@ -86,12 +86,23 @@ trait MailboxTrait {
 
 		$enc_password = Mailbox::encryptPassword( $password );
 
+		query( 'START TRANSACTION' );
+
 		// update
 		( new MailboxAPI() )
 			->whereMailbox( $this )
 			->update( [
 				new DBCol( 'mailbox_password', $enc_password, 's' ),
 			] );
+
+	        // register this event in the registry
+	        APILog::insert( [
+	                'family'  => 'mailbox',
+	                'action'  => 'newpassword',
+	                'mailbox' => $this,
+	        ] );
+
+		query( 'COMMIT' );
 
 		return $password;
 	}
