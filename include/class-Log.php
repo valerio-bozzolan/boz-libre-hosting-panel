@@ -70,11 +70,7 @@ trait LogTrait {
 				return self::domainMessage( $action, $this, $args );
 		}
 
-		return esc_html( sprintf(
-			__( "misterious action about %s (%s)" ),
-			$family,
-			$action
-		) );
+		return self::unknownAction( $family, $action );
 	}
 
 	/**
@@ -153,6 +149,14 @@ class Log extends Queried {
 				);
 		}
 
-		return 'edited a domain (wtf?)';
+		return self::unknownAction( 'domain', $action );
+	}
+
+	private static function unknownAction( $family, $action ) {
+		return esc_html( sprintf(
+			__( "misterious action about %s (%s)" ),
+			$family,
+			$action
+		) );
 	}
 }
