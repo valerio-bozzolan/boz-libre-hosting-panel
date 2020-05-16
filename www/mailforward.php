@@ -124,7 +124,8 @@ if( $mailforwardfrom ) {
 	// action fired when deleting a whole mailforward
 	if( is_action( 'mailforward-delete' ) ) {
 
-		// drop th
+		// drop the existing one
+		// TODO: refactor with Query builder
 		query( sprintf(
 			"DELETE FROM %s WHERE domain_ID = %d AND mailforwardfrom_username = '%s'",
 			T( 'mailforwardfrom' ),
@@ -154,6 +155,8 @@ if( $mailforwardfrom ) {
 
 		// action fired when removing a mailforward
 		if( is_action( 'mailforwardto-remove' ) && $existing_address ) {
+
+			// TODO refactor with query builder
 			query( sprintf(
 				"DELETE FROM %s WHERE mailforwardfrom_ID = %d and mailforwardto_address = '%s'",
 				T( 'mailforwardto' ),
