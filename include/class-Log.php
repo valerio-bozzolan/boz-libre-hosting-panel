@@ -19,6 +19,7 @@
 class_exists( User::class );
 class_exists( Domain::class );
 class_exists( Mailbox::class );
+class_exists( Mailforwardfrom::class );
 
 trait LogTrait {
 
@@ -71,6 +72,8 @@ trait LogTrait {
 				return self::domainMessage( $action, $this, $args );
 			case 'mailbox':
 				return self::mailboxMessage( $action, $this, $args );
+			case 'mailforward':
+				return self::mailforwardMessage( $action, $this, $args );
 		}
 
 		return self::unknownAction( $family, $action );
@@ -115,6 +118,7 @@ class Log extends Queried {
 	use UserTrait;
 	use DomainTrait;
 	use MailboxTrait;
+	use MailforwardfromTrait;
 
 	public function __construct() {
 		$this->normalizeLog();
@@ -195,6 +199,7 @@ class Log extends Queried {
 					$mailbox_firm
 				);
 
+			// the description was changed
 			case 'description.change':
 				return sprintf(
 					__( "edited description of %s" ),
@@ -204,6 +209,53 @@ class Log extends Queried {
 
 		// default dummy message
 		return self::unknownAction( 'mailbox', $action );
+	}
+
+	/**
+	 * Generate a Mailforward-related message
+	 *
+	 * @param  string $action The related action name
+	 * @param  object $log
+	 * @param  array  $args Arguments
+	 * @return string Message
+	 */
+	public static function mailforwardMessage( $action, $log, $args ) {
+
+		/**
+		 * You can pass some objects to build the message:
+		 *
+		 * A complete 'domain'  Domain object
+		 * A complete 'mailbox' Mailbox object
+		 */
+		$domain      = $args['domain']      ?? $log;
+		$mailforward = $args['mailforward'] ?? $log;
+
+		$firm = Mailforwardfrom::firm(
+			$domain->getDomainName(),
+			$mailforward->getMailforwardfromUsername()
+		);
+
+		// trigger the right action message
+		switch( $action ) {
+
+			// a Mailforward destination was added
+			case 'add.destination':
+				return sprintf(
+					__( "added a destination for %s" ),
+					$firm
+				);
+
+			// a Mailforward destination was removed
+			case 'remove.destination':
+				return sprintf(
+					__( "removed a destination for %s" ),
+					$firm
+				);
+		}
+
+		// default dummy message
+		return self::unknownAction( 'mailforward', $action );
+
 	}
 
 	private static function unknownAction( $family, $action ) {

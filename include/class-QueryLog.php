@@ -150,6 +150,9 @@ trait QueryLogTrait {
 		if( !$skip_mailforwardfrom ) {
 			//              type,   table,             first column,                         second column
 			$this->joinOn( 'LEFT', 'mailforwardfrom', 'mailforwardfrom.mailforwardfrom_ID', 'log.mailforwardfrom_ID' );
+			$this->select( [
+				'mailforwardfrom_username',
+			] );
 		}
 
 		// left join with the Plan table
