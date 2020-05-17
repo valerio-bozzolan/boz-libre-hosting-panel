@@ -34,7 +34,7 @@ trait MailforwardfromTrait {
 	 * @return string E-mail
 	 */
 	public function getMailforwardfromAddress() {
-		return sprintf( '%s@%s',
+		return Mailbox::address(
 			$this->getMailforwardfromUsername(),
 			$this->getDomainName()
 		);

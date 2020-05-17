@@ -104,6 +104,7 @@ if( is_action( 'mailforward-save' ) ) {
 		APILog::insert( [
 			'family'          => 'mailforward',
 			'action'          => 'create',
+			'domain'          => $domain,
 			'mailforwardfrom' => last_inserted_ID(),
 		] );
 
@@ -156,6 +157,8 @@ if( $mailforwardfrom ) {
 		// action fired when removing a mailforward
 		if( is_action( 'mailforwardto-remove' ) && $existing_address ) {
 
+			query( 'START TRANSACTION' );
+
 			// TODO refactor with query builder
 			query( sprintf(
 				"DELETE FROM %s WHERE mailforwardfrom_ID = %d and mailforwardto_address = '%s'",
@@ -163,14 +166,37 @@ if( $mailforwardfrom ) {
 				$mailforwardfrom->getMailforwardfromID(),
 				esc_sql( $address )
 			) );
+
+			// remember that we removed an address
+			APILog::insert( [
+				'family'          => 'mailforward',
+				'action'          => 'remove.destination',
+				'domain'          => $domain,
+				'mailforwardfrom' => $mailforwardfrom,
+			] );
+
+			query( 'COMMIT' );
 		}
 
 		// action fired when adding a mailforward
 		if( is_action( 'mailforwardto-add' ) && ! $existing_address ) {
+
+			query( 'START TRANSACTION' );
+
 			insert_row( 'mailforwardto', [
 				new DBCol( 'mailforwardfrom_ID',    $mailforwardfrom->getMailforwardfromID(), 'd' ),
 				new DBCol( 'mailforwardto_address', $address,                                 's' ),
 			] );
+
+			// remember that we added an address
+			APILog::insert( [
+				'family'          => 'mailforward',
+				'action'          => 'add.destination',
+				'domain'          => $domain,
+				'mailforwardfrom' => $mailforwardfrom,
+			] );
+
+			query( 'COMMIT' );
 		}
 	}
 }
