@@ -1,6 +1,6 @@
 <?php
 # Copyright (C) 2018, 2019, 2020 Valerio Bozzolan
-# Boz Libre Hosting Panel
+# KISS Libre Hosting Panel
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as
@@ -35,6 +35,18 @@ trait MailforwardfromTrait {
 	 */
 	public function getMailforwardfromAddress() {
 		return Mailbox::address(
+			$this->getDomainName(),
+			$this->getMailforwardfromUsername()
+		);
+	}
+
+	/**
+	 * Get the Mailforwardfrom printable firm
+	 *
+	 * @return self
+	 */
+	public function getMailforwardfromFirm() {
+		return Mailforwardfrom::firm(
 			$this->getDomainName(),
 			$this->getMailforwardfromUsername()
 		);
@@ -113,6 +125,20 @@ class Mailforwardfrom extends Queried {
 			$part .= _ . $mailforward;
 		}
 		return $part;
+	}
+
+	/**
+	 * Get a printable Mailbox firm
+	 *
+	 * @param  string $domain_name          Domain name
+	 * @param  string $mailforward_username Mailforward username without domain name
+	 * @return string
+	 */
+	public static function firm( $domain_name, $mailforward_username ) {
+		return HTML::a(
+			self::permalink( $domain_name, $mailforward_username ),
+			esc_html( Mailbox::address( $domain_name, $mailforward_username ) )
+		);
 	}
 
 	/**
