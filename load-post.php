@@ -110,6 +110,7 @@ add_menu_entries( [
 	new MenuEntry( 'profile',        'profile.php',         __( "Profile"        )                        ),
 	new MenuEntry( 'logout',         'logout.php',          __( "Logout"         ), null, 'read'          ),
 	new MenuEntry( 'user-list',      'user-list.php',       __( "Users"          ), null, 'edit-user-all' ),
+	new MenuEntry( 'activity',       'activity.php',        __( "Last Activity"  ), null, 'monitor'       ),
 	new MenuEntry( 'password-reset', 'password-reset.php',  __( "Password reset" )                        ),
 ] );
 
@@ -126,4 +127,5 @@ inherit_permissions( 'admin', 'user', [
 	'edit-domain-all',
 	'edit-plan-all',
 	'edit-ftp-all',
+	'monitor',
 ] );

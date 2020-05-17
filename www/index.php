@@ -1,6 +1,6 @@
 <?php
-# Copyright (C) 2018, 2019 Valerio Bozzolan
-# Boz Libre Hosting Panel
+# Copyright (C) 2018, 2019, 2020 Valerio Bozzolan
+# KISS Libre Hosting Panel
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as
@@ -71,12 +71,23 @@ $domains = ( new DomainAPI() )
 		<?php endif ?>
 	<?php endif ?>
 
+	<!-- link to users -->
 	<?php if( has_permission( 'edit-user-all' ) ): ?>
 		<h3><?= HTML::a(
 			menu_entry( 'user-list' )->getURL(),
 			__( "Users" )
 		) ?></h3>
 	<?php endif ?>
+	<!-- end link to users -->
+
+	<!-- link to users activity -->
+	<?php if( has_permission( 'monitor' ) ): ?>
+		<h3><?= HTML::a(
+			menu_entry( 'activity' )->getURL(),
+			__( "Last Activity" )
+		) ?></h3>
+	<?php endif ?>
+	<!-- end link to users activity -->
 
 <?php
 
