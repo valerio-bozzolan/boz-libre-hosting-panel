@@ -181,8 +181,8 @@ class Log extends Queried {
 		$mailbox = $args['mailbox'] ?? $log;
 
 		$mailbox_firm = Mailbox::firm(
-			$mailbox->getMailboxUsername(),
-			$domain->getDomainName()
+			$domain->getDomainName(),
+			$mailbox->getMailboxUsername()
 		);
 
 		// trigger the right action message

@@ -47,8 +47,8 @@ trait MailboxTrait {
 	 */
 	public function getMailboxAddress() {
 		return Mailbox::address(
-			$this->get( 'mailbox_username' ),
-			$this->get( 'domain_name' )
+			$this->get( 'domain_name' ),
+			$this->get( 'mailbox_username' )
 		);
 	}
 
@@ -249,7 +249,7 @@ class Mailbox extends Queried {
 	 * @return string
 	 */
 	public static function address( $domain_name, $mailbox_username ) {
-		return $domain_name . '@' . $mailbox_username;
+		return $mailbox_username . '@' . $domain_name;
 	}
 
 	/**
