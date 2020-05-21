@@ -54,9 +54,9 @@ class MailboxDestroyer {
 
 		// delete all log-related stuff
 		// TODO: enable when the T338 will be implemented
-//		( new QueryLog() )
-//			->whereMailbox( $mailbox )
-//			->delete();
+		( new QueryLog() )
+			->whereMailbox( $mailbox )
+			->delete();
 
 		// finally delete the mailbox
 		( new MailboxAPI() )
