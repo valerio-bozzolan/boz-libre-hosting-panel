@@ -1,7 +1,7 @@
 #!/usr/bin/php
 <?php
 # Copyright (C) 2020 Valerio Bozzolan
-# Boz Libre Hosting Panel
+# KISS Libre Hosting Panel
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as
@@ -47,31 +47,10 @@ if( !$mailbox_raw ) {
 	exit( 2 );
 }
 
-// mailbox username and domain name
-$mailbox_username = null;
-$domain_name      = null;
-
-// no valid mailbox no party
-if( substr_count( $mailbox_raw, '@' ) === 1 ) {
-
-	// extract the mailbox username and domain name
-	list( $mailbox_username, $domain_name ) = explode( '@', $mailbox_raw, 2 );
-}
-
-// check if the user input has sense
-if( !$mailbox_username || !$domain_name ) {
-	destroy_mailbox_help( sprintf(
-		"Invalid e-mail address '%s'",
-		$mailbox_raw
-	) );
-	exit( 3 );
-}
-
 // request the mailbox
 $mailbox = ( new MailboxAPI() )
 	->joinDomain()
-	->whereDomainName( $domain_name )
-	->whereMailboxUsername( $mailbox_username )
+	->whereCompleteMailboxAddress( $mailbox_raw )
 	->queryRow();
 
 // no mailbox no party

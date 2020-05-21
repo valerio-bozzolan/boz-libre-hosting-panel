@@ -66,6 +66,32 @@ trait MailboxAPITrait {
 	}
 
 	/**
+	 * Filter to a specific Mailbox complete e-mail address
+	 *
+	 * Note that you must have both the Mailbox and Domain tables
+	 *
+	 * @param string $address E-mail address
+	 * @return self
+	 */
+	public function whereCompleteMailboxAddress( $address ) {
+
+		// no valid mailbox no party
+		if( substr_count( $address, '@' ) === 1 ) {
+
+			// extract the mailbox username and domain name
+			list( $mailbox_username, $domain_name ) = explode( '@', $address, 2 );
+		}
+
+		// check if the user input has sense
+		if( !$mailbox_username || !$domain_name ) {
+			throw new Exception( "invalid e-mail address" );
+		}
+
+		return $this->whereDomainName(      $domain_name      )
+		            ->whereMailboxUsername( $mailbox_username );
+	}
+
+	/**
 	 * Join mailboxes and domain (once)
 	 *
 	 * @return self
