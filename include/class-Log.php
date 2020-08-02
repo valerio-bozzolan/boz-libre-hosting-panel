@@ -257,6 +257,13 @@ class Log extends Queried {
 					__( "removed a destination for %s" ),
 					$firm
 				);
+
+			// a Mailforward mailbox was created
+			case 'create':
+				return sprintf(
+					__( "created %s" ),
+					$firm
+				);
 		}
 
 		// default dummy message
