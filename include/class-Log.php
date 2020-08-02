@@ -205,6 +205,12 @@ class Log extends Queried {
 					__( "edited description of %s" ),
 					$mailbox_firm
 				);
+
+			case 'newpassword':
+				return sprintf(
+					__( "reset password of %s" ),
+					$mailbox_firm
+				);
 		}
 
 		// default dummy message
