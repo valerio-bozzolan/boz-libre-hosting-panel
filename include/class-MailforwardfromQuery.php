@@ -15,20 +15,10 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-/**
- * Execute query againsts a Mailforwardfrom
- */
-class MailforwardfromQuery extends DomainAPI {
+// load DomainAPITrait;
+class_exists( 'DomainAPI', true );
 
-	/**
-	 * Construct
-	 */
-	public function __construct() {
-		parent::__construct();
-		$this->from(   'mailforwardfrom' );
-		$this->equals( 'mailforwardfrom.domain_ID', 'domain.domain_ID' );
-		$this->defaultClass( 'Mailforwardfrom' );
-	}
+trait MailforwardfromQueryTrait {
 
 	/**
 	 * Filter to a specific mailforward username
@@ -38,6 +28,44 @@ class MailforwardfromQuery extends DomainAPI {
 	 */
 	public function whereMailforwardfromUsername( $username ) {
 		return $this->whereStr( 'mailforwardfrom_username', $username );
+	}
+
+	public function whereMailforwardfromID( $id ) {
+		return $this->whereInt( $this->MAILFORWARDFROM_ID, $id );
+	}
+
+	public function whereMailforwardfrom( $mailforwardfrom ) {
+		return $this->whereMailforwardfromID( $mailforwardfrom->getMailforwardfromID() );
+	}
+
+}
+
+/**
+ * Execute query againsts a Mailforwardfrom
+ */
+class MailforwardfromQuery extends Query {
+
+	use MailforwardfromQueryTrait;
+	use DomainAPITrait;
+
+	/**
+	 * Univoque Domain ID column name
+	 */
+	const DOMAIN_ID = 'mailforwardfrom.domain_ID';
+
+	/**
+	 * Column name of the Mailforwardfrom ID
+	 */
+	protected $MAILFORWARDFROM_ID = 'mailforwardfrom.mailforwardfrom_ID';
+
+	/**
+	 * Construct
+	 */
+	public function __construct() {
+		parent::__construct();
+
+		$this->from( 'mailforwardfrom' );
+		$this->defaultClass( 'Mailforwardfrom' );
 	}
 
 }
