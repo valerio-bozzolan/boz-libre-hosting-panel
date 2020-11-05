@@ -17,6 +17,7 @@
 
 // make sure that this class is loaded
 class_exists( MailboxAPI::class );
+class_exists( MailforwardfromQuery::class );
 
 /**
  * Methods of a QueryLog object
@@ -176,6 +177,7 @@ class QueryLog extends Query {
 
 	use QueryLogTrait;
 	use MailboxAPITrait;
+	use MailforwardfromQueryTrait;
 
 	/**
 	 * Univoque Domain ID column name
@@ -188,6 +190,11 @@ class QueryLog extends Query {
 	 * @var string
 	 */
 	protected $MAILBOX_ID = 'log.mailbox_ID';
+
+	/**
+	 * Column name of the Mailforwardfrom ID
+	 */
+	protected $MAILFORWARDFROM_ID = 'log.mailforwardfrom_ID';
 
 	/**
 	 * Constructor
