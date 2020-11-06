@@ -57,15 +57,42 @@ Let me say that I love listening to the whishlist of my costumers. Here are the 
 	- [X] remove
 	- [X] password reset
 - [ ] administration of own MariaDB databases
+	- [ ] list own databases
+	- [ ] list own users
+	- [ ] change user password
 - [ ] administration of User(s)
 	- [X] create
 	- [X] password reset
 	- [X] create a Domain for that User
 	- [ ] change login
 	- [ ] change e-mail
-- [X] plans
+- plans
 	- [X] limit number of mailboxes per domain
 	- [X] limit number of mail forwardings
+- action log
+
+## Installation
+
+Web interface:
+
+```
+git clone https://gitpull.it/source/boz-libre-hosting-panel.git
+git clone https://gitpull.it/source/suckless-php.git
+```
+
+```
+# database
+apt install mariadb-server
+
+# web server
+apt install apache2 libjs-bootstrap certbot
+
+# FTP server
+apt install pure-ftpd-mysql
+
+# mailserver
+apt install postfix-mysql postfix-policyd-spf-python dovecot-mysql dovecot-imapd dovecot-pop3d spamassassin
+```
 
 ## Why PHP7
 
