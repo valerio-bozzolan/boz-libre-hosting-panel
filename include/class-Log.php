@@ -236,10 +236,14 @@ class Log extends Queried {
 		$domain      = $args['domain']      ?? $log;
 		$mailforward = $args['mailforward'] ?? $log;
 
-		$firm = Mailforwardfrom::firm(
-			$domain->getDomainName(),
-			$mailforward->getMailforwardfromUsername()
-		);
+		if( $mailforward ) {
+			$firm = $domain->getDomainFirm();
+		} else {
+			$firm = Mailforwardfrom::firm(
+				$domain->getDomainName(),
+				$mailforward->getMailforwardfromUsername()
+			);
+		}
 
 		// trigger the right action message
 		switch( $action ) {
@@ -262,6 +266,12 @@ class Log extends Queried {
 			case 'create':
 				return sprintf(
 					__( "created %s" ),
+					$firm
+				);
+
+			case 'delete':
+				return sprintf(
+					__( "deleted an %s mail forwarding" ),
 					$firm
 				);
 		}

@@ -30,6 +30,7 @@ defined( 'BOZ_PHP' ) or die;
 
 // domain mail forwardings
 $mailforwardfroms = $domain->factoryMailforwardfrom()
+	->joinDomain()
 	->select( [
 		'mailforwardfrom.mailforwardfrom_ID',
 		'mailforwardfrom_username',

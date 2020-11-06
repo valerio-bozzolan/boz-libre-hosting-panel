@@ -38,6 +38,7 @@ if( $mailforwardfrom_username ) {
 			'mailforwardfrom.mailforwardfrom_ID',
 			'mailforwardfrom_username',
 		] )
+		->joinDomain()
 		->whereDomainName( $domain_name )
 		->whereMailforwardfromUsername( $mailforwardfrom_username )
 		->whereDomainIsEditable()
@@ -125,14 +126,29 @@ if( $mailforwardfrom ) {
 	// action fired when deleting a whole mailforward
 	if( is_action( 'mailforward-delete' ) ) {
 
+		query( 'START TRANSACTION' );
+
+		// mark a deletion on this Domain
+		APILog::insert( [
+			'family'          => 'mailforward',
+			'action'          => 'delete',
+			'domain'          => $domain,
+		] );
+
+		// drop the foreign key constraints
+		// See https://gitpull.it/T518
+		( new QueryLog() )
+			->whereMailforwardfrom( $mailforwardfrom )
+			->update( [
+				'mailforwardfrom_ID' => null,
+			] );
+
 		// drop the existing one
-		// TODO: refactor with Query builder
-		query( sprintf(
-			"DELETE FROM %s WHERE domain_ID = %d AND mailforwardfrom_username = '%s'",
-			T( 'mailforwardfrom' ),
-			$mailforwardfrom->getDomainID(),
-			$mailforwardfrom->getMailforwardfromUsername()
-		) );
+		( new MailforwardfromQuery() )
+			->whereMailforwardfrom( $mailforwardfrom )
+			->delete();
+
+		query( 'COMMIT' );
 
 		// POST/redirect/GET
 		http_redirect( $domain->getDomainPermalink( true ), 303 );
