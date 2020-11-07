@@ -87,6 +87,10 @@ defined( 'BOZ_PHP' ) or die;
 	<?php endif ?>
 	<!-- /actions -->
 
+	<?php template( 'mailbox-delete-notes', [
+		'mailbox' => $mailbox,
+	] ) ?>
+
 	<?php if( $mailbox ): ?>
 	<section>
 		<h3><?= __( "Last Activity" ) ?></h3>
