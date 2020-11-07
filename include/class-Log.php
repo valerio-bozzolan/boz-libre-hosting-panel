@@ -237,12 +237,12 @@ class Log extends Queried {
 		$mailforward = $args['mailforward'] ?? $log;
 
 		if( $mailforward ) {
-			$firm = $domain->getDomainFirm();
-		} else {
 			$firm = Mailforwardfrom::firm(
 				$domain->getDomainName(),
 				$mailforward->getMailforwardfromUsername()
 			);
+		} else {
+			$firm = $domain->getDomainFirm();
 		}
 
 		// trigger the right action message
