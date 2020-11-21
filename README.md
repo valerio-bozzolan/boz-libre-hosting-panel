@@ -107,15 +107,15 @@ This PHP7 application is stateless. Does not have sessions. It's well-designed. 
 
 ## Report a bug
 
-https://gitpull.it/project/board/15/
+https://gitpull.it/tag/kiss_libre_hosting_panel/
 
 ## Report a feature
 
-https://gitpull.it/project/board/15/
+https://gitpull.it/tag/kiss_libre_hosting_panel/
 
 ## License
 
-Copyright (C) 2018, 2019, 2020 [Valerio Bozzolan](https://boz.reyboz.it/) - _KISS Libre Hosting Panel_
+Copyright (C) 2018, 2019, 2020 [Valerio Bozzolan](https://boz.reyboz.it/) - KISS Libre Hosting Panel
 
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
