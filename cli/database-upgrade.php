@@ -44,7 +44,7 @@ echo <<<EOF
 EOF;
 
 // path to the documentation directory
-$documentation_path = ABSPATH . '/documentation/database';
+$documentation_path = ABSPATH . '/documentation';
 
 // directory to the database patches
 $patch_directory = "$documentation_path/patches";
