@@ -68,12 +68,6 @@ if( !$database_exists ) {
 	echo "important tables are missing! assuming no database.\n";
 	echo "importing the schema for the first time\n";
 	execute_queries_from_file( "$documentation_path/database-schema.sql" );
-
-	// if we have not imported any database version, just set the latest one
-	$version_exists = get_option( 'database_version', 0 );
-	if( !$version_exists ) {
-		set_option( 'database_version', DATABASE_VERSION );
-	}
 }
 
 // get the current database version
