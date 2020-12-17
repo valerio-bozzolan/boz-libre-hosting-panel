@@ -26,17 +26,41 @@
  *   load.php
  */
 
-// database version
+// Database vesion
 //
-// you can increase your database version if you added some patches in:
+// Do not touch if not sure.
+//
+// the maintainer increases this database version
+// each version is related to a patch here:
 //   documentation/database/patches
 define( 'DATABASE_VERSION', 7 );
+
+/**
+ * VirtualHost(s) base path
+ *
+ * e.g. you may have /var/www/example.com/index.html
+ * do NOT end with a slash
+ */
+define_default( 'VIRTUALHOST_BASE_PATH', '/var/www' );
+
+/**
+ * Mailbox base path
+ *
+ * Used by CLI scripts to calculate the current quotas.
+ *
+ * The mailboxes should have paths like:
+ *     MAILBOX_BASE_PATH/domain_name/user_name/
+ */
+define_default( 'MAILBOX_BASE_PATH', '/home/vmail' );
 
 // include path
 define_default( 'INCLUDE_PATH',  ABSPATH . __ . 'include' );
 
 // template path
 define_default( 'TEMPLATE_PATH', ABSPATH . __ . 'template' );
+
+// override default user class
+define_default( 'SESSIONUSER_CLASS', 'User' );
 
 // autoload classes from the /include directory
 spl_autoload_register( function( $name ) {
@@ -46,9 +70,6 @@ spl_autoload_register( function( $name ) {
 		require $path;
 	}
 } );
-
-// override default user class
-define( 'SESSIONUSER_CLASS', 'User' );
 
 // load common functions
 require INCLUDE_PATH . __ . 'functions.php';
@@ -65,12 +86,6 @@ define_default( 'BOOTSTRAP_DIR_URL', '/javascript/bootstrap' );
 // provided by the php-net-smtp package as default
 define_default( 'NET_SMTP', '/usr/share/php/Net/SMTP.php' );
 
-// base directory for your virtualhosts
-// e.g. you may have /var/www/example.com/index.html
-// do NOT end with a slash
-// TODO: support multiple hosts
-define_default( 'VIRTUALHOSTS_DIR', '/var/www' );
-
 // default currency simbol
 define_default( 'DEFAULT_CURRENCY_SYMBOL', '€' );
 
@@ -86,28 +101,18 @@ define( 'GETTEXT_DIRECTORY', 'l10n' );
 define( 'GETTEXT_DEFAULT_ENCODE', CHARSET ); // UTF-8
 
 // common strings
-define_default( 'SITE_NAME', "KISS Libre Hosting Panel" );
+define_default( 'SITE_NAME', "Libre Hosting Panel" );
 define_default( 'CONTACT_EMAIL', 'support@' . DOMAIN );
-define_default( 'REPO_URL', 'https://gitpull.it/project/profile/15/' );
+define_default( 'REPO_URL', 'https://gitpull.it/source/kiss-libre-hosting-panel/' );
 
 // limit session duration to 5 minutes (60s * 100m)
 define_default( 'SESSION_DURATION', 6000 );
 
-/**
- * Mailbox base path
- *
- * Used by CLI scripts to calculate the current quotas.
- *
- * The mailboxes should have paths like:
- *     MAILBOX_BASE_PATH/domain_name/user_name/
- */
-define_default( 'MAILBOX_BASE_PATH', '/home/vmail' );
-
 // register web pages
 add_menu_entries( [
-	new MenuEntry( 'index',          '/',                   __( "Dashboard"      ), null, 'backend'       ),
+	new MenuEntry( 'index',          '',                    __( "Dashboard"      ), null, 'backend'       ),
 	new MenuEntry( 'login',          'login.php',           __( "Login"          )                        ),
-	new MenuEntry( 'profile',        'profile.php',         __( "Profile"        )                        ),
+	new MenuEntry( 'profile',        'profile.php',         __( "Profile"        ), null, 'read'          ),
 	new MenuEntry( 'logout',         'logout.php',          __( "Logout"         ), null, 'read'          ),
 	new MenuEntry( 'user-list',      'user-list.php',       __( "Users"          ), null, 'edit-user-all' ),
 	new MenuEntry( 'activity',       'activity.php',        __( "Last Activity"  ), null, 'monitor'       ),

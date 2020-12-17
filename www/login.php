@@ -1,6 +1,6 @@
 <?php
-# Copyright (C) 2018, 2019 Valerio Bozzolan
-# Boz Libre Hosting Panel
+# Copyright (C) 2018, 2019, 2020 Valerio Bozzolan
+# KISS Libre Hosting Panel
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as
@@ -22,13 +22,13 @@
 // load framework
 require '../load.php';
 
-// spawn header
-Header::spawn();
-
 // go to the wanted page (or homepage)
 if( isset( $_POST['user_uid'] ) && login() ) {
 	http_redirect( after_login_url(), 303 ); // Redirection "See Other"
 }
+
+// spawn header
+Header::spawn();
 ?>
 
 	<?php if( isset( $_POST[ 'user_uid' ] ) ): ?>

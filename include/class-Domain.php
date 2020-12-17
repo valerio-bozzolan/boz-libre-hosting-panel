@@ -245,7 +245,7 @@ trait DomainTrait {
 	 */
 	public function getDomainBasePath() {
 		// mailboxes are stored under a $BASE/domain/username filesystem structure
-		return VIRTUALHOSTS_DIR . __ . $this->getDomainDirname();
+		return VIRTUALHOST_BASE_PATH . __ . $this->getDomainDirname();
 	}
 
 	/**

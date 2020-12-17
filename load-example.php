@@ -1,5 +1,5 @@
 <?php
-# Copyright (C) 2018, 2019 Valerio Bozzolan
+# Copyright (C) 2018, 2019, 2020 Valerio Bozzolan
 # Boz Libre Hosting Panel
 #
 # This program is free software: you can redistribute it and/or modify
@@ -21,17 +21,15 @@
  * Please fill this file and save as 'load.php'!
  */
 
-// database credentials
-$username = 'insert here database username';
-$password = 'insert here database password';
-$database = 'insert here database name';
+// change these MySQL/MariaDB database credentials
+$username = 'libre_hosting_panel';
+$database = 'libre_hosting_panel';
+$password = 'insert here a password';
+
 $location = 'localhost';
 
 // database prefix (if any)
-$prefix = '';
-
-// your contact e-mail
-define( 'CONTACT_EMAIL', 'services@example.org' );
+$prefix = 'librehost_';
 
 // your SMTP credentials
 define( 'MAIL_FROM',     'noreply@example.org' );
@@ -42,26 +40,35 @@ define( 'SMTP_TLS',      true );
 define( 'SMTP_SERVER',   'mail.example.org' );
 define( 'SMTP_PORT',     465 );
 
-// absolute path to the project directory without trailing slash
-define( 'ABSPATH', __DIR__ );
+// your contact e-mail
+define( 'CONTACT_EMAIL', 'services@example.org' );
 
 // absolute web directory without trailing slash
+// if your URL is http://asd.org/hosting/ then set '/hosting'
+// if your URL is http://asd.org/ then set ''
 define( 'ROOT', '' );
+
+// absolute path to the project directory without trailing slash
+// this is rarely changed
+define( 'ABSPATH', __DIR__ );
 
 // other specific configuration about your hosting environments
 $HOSTING_CONFIG = new stdClass();
 
-// Mailbox password encryption custom mechanism (you can leave this commented for the default)
+// Mailbox password encryption custom mechanism
+// you can leave this commented for the default- this is just an example.
 # $HOSTING_CONFIG->MAILBOX_ENCRYPT_PWD = function ( $password ) {
 #	$salt = bin2hex( openssl_random_pseudo_bytes( 3 ) );
 #	return '{SHA512-CRYPT}' . crypt( $password, "$6$$salt" );
 # };
 
-// FTP password encryption custom mechanism (you can leave this commented for the default)
+// FTP password encryption custom mechanism
+// you can leave this commented for the default. this is just an example.
 # $HOSTING_CONFIG->FTP_ENCRYPT_PWD = function ( $password ) {
 #	$salt = bin2hex( openssl_random_pseudo_bytes( 3 ) );
 #	return '{SHA512-CRYPT}' . crypt( $password, "$6$$salt" );
 # };
 
-// path to the boz-php framework
-require '/usr/share/php/suckless-php/load.php';
+// customize your path to the suckess-php framework
+//   https://gitpull.it/source/suckless-php/
+require __DIR__ . '/../suckless-php/load.php';

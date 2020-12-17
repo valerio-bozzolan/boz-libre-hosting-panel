@@ -67,13 +67,7 @@ if( !$database_exists ) {
 	// database schema installation
 	echo "important tables are missing! assuming no database.\n";
 	echo "importing the schema for the first time\n";
-	execute_queries_from_file( "$documentation_path/schema.sql" );
-
-	// if we have not imported any database version, just set the latest one
-	$version_exists = get_option( 'database_version', 0 );
-	if( !$version_exists ) {
-		set_option( 'database_version', DATABASE_VERSION );
-	}
+	execute_queries_from_file( "$documentation_path/database-schema.sql" );
 }
 
 // get the current database version
@@ -131,10 +125,14 @@ function execute_queries_from_file( $file ) {
 	echo "\t executing queries from $file\n";
 
 	// get the patch content
-	$queries = file_get_contents( $file );
+	$queries = @file_get_contents( $file );
+	if( !$queries ) {
+		throw new Exception( "missing file $file" );
+	}
 
 	// replace the database prefix with the current one
-	$database_prefix = DB::instance()->getPrefix();
+	//$database_prefix = DB::instance()->getPrefix(); // this cannot work in this phase
+	$database_prefix = $GLOBALS['prefix'];
 	$queries = str_replace( '{$prefix}', $database_prefix,  $queries );
 
 	// execute the patch queries (it will die in case of error)
