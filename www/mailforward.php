@@ -22,6 +22,9 @@
 // load framework
 require '../load.php';
 
+// this page is not public
+require_permission( 'backend' );
+
 // wanted informations
 $domain          = null;
 $mailforwardfrom = null;

@@ -22,8 +22,8 @@
 // load framework
 require '../load.php';
 
-// must be logged
-require_permission( 'read' );
+// this page is not public
+require_permission( 'backend' );
 
 // myself
 $user = get_user();

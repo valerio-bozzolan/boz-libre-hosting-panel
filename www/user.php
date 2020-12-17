@@ -22,7 +22,7 @@
 // load framework
 require '../load.php';
 
-// require the permission to see the backend
+// this page is not public
 require_permission( 'backend' );
 
 // wanted informations

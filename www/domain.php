@@ -22,6 +22,9 @@
 // load framework
 require '../load.php';
 
+// this page is not public
+require_permission( 'backend' );
+
 // wanted domain
 list( $domain_name ) = url_parts( 1, 0 );
 

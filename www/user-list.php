@@ -22,6 +22,9 @@
 // load framework
 require '../load.php';
 
+// this page is not public
+require_permission( 'backend' );
+
 // spawn header
 Header::spawn( [
 	'title' => __( "Users" ),

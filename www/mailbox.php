@@ -22,6 +22,9 @@
 // load framework
 require '../load.php';
 
+// this page is not public
+require_permission( 'backend' );
+
 // wanted domain and mailbox username
 list( $domain_name, $mailbox_username ) = url_parts( 2, 1 );
 
