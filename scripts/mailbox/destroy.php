@@ -55,7 +55,7 @@ $mailbox = ( new MailboxAPI() )
 
 // no mailbox no party
 if( !$mailbox ) {
-	echo "Cannot destroy an unexisting mailbox.\n";
+	echo "Cannot destroy a not existing mailbox.\n";
 	exit( 4 );
 }
 
