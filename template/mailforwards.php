@@ -29,13 +29,15 @@
 defined( 'BOZ_PHP' ) or die;
 
 // domain mail forwardings
-$mailforwardfroms = $domain->factoryMailforwardfrom()
+$mailforwardfroms =
+	$domain->factoryMailforwardfrom()
 	->joinDomain()
 	->select( [
 		'mailforwardfrom.mailforwardfrom_ID',
 		'mailforwardfrom_username',
 		'domain_name',
 	] )
+	->orderBy( 'mailforwardfrom_username' )
 	->queryGenerator();
 ?>
 	<!-- mail forwardings -->
