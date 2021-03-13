@@ -16,42 +16,25 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 /*
- * This is the template for the website domain dashboard page
+ * This is the template for the website Domain MTA link
+ *
+ * See:
+ * 	https://gitpull.it/T340
  *
  * Called from:
  * 	domain.php
  *
  * Available variables:
- * 	$domain object Domain
- *  $plan   object Plan
+ * 	$domain object    Domain
  */
+?>
 
-// unuseful when load directly
-defined( 'BOZ_PHP' ) or die;
+<h3><?= __( "MTA" ) ?></h3>
 
-// pass the same arguments to the sub-templates
-$args = [
-	'domain' => $domain,
-	'plan'   => $plan,
-];
+<?php if( !$domain->getMTAID() ): ?>
 
-// spawn the mailboxes list
-template( 'mailboxes', $args );
+	<p><?= esc_html( __( "At the moment there is no MTA configured for this Domain." ) ) ?></p>
 
-// spawn the mail forwardings list
-template( 'mailforwards', $args );
+<?php endif ?>
 
-// spawn the ftp list
-template( 'ftp-users', $args );
-
-// show some links to the plan
-template( 'domain-plan-section', $args );
-
-if( has_permission( 'edit-mta-all' ) ) {
-
-	// show a link to the Domain-MTA page
-	template( 'domain-mta-link', $args );
-}
-
-// show Domain activity
-template( 'domain-activity', $args );
+<?php the_link( MTA::domainPermalink( $domain->getDomainName() ), __( "MTA" ) ) ?>

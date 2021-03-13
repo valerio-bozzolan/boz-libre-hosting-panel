@@ -149,6 +149,11 @@ class DomainAPI extends Query {
 	const DOMAIN_ID = 'domain.domain_ID';
 
 	/**
+	 * External MTA ID key
+	 */
+	protected $MTA_ID = 'mta.mta_ID';
+
+	/**
 	 * Univoque Plan ID column name
 	 */
 	protected $PLAN_ID = 'domain.plan_ID';

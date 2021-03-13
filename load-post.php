@@ -1,6 +1,6 @@
 <?php
-# Copyright (C) 2018, 2019, 2020 Valerio Bozzolan
-# Boz Libre Hosting Panel
+# Copyright (C) 2018, 2019, 2020, 2021 Valerio Bozzolan
+# KISS Libre Hosting Panel
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as
@@ -132,5 +132,6 @@ inherit_permissions( 'admin', 'user', [
 	'edit-domain-all',
 	'edit-plan-all',
 	'edit-ftp-all',
+	'edit-mta-all',
 	'monitor',
 ] );

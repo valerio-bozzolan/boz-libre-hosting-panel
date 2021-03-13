@@ -16,7 +16,8 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 // load Plan trait
-class_exists( 'Plan' );
+class_exists( Plan::class, true );
+class_exists( MTA::class, true );
 
 /**
  * Methods for a Domain class
@@ -276,6 +277,7 @@ trait DomainTrait {
 class Domain extends Queried {
 
 	use DomainTrait;
+	use MTATrait;
 
 	/**
 	 * Table name
@@ -289,6 +291,7 @@ class Domain extends Queried {
 	 */
 	public function __construct() {
 		$this->normalizeDomain();
+		$this->normalizeMTA();
 	}
 
 	/**
