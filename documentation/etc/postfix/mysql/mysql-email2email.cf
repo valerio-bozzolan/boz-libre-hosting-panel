@@ -15,7 +15,7 @@
 #
 # Note: the `mail_accounts_simple` table is a MySQL view.
 user     = {$YOUR_POSTFIX_READONLY_MYSQL_USERNAME}
-password = $YOUR_POSTFIX_READONLY_MYSQL_PASSWORD}
+password = {$YOUR_POSTFIX_READONLY_MYSQL_PASSWORD}
 dbname   = {$YOUR_DATABASE_NAME}
 query    = SELECT `email` FROM `{$YOUR_DATABASE_PREFIX}mailbox_simple` WHERE `username` = '%u' AND `domain` = '%d'
 hosts    = 127.0.0.1
