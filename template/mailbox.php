@@ -65,6 +65,7 @@ defined( 'BOZ_PHP' ) or die;
 	<?php endif ?>
 	<!-- /notes -->
 
+	<!-- actions -->
 	<?php if( $mailbox ): ?>
 		<h3><?= __( "Actions" ) ?></h3>
 		<form method="post">
@@ -87,21 +88,27 @@ defined( 'BOZ_PHP' ) or die;
 	<?php endif ?>
 	<!-- /actions -->
 
-	<?php template( 'mailbox-delete-notes', [
-		'mailbox' => $mailbox,
-	] ) ?>
-
+	<!-- deletion notes -->
 	<?php if( $mailbox ): ?>
-	<section>
-		<h3><?= __( "Last Activity" ) ?></h3>
-
-		<?php
-			// print the last activities
-			ActivityPanel::spawn( [
-				'query' => [
-					'mailbox' => $mailbox,
-				],
-			] )
-		?>
-	</section>
+		<?php template( 'mailbox-delete-notes', [
+			'mailbox' => $mailbox,
+		] ) ?>
 	<?php endif ?>
+	<!-- end deletion notes -->
+
+	<!-- start last activity -->
+	<?php if( $mailbox ): ?>
+		<section>
+			<h3><?= __( "Last Activity" ) ?></h3>
+
+			<?php
+				// print the last activities
+				ActivityPanel::spawn( [
+					'query' => [
+						'mailbox' => $mailbox,
+					],
+				] )
+			?>
+		</section>
+	<?php endif ?>
+	<!-- end last activity -->
