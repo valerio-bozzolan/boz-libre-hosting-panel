@@ -71,8 +71,10 @@ defined( 'BOZ_PHP' ) or die;
 		<form method="post">
 			<?php form_action( 'mailbox-password-reset' ) ?>
 			<?php if( $mailbox_password ): ?>
+			<p>
 				<label for="password"><?= __( "Please copy your new password:" ) ?><br />
 				<input type="text" id="password" readonly<?= value( $mailbox_password ) ?> />
+			</p>
 			<?php else: ?>
 				<p><button type="submit" class="btn btn-default"><?= __( "Generate new password" ) ?></button></p>
 			<?php endif ?>
