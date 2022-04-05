@@ -1,5 +1,5 @@
 <?php
-# Copyright (C) 2018, 2019, 2020 Valerio Bozzolan
+# Copyright (C) 2018, 2019, 2020, 2021, 2022 Valerio Bozzolan
 # KISS Libre Hosting Panel
 #
 # This program is free software: you can redistribute it and/or modify
@@ -72,15 +72,8 @@ if( $mailbox_username ) {
 // does the user want to create a Mailbox?
 if( !$mailbox ) {
 
-	// count the actual number of Domain Mailbox(es)
-	$mailbox_count = (int)
-		( new MailboxAPI() )
-			->select( 'COUNT(*) count' )
-			->whereDomain( $domain )
-			->queryValue( 'count' );
-
 	// check if I can add another Mailbox
-	if( $mailbox_count >= $plan->getPlanMailboxes() && !has_permission( 'edit-email-all' ) ) {
+	if( !$domain->canCreateMailboxInDomain() ) {
 		BadRequest::spawn( __( "Your Plan does not allow this action" ), 401 );
 	}
 
