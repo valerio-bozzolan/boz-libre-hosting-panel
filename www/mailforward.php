@@ -1,5 +1,5 @@
 <?php
-# Copyright (C) 2018, 2019, 2020 Valerio Bozzolan
+# Copyright (C) 2018, 2019, 2020, 2021, 2022 Valerio Bozzolan
 # KISS Libre Hosting Panel
 #
 # This program is free software: you can redistribute it and/or modify
@@ -35,13 +35,8 @@ list( $domain_name, $mailforwardfrom_username ) = url_parts( 2, 1 );
 // eventually retrieve mailforward from database
 if( $mailforwardfrom_username ) {
 	$mailforwardfrom = ( new MailforwardfromQuery() )
-		->select( [
-			'domain.domain_ID',
-			'domain_name',
-			'mailforwardfrom.mailforwardfrom_ID',
-			'mailforwardfrom_username',
-		] )
 		->joinDomain()
+		->joinPlan( 'LEFT' )
 		->whereDomainName( $domain_name )
 		->whereMailforwardfromUsername( $mailforwardfrom_username )
 		->whereDomainIsEditable()
@@ -55,19 +50,26 @@ if( $mailforwardfrom_username ) {
 }
 
 // eventually retrieve domain from database
-if( ! $domain ) {
+if( !$domain ) {
 	$domain = ( new DomainAPI() )
-		->select( [
-			'domain.domain_ID',
-			'domain.domain_name',
-		] )
 		->whereDomainName( $domain_name )
 		->whereDomainIsEditable()
+		->joinPlan( 'LEFT' )
 		->queryRow();
 
 	// 404
 	$domain or PageNotFound::spawn();
 }
+
+// check if I'm creating a new one
+if( !$mailforwardfrom ) {
+
+	// check if I can add another one
+	if( !$domain->canCreateMailforwardfromInDomain() ) {
+		BadRequest::spawnPlanDoesNotAllow();
+	}
+}
+
 
 // save destination action
 if( is_action( 'mailforward-save' ) ) {

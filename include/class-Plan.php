@@ -1,5 +1,5 @@
 <?php
-# Copyright (C) 2018, 2019, 2020 Valerio Bozzolan
+# Copyright (C) 2018, 2019, 2020, 2021, 2022 Valerio Bozzolan
 # KISS Libre Hosting Panel
 #
 # This program is free software: you can redistribute it and/or modify

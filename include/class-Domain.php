@@ -1,5 +1,5 @@
 <?php
-# Copyright (C) 2018, 2019, 2020 Valerio Bozzolan
+# Copyright (C) 2018, 2019, 2020, 2021, 2022 Valerio Bozzolan
 # Boz Libre Hosting Panel
 #
 # This program is free software: you can redistribute it and/or modify
@@ -128,6 +128,19 @@ trait DomainTrait {
 	}
 
 	/**
+	 * Check if you can create a new Mailforward for this Domain
+	 *
+	 * The Domain must have Plan informations.
+	 *
+	 * @return boolean
+	 */
+	public function canCreateMailforwardfromInDomain() {
+		return $this->getPlanMailforwardings() > $this->getDomainMailforwardfromCount()
+		       ||
+		       has_permission( 'edit-email-all' );
+	}
+
+	/**
 	 * Check if you can create a new FTP account for this Domain
 	 *
 	 * The Domain must have Plan informations.
@@ -141,7 +154,7 @@ trait DomainTrait {
 	}
 
 	/**
-	 * Factory mailbox from this domain
+	 * Factory a MailboxFullAPI from this Domain
 	 *
 	 * @return MailboxFullAPI
 	 */
@@ -150,9 +163,9 @@ trait DomainTrait {
 	}
 
 	/**
-	 * Factory e-mail forward from this domain
+	 * Factory a Mailforwardfrom from this Domain
 	 *
-	 * @return MailforwardFullAPI
+	 * @return MailforwardfromQuery
 	 */
 	public function factoryMailforwardfrom() {
 		return ( new MailforwardfromQuery() )->whereDomain( $this );
@@ -192,6 +205,30 @@ trait DomainTrait {
 		}
 
 		return $this->domainMailboxCount;
+	}
+
+	/**
+	 * Get the number of Mailforwardfrom addresses of this Domain
+	 *
+	 * This method has a layer of cache.
+	 *
+	 * @return int
+	 */
+	public function getDomainMailforwardfromCount() {
+
+		// check if we already know the count
+		if( !isset( $this->domainMailforwardfromCount ) ) {
+
+			// count the number of mailboxes associated to this Domain
+			$count = $this->factoryMailforwardfrom()
+				->select( 'COUNT(*) count' )
+				->queryValue( 'count' );
+
+			// save in cache
+			$this->domainMailforwardfromCount = (int) $count;
+		}
+
+		return $this->domainMailforwardfromCount;
 	}
 
 	/**

@@ -1,5 +1,5 @@
 <?php
-# Copyright (C) 2018, 2019, 2020 Valerio Bozzolan
+# Copyright (C) 2018, 2019, 2020, 2021, 2022 Valerio Bozzolan
 # KISS Libre Hosting Panel
 #
 # This program is free software: you can redistribute it and/or modify
@@ -60,7 +60,7 @@ $mailforwardfroms =
 	<?php endif ?>
 
 	<p><?= esc_html( sprintf(
-		__( "Your Plan \"%s\" allows %s %s." ),
+		__( "Your Plan \"%s\" allows up to %s %s." ),
 		$plan->getPlanName(),
 		$plan->getPlanMailForwardings(),
 		__( "Forwarding" )
@@ -68,6 +68,9 @@ $mailforwardfroms =
 
 	<p><?php the_link(
 		Mailforwardfrom::permalink( $domain->getDomainName() ),
-		__( "Create" )
+		__( "Create" ),
+		[
+			'disabled' => !$domain->canCreateMailforwardfromInDomain(),
+		]
 	) ?></p>
 	<!-- end mail forwardings -->
