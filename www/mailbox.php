@@ -74,7 +74,7 @@ if( !$mailbox ) {
 
 	// check if I can add another Mailbox
 	if( !$domain->canCreateMailboxInDomain() ) {
-		BadRequest::spawn( __( "Your Plan does not allow this action" ), 401 );
+		BadRequest::spawnPlanDoesNotAllow();
 	}
 
 }

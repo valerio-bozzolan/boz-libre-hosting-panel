@@ -1,5 +1,5 @@
 <?php
-# Copyright (C) 2018, 2019 Valerio Bozzolan
+# Copyright (C) 2018, 2019, 2020, 2021, 2022 Valerio Bozzolan
 # Boz Libre Hosting Panel
 #
 # This program is free software: you can redistribute it and/or modify
@@ -39,6 +39,13 @@ class BadRequest {
 		Footer::spawn();
 
 		exit;
+	}
+
+	/**
+	 * Spawn a bad request message related to a Plan
+	 */
+	public static function spawnPlanDoesNotAllow() {
+		self::spawn( __( "Your Plan does not allow this action" ), 401 );
 	}
 
 }
