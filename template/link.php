@@ -24,10 +24,11 @@
  * Available variables:
  * 	$title string e.g. "Home"
  * 	$url string e.g. "/"
+ *      $classes string e.g. "disabled"
  * 	$args mixed
  */
 
 // unuseful when load directly
 defined( 'BOZ_PHP' ) or die;
 
-?><a class="btn btn-default" href="<?= esc_attr( $url ) ?>"><?php echo esc_html( $title ) ?></a>
+?><a class="btn btn-default<?= HTML::spaced( $classes ) ?>" href="<?= esc_attr( $url ) ?>"><?= esc_html( $title ) ?></a>

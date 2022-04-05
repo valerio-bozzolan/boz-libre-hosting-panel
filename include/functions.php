@@ -164,10 +164,17 @@ function the_menu_link( $uid, $args = [] ) {
  * @param $args mixed Arguments
  */
 function the_link( $url, $title, $args = [] ) {
+
+	$classes = "";
+	if( isset( $args[ 'disabled' ] ) && $args[ 'disabled' ] ) {
+		$classes .= "disabled";
+	}
+
 	template( 'link', [
-		'title' => $title,
-		'url'   => $url,
-		'args'  => $args,
+		'title'   => $title,
+		'url'     => $url,
+		'args'    => $args,
+		'classes' => $classes,
 	] );
 }
 
