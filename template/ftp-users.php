@@ -1,5 +1,5 @@
 <?php
-# Copyright (C) 2019 Valerio Bozzolan
+# Copyright (C) 2019, 2020, 2021, 2022 Valerio Bozzolan
 # Boz Libre Hosting Panel
 #
 # This program is free software: you can redistribute it and/or modify
@@ -61,17 +61,18 @@ $ftps = $domain->factoryFTP()
 	<?php endif ?>
 
 	<p><?= esc_html( sprintf(
-		__( "Your Plan \"%s\" allows %s %s." ),
+		__( "Your Plan \"%s\" allows up to %s %s." ),
 		$plan->getPlanName(),
 		$plan->getPlanFTPUsers(),
 		__( "FTP users" )
 	) ) ?></p>
 
-	<?php if( $domain->canCreateFTPAccountForDomain() ): ?>
-		<p><?php the_link(
-			FTP::permalink( $domain->getDomainName() ),
-			__( "Create" )
-		) ?></p>
-	<?php endif ?>
+	<p><?php the_link(
+		FTP::permalink( $domain->getDomainName() ),
+		__( "Create" ),
+		[
+			'disabled' => !$domain->canCreateFTPAccountForDomain()
+		]
+	) ?></p>
 
 	<!-- end FTP users -->
