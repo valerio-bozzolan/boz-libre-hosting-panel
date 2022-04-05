@@ -1,5 +1,5 @@
 <?php
-# Copyright (C) 2018, 2019 Valerio Bozzolan
+# Copyright (C) 2018, 2019, 2020, 2021, 2022 Valerio Bozzolan
 # Boz Libre Hosting Panel
 #
 # This program is free software: you can redistribute it and/or modify
@@ -33,12 +33,6 @@ $mailboxes = $domain->factoryMailbox()
 		'mailbox_receive',
 	] )
 	->queryGenerator();
-
-// total number of mailboxes
-$count = DB::instance()->affectedRows();
-
-// cache the value that can be useful
-$domain->setDomainMailboxCount( $count );
 ?>
 
 <!-- mail boxes -->
@@ -65,15 +59,15 @@ $domain->setDomainMailboxCount( $count );
 <?php endif ?>
 
 <p><?= esc_html( sprintf(
-	__( "Your Plan \"%s\" allows %s %s." ),
+	__( "Your Plan \"%s\" allows up to %s %s." ),
 	$plan->getPlanName(),
 	$plan->getPlanMailboxes(),
 	__( "Mailboxes" )
 ) ) ?></p>
 
-<?php if( $domain->canCreateMailboxInDomain() ): ?>
-	<p><?php the_link( Mailbox::permalink( $domain->getDomainName() ), __( "Create" ) ) ?></p>
-<?php endif ?>
+<p><?php the_link( Mailbox::permalink( $domain->getDomainName() ), __( "Create" ), [
+	'disabled' => !$domain->canCreateMailboxInDomain(),
+] ) ?></p>
 
 <!-- end mail boxes -->
 
