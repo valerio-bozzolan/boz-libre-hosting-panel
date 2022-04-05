@@ -1,5 +1,5 @@
 <?php
-# Copyright (C) 2018, 2019, 2020 Valerio Bozzolan
+# Copyright (C) 2018, 2019, 2020, 2021, 2022 Valerio Bozzolan
 # KISS Libre Hosting Panel
 #
 # This program is free software: you can redistribute it and/or modify
@@ -149,6 +149,13 @@ class Log extends Queried {
 		$plan   = $args['plan']   ?? $log;
 
 		switch( $action ) {
+
+			// an administrator created the Domain
+			case 'create':
+				return sprintf(
+					__( "created the domain %s" ),
+					$domain->getDomainFirm()
+				);
 
 			// an administrator has changed the Plan for a Domain
 			case 'plan.change':
