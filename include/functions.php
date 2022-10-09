@@ -183,7 +183,7 @@ function the_link( $url, $title, $args = [] ) {
  *
  * @param $bytes int
  */
-function generate_password( $bytes = 8 ) {
+function generate_password( $bytes = 12 ) {
 	return rtrim( base64_encode( bin2hex( openssl_random_pseudo_bytes( $bytes ) ) ), '=' );
 }
 
