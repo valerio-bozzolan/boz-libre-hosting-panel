@@ -101,7 +101,7 @@ define( 'GETTEXT_DIRECTORY', 'l10n' );
 define( 'GETTEXT_DEFAULT_ENCODE', CHARSET ); // UTF-8
 
 // common strings
-define_default( 'SITE_NAME', "Libre Hosting Panel" );
+define_default( 'SITE_NAME', "Keep It Simple And Stupid Libre Hosting Panel" );
 define_default( 'CONTACT_EMAIL', 'support@' . DOMAIN );
 define_default( 'REPO_URL', 'https://gitpull.it/source/kiss-libre-hosting-panel/' );
 
