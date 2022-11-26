@@ -52,10 +52,13 @@ function template_content( $name, $args = [] ) {
  * @param $email string
  */
 function email_blur( $email ) {
-	$dot = strip_tags( __( " dot <!-- . -->" ) );
-	$at  = strip_tags( __( " at <!-- @ -->"  ) );
-	$email = esc_html( $email );
-	echo str_replace( [ '.', '@' ], [ $dot, $at ], $email );
+	if( !is_logged() ) {
+		$dot = strip_tags( __( " dot <!-- . -->" ) );
+		$at  = strip_tags( __( " at <!-- @ -->"  ) );
+		$email = esc_html( $email );
+		$email = str_replace( [ '.', '@' ], [ $dot, $at ], $email );
+	}
+	return $email;
 }
 
 /**
