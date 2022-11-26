@@ -59,16 +59,16 @@ load_module( 'footer' );
 			<?php if( CONTACT_EMAIL ): ?>
 			<div class="col-sm-2">
 				<?= __( "Help:" ) ?><br />
-				<?php email_blur( CONTACT_EMAIL ) ?>
+				<?= email_blur( CONTACT_EMAIL ) ?>
 			</div>
 			<?php endif ?>
 			<!-- end help -->
 
 			<!-- fork -->
 			<?php if( REPO_URL ): ?>
-			<div class="col-sm-2">
-				<?= __( "Contribute:" ) ?><br />
-				<a href="<?= REPO_URL ?>" target="_blank"><?php echo __( "project repository" ) ?></a>
+			<div class="col-sm-10">
+				<?= __( "Hack me:" ) ?><br />
+				<a href="<?= esc_attr( REPO_URL ) ?>" target="_blank"><?= esc_html( REPO_URL ) ?></a>
 			</div>
 			<?php endif ?>
 			<!-- end for -->
