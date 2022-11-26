@@ -1,6 +1,6 @@
 # KISS Libre Hosting Panel
 
-Welcome in an actively developed keep-it-simple-and-stupid hosting panel designed for GNU/Linux operating systems. This software can be useful to serve everyday shared hosting services.
+Welcome in the **Keep It Simple And Stupid Libre Hosting Panel**, designed for GNU/Linux operating systems. This software can be useful to serve everyday shared hosting services.
 
 This panel is designed to **respect the freedom** of its users. It works **without proprietary JavaScript**. To be honest, without **any line of JavaScript** in any form.
 
@@ -12,7 +12,7 @@ https://gitpull.it/w/kiss_libre_hosting_panel/
 
 ## License
 
-Copyright (C) 2018, 2019, 2020 [Valerio Bozzolan](https://boz.reyboz.it/) - KISS Libre Hosting Panel
+Copyright (C) 2018, 2019, 2020, 2021, 2022 [Valerio Bozzolan](https://boz.reyboz.it/) - KISS Libre Hosting Panel
 
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
