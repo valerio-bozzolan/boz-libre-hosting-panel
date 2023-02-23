@@ -1,5 +1,5 @@
 <?php
-# Copyright (C) 2018 Valerio Bozzolan
+# Copyright (C) 2018-2023 Valerio Bozzolan
 # Boz Libre Hosting Panel
 #
 # This program is free software: you can redistribute it and/or modify
@@ -22,7 +22,7 @@
  * 	include/functions.php - the_link() function
  *
  * Available variables:
- * 	$title string e.g. "Home"
+ * 	$title string e.g. "Home" - it will be escaped.
  * 	$url string e.g. "/"
  *      $classes string e.g. "disabled"
  * 	$args mixed
