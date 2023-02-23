@@ -51,10 +51,10 @@ trait QueryLogTrait {
 	 *
 	 * The marionette is the user touched by the actor.
 	 *
-	 * @param string $id User ID
+	 * @param object User
 	 * @return self
 	 */
-	public function whereLogMarionette( $id ) {
+	public function whereLogMarionette( $user ) {
 		return $this->whereLogMarionetteID( $user->getUserID() );
 	}
 
