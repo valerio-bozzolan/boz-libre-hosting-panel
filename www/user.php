@@ -64,22 +64,34 @@ if( is_action( 'save-user' ) ) {
 		$data['user_name']    = $name;
 		$data['user_surname'] = $surname;
 
+		start_transaction();
+
 		if( $user ) {
 			// update existing User
 			( new UserAPI() )
 				->whereUser( $user )
 				->update( $data );
 		} else {
-			// insert new User
+			// insert new User (arguments)
 			$data['user_uid']      = $uid;
 			$data['user_active']   = 0;      // disable login as default
 			$data['user_password'] = '!';    // assign an invalid password
 			$data['user_role']     = 'user'; // assign low privileges
 			$data[] = new DBCol( 'user_registration_date', 'NOW()', '-' );
 
+			// insert new User
 			( new UserAPI() )
 				->insertRow( $data );
+
+			// register user creation
+			APILog::insert( [
+				'family'     => 'user',
+				'action'     => 'create',
+				'marionette' => last_inserted_ID(),
+			] );
 		}
+
+		commit();
 
 		// POST -> redirect -> GET (See Other)
 		http_redirect( User::permalink( $uid ), 303 );

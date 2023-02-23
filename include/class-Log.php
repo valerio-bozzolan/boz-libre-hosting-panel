@@ -1,5 +1,5 @@
 <?php
-# Copyright (C) 2018, 2019, 2020, 2021, 2022 Valerio Bozzolan
+# Copyright (C) 2018-2023 Valerio Bozzolan
 # KISS Libre Hosting Panel
 #
 # This program is free software: you can redistribute it and/or modify
@@ -313,6 +313,13 @@ class Log extends Queried {
 
 		// trigger the right action message
 		switch( $action ) {
+
+			// an User creation
+			case 'create':
+				return sprintf(
+					__( "gave birth to %s" ),
+					$firm
+				);
 
 			// a password reset
 			case 'password.reset':
