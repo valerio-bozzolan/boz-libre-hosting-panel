@@ -1,5 +1,5 @@
 <?php
-# Copyright (C) 2019, 2020, 2021 Valerio Bozzolan
+# Copyright (C) 2019-2023 Valerio Bozzolan
 # Boz Libre Hosting Panel
 #
 # This program is free software: you can redistribute it and/or modify
@@ -173,7 +173,12 @@ if( is_action( 'change-password' ) && $user ) {
 			User::PASSWORD  => $encrypted,
 		] );
 
-	// do not refresh the page
+	// clean the session to avoid invalid cookie logins
+	if( $user->isUserMyself() ) {
+		logout();
+	}
+
+	// do not refresh the page or the new password cannot be shown
 }
 
 // expose the User domains
@@ -199,11 +204,21 @@ Header::spawn( [
 ] );
 
 // spawn the page content
-template( 'user', [
-	'user'         => $user,
-	'new_password' => $new_password,
-	'user_domains' => $user_domains,
-] );
+if( $new_password ) {
+
+	template( 'password-reset-show', [
+		'user'         => $user,
+		'new_password' => $new_password,
+	] );
+
+} else {
+
+	template( 'user', [
+		'user'         => $user,
+		'user_domains' => $user_domains,
+	] );
+
+}
 
 // spawn the footer
 Footer::spawn();

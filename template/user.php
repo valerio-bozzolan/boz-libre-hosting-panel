@@ -98,10 +98,9 @@ defined( 'BOZ_PHP' ) or die;
 			<?php form_action( 'change-password' ) ?>
 
 			<p>
-				<?php if( $new_password ): ?>
-					<?= esc_html( __( "The new password is:" ) ) ?><br />
-					<input type="text" readonly<?= value( $new_password ) ?> />
-				<?php endif ?>
+				<?= esc_html( __( "The Password Reset is useful to immediately terminate your session and your soul." ) ) ?><br />
+				<?= esc_html( __( "Before proceeding, create a basin with your hands to cover the screen." ) ) ?><br />
+				<?= esc_html( __( "Stay ready to copy your new Password." ) ) ?>
 			</p>
 
 			<p>
