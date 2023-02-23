@@ -107,7 +107,7 @@ if( is_action( 'add-domain' ) ){
 			->whereDomainName( $domain_name )
 			->queryRow();
 
-	query( 'START TRANSACTION' );
+	start_transaction();
 
 	// domain ID to be assigned to the User
 	$domain_ID = null;
@@ -155,7 +155,7 @@ if( is_action( 'add-domain' ) ){
 		die( "this Domain is not registered and can't be added" );
 	}
 
-	query( 'COMMIT' );
+	commit();
 }
 // end add Domain to User
 
