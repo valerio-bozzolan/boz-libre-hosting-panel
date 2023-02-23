@@ -32,6 +32,14 @@ defined( 'BOZ_PHP' ) or die;
 			esc_html( get_user( 'user_name' ) )
 		) ?></p>
 
+		<!-- link to the user profile -->
+		<p><?php template( 'link', [
+			'title' => __( "Your Profile" ),
+			'url'   => get_user()->getUserPermalink(),
+		] ) ?></p>
+
+		<hr />
+
 		<?php template( 'logout', [
 			'please' => false,
 		] ) ?>
