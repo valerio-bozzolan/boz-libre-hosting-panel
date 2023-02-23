@@ -127,5 +127,18 @@ defined( 'BOZ_PHP' ) or die;
 		?>
 	</section>
 
+	<section>
+		<h3><?= __( "Last Changes" ) ?></h3>
+
+		<?php
+			// print the last activities
+			ActivityPanel::spawn( [
+				'query' => [
+					'marionette' => $user,
+				],
+			] )
+		?>
+	</section>
+
 <?php endif ?>
 <!-- end user last log actions -->

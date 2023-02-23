@@ -56,6 +56,15 @@ trait LogTrait {
 	}
 
 	/**
+	 * Get the UID of the User Marionette (user passively involved)
+	 *
+	 * @return string
+	 */
+	public function getLogMarionetteUID() {
+		return $this->get( 'marionette_uid' );
+	}
+
+	/**
 	 * Get the log message
 	 *
 	 * @param  array $args Arguments
@@ -304,7 +313,14 @@ class Log extends Queried {
 		 *
 		 * A complete 'marionette' User object
 		 */
-		$marionette_uid = $log->marionette_uid ?? null;
+		$marionette = $args['marionette'] ?? null;
+
+		$marionette_uid = '?';
+		if( $args['marionette'] ) {
+			$marionette_uid = $marionette->getUserUID();
+		} else {
+			$marionette_uid = $log->getLogMarionetteUID();
+		}
 
 		$firm = '?';
 		if( $marionette_uid ) {
