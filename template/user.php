@@ -1,5 +1,5 @@
 <?php
-# Copyright (C) 2020 Valerio Bozzolan
+# Copyright (C) 2020-2023 Valerio Bozzolan
 # KISS Libre Hosting Panel
 #
 # This program is free software: you can redistribute it and/or modify
@@ -102,7 +102,9 @@ defined( 'BOZ_PHP' ) or die;
 					<?= esc_html( __( "The new password is:" ) ) ?><br />
 					<input type="text" readonly<?= value( $new_password ) ?> />
 				<?php endif ?>
+			</p>
 
+			<p>
 				<button type="submit" class="btn btn-primary"><?= esc_html( __( "Password Reset" ) ) ?></button>
 			</p>
 		</form>
