@@ -163,6 +163,8 @@ if( is_action( 'add-domain' ) ){
 $new_password = null;
 if( is_action( 'change-password' ) && $user ) {
 
+	start_transaction();
+
 	// generate a new password and save
 	$new_password = generate_password();
 	$encrypted = User::encryptPassword( $new_password );
@@ -172,6 +174,15 @@ if( is_action( 'change-password' ) && $user ) {
 			User::IS_ACTIVE => 1,
 			User::PASSWORD  => $encrypted,
 		] );
+
+	// register password reset action in the audit log
+	APILog::insert( [
+		'family'     => 'user',
+		'marionette' => $user,
+		'action'     => 'password.reset',
+	] );
+
+	commit();
 
 	// clean the session to avoid invalid cookie logins
 	if( $user->isUserMyself() ) {

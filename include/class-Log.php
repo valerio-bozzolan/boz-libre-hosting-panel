@@ -62,7 +62,6 @@ trait LogTrait {
 	 * @return self
 	 */
 	public function getLogMessage( $args ) {
-
 		$family = $this->getLogFamily();
 		$action = $this->getLogAction();
 
@@ -74,6 +73,8 @@ trait LogTrait {
 				return self::mailboxMessage( $action, $this, $args );
 			case 'mailforward':
 				return self::mailforwardMessage( $action, $this, $args );
+			case 'user':
+				return self::userMessage( $action, $this, $args );
 		}
 
 		return self::unknownAction( $family, $action );
@@ -285,6 +286,44 @@ class Log extends Queried {
 
 		// default dummy message
 		return self::unknownAction( 'mailforward', $action );
+
+	}
+
+	/**
+	 * Generate a User-related message
+	 *
+	 * @param  string $action The related action name
+	 * @param  object $log
+	 * @param  array  $args Arguments
+	 * @return string Message
+	 */
+	public static function userMessage( $action, $log, $args ) {
+
+		/**
+		 * You can pass some objects to build the message:
+		 *
+		 * A complete 'marionette' User object
+		 */
+		$marionette_uid = $log->marionette_uid ?? null;
+
+		$firm = '?';
+		if( $marionette_uid ) {
+			$firm = User::firm( $marionette_uid );
+		}
+
+		// trigger the right action message
+		switch( $action ) {
+
+			// a password reset
+			case 'password.reset':
+				return sprintf(
+					__( "reset password for %s" ),
+					$firm
+				);
+		}
+
+		// default dummy message
+		return self::unknownAction( 'user', $action );
 
 	}
 
