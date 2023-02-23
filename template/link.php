@@ -28,6 +28,8 @@
  * 	$args mixed
  */
 
+$classes = $classes ?? null;
+
 // unuseful when load directly
 defined( 'BOZ_PHP' ) or die;
 
