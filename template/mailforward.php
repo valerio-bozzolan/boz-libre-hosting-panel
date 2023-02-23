@@ -71,3 +71,17 @@ defined( 'BOZ_PHP' ) or die;
 			'mailforwardfrom' => $mailforwardfrom,
 		] ) ?>
 	<?php endif ?>
+
+	<section>
+		<h3><?= __( "Last Changes" ) ?></h3>
+
+		<?php
+			// print the last activities
+			ActivityPanel::spawn( [
+				'query' => [
+					'domain'          => $domain,
+					'mailforwardfrom' => $mailforwardfrom,
+				],
+			] )
+		?>
+	</section>

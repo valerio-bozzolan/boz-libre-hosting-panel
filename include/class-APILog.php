@@ -99,6 +99,8 @@ class APILog {
 		$marionette = $args['marionette'] ?? null;
 		$mailbox    = $args['mailbox']    ?? null;
 		$domain     = $args['domain']     ?? null;
+		$mailforwardfrom
+		            = $args['mailforwardfrom'] ?? null;
 
 		// create a fresh query builder
 		$query = new QueryLog();
@@ -130,12 +132,18 @@ class APILog {
 			$query->whereDomain( $domain );
 		}
 
+		// eventually filter by Mailforward From
+		if( $mailforwardfrom ) {
+			$query->whereMailforwardfrom( $mailforwardfrom );
+		}
+
 		// eventually skip to join something
 		$query->joinLogMessageTables( [
 			'actor'      => is_object( $actor      ),
 			'marionette' => is_object( $marionette ),
 			'mailbox'    => is_object( $mailbox    ),
 			'domain'     => is_object( $domain     ),
+			'mailforwardfrom' => is_object( $mailforwardfrom ),
 		] );
 
 		// as default sort descending the timeline

@@ -247,20 +247,26 @@ class Log extends Queried {
 		/**
 		 * You can pass some objects to build the message:
 		 *
-		 * A complete 'domain'  Domain object
-		 * A complete 'mailbox' Mailbox object
+		 * A complete 'domain'          Domain object
+		 * A complete 'mailforwardfrom' Mailforwardfrom object
 		 */
-		$domain      = $args['domain']      ?? $log;
-		$mailforward = $args['mailforward'] ?? $log;
+		$domain          = $args['domain']          ?? $log;
+		$mailforwardfrom = $args['mailforwardfrom'] ?? $log;
 
-		if( $mailforward ) {
-			$firm = Mailforwardfrom::firm(
-				$domain->getDomainName(),
-				$mailforward->getMailforwardfromUsername()
-			);
-		} else {
-			$firm = $domain->getDomainFirm();
+		$domain_name = '?';
+		if( $domain ) {
+			$domain_name = $domain->getDomainName();
 		}
+
+		$mailforwardfrom_username = '?';
+		if( $mailforwardfrom ) {
+			$mailforwardfrom_username = $mailforwardfrom->getMailforwardfromUsername();
+		}
+
+		$firm = Mailforwardfrom::firm(
+			$domain_name,
+			$mailforwardfrom_username
+		);
 
 		// trigger the right action message
 		switch( $action ) {

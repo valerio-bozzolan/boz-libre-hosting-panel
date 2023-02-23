@@ -53,6 +53,11 @@ class MailforwardfromQuery extends Query {
 	 */
 	const DOMAIN_ID = 'mailforwardfrom.domain_ID';
 
+        /**
+         * Column name of the Plan ID
+         */
+        protected $PLAN_ID = 'domain.plan_ID';
+
 	/**
 	 * Column name of the Mailforwardfrom ID
 	 */
