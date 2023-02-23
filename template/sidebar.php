@@ -32,9 +32,7 @@ defined( 'BOZ_PHP' ) or die;
 			esc_html( get_user( 'user_name' ) )
 		) ?></p>
 
-		<?php if( is_logged() ): ?>
-			<?php template( 'logout', [
-				'please' => false,
-			] ) ?>
-		<?php endif ?>
+		<?php template( 'logout', [
+			'please' => false,
+		] ) ?>
 	<?php endif ?>
