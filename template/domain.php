@@ -1,5 +1,5 @@
 <?php
-# Copyright (C) 2018, 2019, 2020, 2021 Valerio Bozzolan
+# Copyright (C) 2018, 2019, 2020, 2021, 2025 Valerio Bozzolan
 # KISS Libre Hosting Panel
 #
 # This program is free software: you can redistribute it and/or modify
@@ -52,6 +52,9 @@ if( has_permission( 'edit-mta-all' ) ) {
 	// show a link to the Domain-MTA page
 	template( 'domain-mta-link', $args );
 }
+
+// show some links to the plan
+template( 'domain-users', $args );
 
 // show Domain activity
 template( 'domain-activity', $args );

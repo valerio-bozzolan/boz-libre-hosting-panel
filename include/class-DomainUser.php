@@ -1,5 +1,5 @@
 <?php
-# Copyright (C) 2018, 2019 Valerio Bozzolan
+# Copyright (C) 2018, 2019, 2025 Valerio Bozzolan
 # Boz Libre Hosting Panel
 #
 # This program is free software: you can redistribute it and/or modify
@@ -26,6 +26,10 @@ trait DomainUserTrait {
 
 	use DomainTrait;
 	use UserTrait;
+
+	public function getDomainUserCreationDate() {
+		return $this->get('domain_user_creation_date');
+	}
 
 	/**
 	 * Normalize a DomainUser object after being retrieved from database
@@ -54,6 +58,7 @@ class DomainUser extends Queried {
 	 */
 	public function __construct() {
 		$this->normalizeDomainUser();
+		$this->datetimes('domain_user_creation_date');
 	}
 
 

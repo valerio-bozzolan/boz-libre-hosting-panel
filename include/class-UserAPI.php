@@ -86,6 +86,28 @@ trait UserAPITrait {
 		return $this->whereUserID( $id );
 	}
 
+	/**
+	 * Join whatever table with the domain table
+	 *
+	 * @return self
+	 */
+	public function joinUser() {
+		return $this->joinOn( 'INNER', 'user', self::USER_ID, 'user.user_ID');
+	}
+
+	/**
+	 * Order elements by the User's signature.
+	 */
+	public function orderByUserFirm() {
+		return $this->orderByUserUID();
+	}
+
+	/**
+	 * Order elements by the field "User UID".
+	 */
+	public function orderByUserUID() {
+		return $this->orderBy('user_uid');
+	}
 }
 
 /**
