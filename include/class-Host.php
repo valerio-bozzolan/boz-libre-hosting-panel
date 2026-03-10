@@ -1,5 +1,5 @@
 <?php
-# Copyright (C) 2018, 2019, 2020, 2021 Valerio Bozzolan
+# Copyright (C) 2018-2026 Valerio Bozzolan
 # KISS Libre Hosting Panel
 #
 # This program is free software: you can redistribute it and/or modify
@@ -19,8 +19,6 @@
  * Methods for a Host class
  */
 trait HostTrait {
-
-	use HostTrait;
 
 	/**
 	 * Get the Host's ID
