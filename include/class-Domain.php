@@ -50,7 +50,7 @@ trait DomainTrait {
 	 * @return int
 	 */
 	public function getDomainID() {
-		return $this->get( 'domain_ID' );
+		return $this->get(Domain::ID);
 	}
 
 	/*
@@ -299,7 +299,7 @@ trait DomainTrait {
 	 * Normalize a Domain object after being retrieved from database
 	 */
 	protected function normalizeDomain() {
-		$this->integers( 'domain_ID' );
+		$this->integers(Domain::ID);
 		$this->booleans( 'domain_active' );
 		$this->dates( 'domain_born', 'domain_expiration' );
 
@@ -321,6 +321,7 @@ class Domain extends Queried {
 	 */
 	const T = 'domain';
 
+	const ID = 'domain_ID';
 	const UID = 'domain_name';
 
 	/**
