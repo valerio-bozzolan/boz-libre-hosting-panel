@@ -47,8 +47,8 @@ class APILog {
 			$data['actor_ID'] = get_user()->getUserID();
 		}
 
-		// you cannot change the timestamp
-		$data['log_timestamp'] = date( 'Y-m-d H:i:s' );
+		// Allow to customize the timestamp.
+		$data['log_timestamp'] = $args['timestamp'] ?? date( 'Y-m-d H:i:s' );
 
 		// set the family
 		$data['log_family'] = $args['family'];
