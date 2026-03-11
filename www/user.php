@@ -1,5 +1,5 @@
 <?php
-# Copyright (C) 2019-2023 Valerio Bozzolan
+# Copyright (C) 2019-2026 Valerio Bozzolan
 # Boz Libre Hosting Panel
 #
 # This program is free software: you can redistribute it and/or modify
@@ -149,6 +149,7 @@ if( is_action( 'add-domain' ) ){
 			( new DomainUserAPI() )
 				->whereUser( $user )
 				->whereDomainID( $domain_ID )
+				->forUpdate()
 				->queryRow();
 
 		// is it already mine?
