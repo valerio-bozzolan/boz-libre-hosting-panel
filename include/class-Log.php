@@ -1,5 +1,5 @@
 <?php
-# Copyright (C) 2018-2023 Valerio Bozzolan
+# Copyright (C) 2018-2026 Valerio Bozzolan
 # KISS Libre Hosting Panel
 #
 # This program is free software: you can redistribute it and/or modify
@@ -57,6 +57,8 @@ trait LogTrait {
 
 	/**
 	 * Get the UID of the User Marionette (user passively involved)
+	 *
+	 * This is not a real column but a useful alias provided by the class 'QueryLog'.
 	 *
 	 * @return string
 	 */
