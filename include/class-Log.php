@@ -156,11 +156,34 @@ class Log extends Queried {
 		 *
 		 * A complete 'actor' User object
 		 * A complete 'domain' Domain object
+		 * A complete 'marionette' User object
 		 */
 		$domain = $args['domain'] ?? $log;
 		$plan   = $args['plan']   ?? $log;
+		$marionette = $args['marionette'] ?? $log;
+
+		// Create signature for the involved user.
+		$marionette_firm = null;
+		$marionette_uid = $marionette->getLogMarionetteUID();
+		if ($marionette_uid) {
+			$marionette_firm = User::firm($marionette_uid);
+		}
 
 		switch( $action ) {
+
+			case 'admin.add':
+				return sprintf(
+					__( "added %s as administrator for %s"),
+					$marionette_firm,
+					$domain->getDomainFirm()
+				);
+
+//			case 'admin.remove':
+//				return sprintf(
+//					__( "removed %s as administrator for %s"),
+//					$marionette_firm,
+//					$domain->getDomainFirm()
+//				);
 
 			// an administrator created the Domain
 			case 'create':

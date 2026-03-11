@@ -162,6 +162,15 @@ if( is_action( 'add-domain' ) ){
 					'user_ID'   => $user->getUserID(),
 					new DBCol( 'domain_user_creation_date', 'NOW()', '-' ),
 				] );
+
+			// Remember this action in the audit log.
+			APILog::insert( [
+				'family'          => 'domain',
+				'action'          => 'admin.add',
+				'domain'          => $domain,
+				'marionette'      => $user,
+			] );
+
 		}
 
 	} else {
